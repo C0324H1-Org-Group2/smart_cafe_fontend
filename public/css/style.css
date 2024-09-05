@@ -8073,7 +8073,7 @@ h1, h2, h3, h4, h5,
   overflow-x: scroll; }
 
 .table {
-  min-width: 1000px !important;
+  /*min-width: 1000px !important;*/
   width: 100%;
   text-align: center; }
   .table th {

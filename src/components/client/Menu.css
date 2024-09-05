@@ -1,0 +1,44 @@
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.menu-entry {
+    overflow: hidden; /* Đảm bảo rằng phần tử chứa không bị tràn */
+    display: flex; /* Sử dụng flexbox để bố trí các phần tử bên trong */
+    flex-direction: column; /* Đặt chiều dọc cho phần tử chứa */
+}
+
+.menu-entry .text {
+    text-align: center;
+    overflow: hidden; /* Đảm bảo rằng nội dung không tràn ra ngoài */
+}
+
+.menu-entry .text h3 {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap; /* Ngăn văn bản xuống dòng */
+    overflow: hidden; /* Ẩn văn bản bị tràn ra ngoài */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi văn bản quá dài */
+}
+
+.menu-entry .text h3 a {
+    display: block;
+    max-width: 100%;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
