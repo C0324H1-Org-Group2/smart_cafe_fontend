@@ -24,7 +24,7 @@ const NewsList = () => {
                             newsId={entry.newsId}
                             imageUrl={entry.imageUrl}
                             publishDate={entry.publishDate}
-                            creator={entry.creator.username}
+                            creator={'by ' + entry.creator.username}
                             title={entry.title}
                             content={entry.content}
                         />

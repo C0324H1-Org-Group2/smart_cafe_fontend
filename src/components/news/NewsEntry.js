@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
+import { parseISO } from "date-fns";
 
 const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) => {
+    const formattedDate = formatDistanceToNow(parseISO(publishDate), { addSuffix: true });
+
     return (
         <div className="col-md-4 d-flex">
             <div className="blog-entry align-self-stretch">
@@ -9,7 +13,7 @@ const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) =
                 </Link>
                 <div className="text py-4 d-block">
                     <div className="meta">
-                        <div><a href="#">{publishDate || "Unknown Date"}</a></div>
+                        <div><a href="#">{formattedDate || "Unknown Date"}</a></div>
                         <div><a href="#">{creator || "Unknown Author"}</a></div>
                     </div>
                     <h3 className="heading mt-2"><Link to={`/news/${newsId}`}>{title}</Link></h3>
