@@ -12,7 +12,7 @@ const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) =
                         <div><a href="#">{publishDate || "Unknown Date"}</a></div>
                         <div><a href="#">{creator || "Unknown Author"}</a></div>
                     </div>
-                    <h3 className="heading mt-2"><Link to={`/newsDetail/${newsId}`}>{title}</Link></h3>
+                    <h3 className="heading mt-2"><Link to={`/news/${newsId}`}>{title}</Link></h3>
                     <p>{content}</p>
                 </div>
             </div>
