@@ -4,6 +4,7 @@ import Navbar from "./components/common/Navbar";
 import MainComponent from "./components/MainComponent";
 import Slider from "./components/common/Slider";
 import TopNewestServices from "./components/home/TopNewestServices";
+import TopMostOrderServices from "./components/home/TopMostOrderServices";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Slider></Slider>
           <MainComponent></MainComponent>
           <TopNewestServices></TopNewestServices>
+          <TopMostOrderServices></TopMostOrderServices>
         <Footer></Footer>
       </>
   );
