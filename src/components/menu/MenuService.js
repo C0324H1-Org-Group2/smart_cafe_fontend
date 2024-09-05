@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import * as serviceService from "../serivces/ServiceService";
 
-const getMenuData = async () => {
-    try {
-        const response = await axios.get('http://localhost:8080/api/services/getAll');
-        return response.data;
-    } catch (e) {
-        console.log("Error getting menu data: " + e);
-        return [];
-    }
-}
+// const getMenuData = async () => {
+//     try {
+//         const response = await axios.get('http://localhost:8080/api/services/getAll');
+//         return response.data;
+//     } catch (e) {
+//         console.log("Error getting menu data: " + e);
+//         return [];
+//     }
+// }
 
 const MenuService = () => {
     const [menuItems, setMenuItems] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getMenuData();
+            const data = await serviceService.getAllServices();
             setMenuItems(data);
         };
 
