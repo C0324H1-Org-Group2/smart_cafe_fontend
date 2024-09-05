@@ -9,3 +9,13 @@ export const getAllNews = async () => {
         return [];
     }
 }
+
+export const getNewsById = async (newsId) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/news/${newsId}`);
+        return response.data;
+    } catch (e) {
+        console.error("Lỗi lấy chi tiết tin tức: " + e);
+        return null;
+    }
+}

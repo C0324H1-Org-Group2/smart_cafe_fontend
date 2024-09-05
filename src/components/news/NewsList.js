@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import NewsEntry from "./NewsEntry";
-import * as newsService from "../serivces/NewsService";
+import * as newsService from "../services/NewsService";
 const NewsList = () => {
     const [newsEntries, setNewsEntries] = useState([]);
 
@@ -21,6 +21,7 @@ const NewsList = () => {
                     {newsEntries.map((entry) => (
                         <NewsEntry
                             key={entry.newsId}
+                            newsId={entry.newsId}
                             imageUrl={entry.imageUrl}
                             publishDate={entry.publishDate}
                             creator={entry.creator.username}
