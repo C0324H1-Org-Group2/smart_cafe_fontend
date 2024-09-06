@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as serviceService from "../serivces/ServiceService";
+import * as serviceService from "../services/ServiceService";
 import './TopNewestServices.css';
 
 const TopNewestServices = () => {
