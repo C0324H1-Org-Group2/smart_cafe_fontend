@@ -9,7 +9,7 @@ const Menu = () => {
     const [services, setServices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isTransitioning, setIsTransitioning] = useState(false);
-    const itemsPerPage = 4;
+    const itemsPerPage = 8;
 
     useEffect(() => {
         allMenuItems();
@@ -25,12 +25,15 @@ const Menu = () => {
         }
     };
 
-    // Lấy dịch vụ theo loại
     const handleButtonClick = async (typeId) => {
-        const response = await serviceService.getAllServices();
-        setServices(response.filter(service => service.type.typeId === typeId));
-        setSelectedType(typeId);
-        setCurrentPage(1);
+        try {
+            const response = await serviceService.getServicesByType(typeId);
+            setServices(response);
+            setSelectedType(typeId);
+            setCurrentPage(1);
+        } catch (error) {
+            console.error("Lỗi lấy dịch vụ theo loại: ", error);
+        }
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -57,6 +60,14 @@ const Menu = () => {
                 setIsTransitioning(false);
             }, 300);
         }
+    };
+
+    const handlePageClick = (pageNumber) => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setCurrentPage(pageNumber);
+            setIsTransitioning(false);
+        }, 300);
     };
 
     return (
@@ -100,9 +111,18 @@ const Menu = () => {
 
                         <Row className="justify-content-center mt-4">
                             <Col md={6} className="text-center">
-                                <div className="btn-group" role="group" aria-label="Pagination controls">
-                                    <Button onClick={handlePrevPage} disabled={currentPage === 1}>Trước</Button>
-                                    <Button onClick={handleNextPage} disabled={currentPage === totalPages}>Sau</Button>
+                                <div className="" role="group" aria-label="Pagination controls">
+                                    <Button className="pagination-button btn btn-primary btn-outline-primary" onClick={handlePrevPage} disabled={currentPage === 1}>&lt;</Button>
+                                    {[...Array(totalPages).keys()].map(pageNumber => (
+                                        <Button
+                                            key={pageNumber + 1}
+                                            onClick={() => handlePageClick(pageNumber + 1)}
+                                            className={currentPage === pageNumber + 1 ? 'pagination-button' : 'pagination-button btn btn-primary btn-outline-primary'}
+                                        >
+                                            {pageNumber + 1}
+                                        </Button>
+                                    ))}
+                                    <Button className="pagination-button btn btn-primary btn-outline-primary" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;</Button>
                                 </div>
                             </Col>
                         </Row>
