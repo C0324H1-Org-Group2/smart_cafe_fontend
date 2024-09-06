@@ -9,7 +9,6 @@ export const getMenuItems = async ()=> {
     }
 }
 
-
 export const getTop5NewestServices = async ()=> {
     try {
         const response = await axios.get('http://localhost:8080/api/services/top5-newest');
@@ -30,12 +29,22 @@ export const getTop5MostOrderedServices = async () => {
     }
 }
 
-export const getAllServices = async () => {
+// export const getAllServices = async () => {
+//     try {
+//         const response = await axios.get('http://localhost:8080/api/services/all-services');
+//         return response.data;
+//     } catch (e) {
+//         console.error('Lỗi lấy tất cả :', e);
+//         return [];
+//     }
+// }
+
+export const getServicesByType = async (typeId) => {
     try {
-        const response = await axios.get('http://localhost:8080/api/services/all-services');
+        const response = await axios.get(`http://localhost:8080/api/services/services-by-type/${typeId}`);
         return response.data;
     } catch (e) {
-        console.error('Lỗi lấy tất cả :', e);
+        console.error('Lỗi lấy dịch vụ theo loại:', e);
         return [];
     }
-}
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
@@ -10,10 +10,10 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="ftco-nav">
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item active"><a href="index.html" className="nav-link">Home</a></li>
-                        <li className="nav-item"><Link to="/menu" className="nav-link">Menu</Link></li>
+                        <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
+                        <li className="nav-item"><NavLink to="/menu" className="nav-link">Menu</NavLink></li>
                         <li className="nav-item"><a href="services.html" className="nav-link">Services</a></li>
-                        <li className="nav-item"><a href="blog.html" className="nav-link">Blog</a></li>
+                        <li className="nav-item"><NavLink to="/news" className="nav-link">News</NavLink></li>
                         <li className="nav-item"><a href="about.html" className="nav-link">About</a></li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="room.html" id="dropdown04"

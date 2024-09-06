@@ -7,37 +7,44 @@ import TopNewestServices from "./components/home/TopNewestServices";
 import TopMostOrderServices from "./components/home/TopMostOrderServices";
 import Menu from "./components/client/Menu";
 import {Route, BrowserRouter, Routes} from "react-router-dom";
-import feedback from "./components/admin/feedback";
+import NewsList from "./components/news/NewsList";
+import NewsDetail from "./components/news/NewsDetail";
 
 function App() {
   return (
       <BrowserRouter>
-
+          <Navbar />
           <Routes>
-              <Route path="/feedback" element={<feedback/>}/>
+              <Route path="/" element={
+                  <>
+                      <Slider />
+                      <MainComponent/>
+                      <TopNewestServices/>
+                      <TopMostOrderServices></TopMostOrderServices>
+                  </>
+              } />
+              <Route path="/menu" element={
+                  <>
+                      <Slider />
+                      <Menu />
+                  </>
+
+              } />
+              <Route path="/news" element={
+                  <>
+                      <Slider />
+                      <NewsList />
+                  </>
+              }
+              />
+              <Route path="/news/:newsId" element={
+                  <>
+                      <Slider />
+                      <NewsDetail />
+                  </>
+              } />
           </Routes>
-
-
-          {/*<Navbar />*/}
-          {/*<Routes>*/}
-
-          {/*    <Route path="/" element={*/}
-          {/*        <>*/}
-          {/*            <Slider />*/}
-          {/*            <MainComponent/>*/}
-          {/*            <TopNewestServices/>*/}
-          {/*            <TopMostOrderServices></TopMostOrderServices>*/}
-          {/*        </>*/}
-          {/*    } />*/}
-          {/*    <Route path="/menu" element={*/}
-          {/*        <>*/}
-          {/*            <Slider />*/}
-          {/*            <Menu />*/}
-          {/*        </>*/}
-
-          {/*    } />*/}
-          {/*</Routes>*/}
-          {/*<Footer />*/}
+          <Footer />
       </BrowserRouter>
   );
 }
