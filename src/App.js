@@ -7,29 +7,37 @@ import TopNewestServices from "./components/home/TopNewestServices";
 import TopMostOrderServices from "./components/home/TopMostOrderServices";
 import Menu from "./components/client/Menu";
 import {Route, BrowserRouter, Routes} from "react-router-dom";
+import feedback from "./components/admin/feedback";
 
 function App() {
   return (
       <BrowserRouter>
-          <Navbar />
-          <Routes>
-              <Route path="/" element={
-                  <>
-                      <Slider />
-                      <MainComponent/>
-                      <TopNewestServices/>
-                      <TopMostOrderServices></TopMostOrderServices>
-                  </>
-              } />
-              <Route path="/menu" element={
-                  <>
-                      <Slider />
-                      <Menu />
-                  </>
 
-              } />
+          <Routes>
+              <Route path="/feedback" element={<feedback/>}/>
           </Routes>
-          <Footer />
+
+
+          {/*<Navbar />*/}
+          {/*<Routes>*/}
+
+          {/*    <Route path="/" element={*/}
+          {/*        <>*/}
+          {/*            <Slider />*/}
+          {/*            <MainComponent/>*/}
+          {/*            <TopNewestServices/>*/}
+          {/*            <TopMostOrderServices></TopMostOrderServices>*/}
+          {/*        </>*/}
+          {/*    } />*/}
+          {/*    <Route path="/menu" element={*/}
+          {/*        <>*/}
+          {/*            <Slider />*/}
+          {/*            <Menu />*/}
+          {/*        </>*/}
+
+          {/*    } />*/}
+          {/*</Routes>*/}
+          {/*<Footer />*/}
       </BrowserRouter>
   );
 }
