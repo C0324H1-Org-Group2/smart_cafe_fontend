@@ -10,7 +10,7 @@ const ClientLayout = ({ children }) => {
             <Navbar />
 
             {/* Nội dung chính của các trang client */}
-            <main className="client-content">
+            <main>
                 {children}
             </main>
 

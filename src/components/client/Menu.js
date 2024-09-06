@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as serviceService from "../services/ServiceService";
+import * as serviceService from "../client/services/ServiceService";
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import './Menu.css';
 

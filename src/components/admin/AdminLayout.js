@@ -1,6 +1,7 @@
 // src/components/admin/AdminLayout.js
 import React from 'react';
 import Header from "./common/Header";
+import Footer from "./common/Footer";
 
 const AdminLayout = ({ children }) => {
     return (
@@ -9,9 +10,10 @@ const AdminLayout = ({ children }) => {
             <Header />
 
             {/* Nội dung chính của các trang admin */}
-            <div className="admin-content">
+            <div>
                 {children}
             </div>
+            {/*<Footer />*/}
         </div>
     );
 };
