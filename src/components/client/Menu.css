@@ -8,31 +8,6 @@
     transition: opacity 0.3s ease-out;
 }
 
-.menu-entry {
-    overflow: hidden; /* Đảm bảo rằng phần tử chứa không bị tràn */
-    display: flex; /* Sử dụng flexbox để bố trí các phần tử bên trong */
-    flex-direction: column; /* Đặt chiều dọc cho phần tử chứa */
-}
-
-.menu-entry .text {
-    text-align: center;
-    overflow: hidden; /* Đảm bảo rằng nội dung không tràn ra ngoài */
-}
-
-.menu-entry .text h3 {
-    margin: 0;
-    padding: 0;
-    white-space: nowrap; /* Ngăn văn bản xuống dòng */
-    overflow: hidden; /* Ẩn văn bản bị tràn ra ngoài */
-    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi văn bản quá dài */
-}
-
-.menu-entry .text h3 a {
-    display: block;
-    max-width: 100%;
-    text-decoration: none;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -42,3 +17,18 @@
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
+.pagination-button {
+    text-align: center;
+    display: inline-flex; /* Thay đổi từ inline-block sang inline-flex */
+    align-items: center;  /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    border: 1px solid #674c27;
+    font-size: 16px; /* Đảm bảo rằng kích thước chữ không quá lớn */
+    margin: 0 2px;
+}
+
