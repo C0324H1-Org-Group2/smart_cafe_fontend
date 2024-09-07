@@ -17,6 +17,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
 import TableService from "./components/admin/manager/TableService";
 import NewsForm from "./components/admin/news/NewsForm";
+import CounterSection from "./components/client/home/CounterSection";
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                             <Slider/>
                             <MainComponent/>
                             <TopNewestServices/>
+                            <CounterSection />
                             <TopMostOrderServices/>
                         </ClientLayout>
                     </>

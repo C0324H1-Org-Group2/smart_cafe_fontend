@@ -4,7 +4,7 @@ const Slider = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const slides = [
         { backgroundImage: 'url(/images/bg_1.jpg)', heading: "The Best Coffee Testing Experience", subheading: "Welcome", text: "A small river named Duden flows by their place and supplies it with the necessary regelialia." },
-        { backgroundImage: 'url(/images/bg_2.jpg)', heading: "Amazing Taste & Beautiful Place", subheading: "Welcome", text: "A small river named Duden flows by their place and supplies it with the necessary regelialia." },
+        { backgroundImage: 'url(/images/about.jpg)', heading: "Amazing Taste & Beautiful Place", subheading: "Welcome", text: "A small river named Duden flows by their place and supplies it with the necessary regelialia." },
         { backgroundImage: 'url(/images/bg_3.jpg)', heading: "Creamy Hot and Ready to Serve", subheading: "Welcome", text: "A small river named Duden flows by their place and supplies it with the necessary regelialia." }
     ];
 
