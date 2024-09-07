@@ -1,82 +1,93 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import * as newsService from '../services/NewsService';
+import 'react-toastify/dist/ReactToastify.css';
 
 const NewsForm = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [file, setFile] = useState(null);
-    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    // Đặt userId mặc định (ví dụ: 1)
-    const defaultUserId = 1;
+    const validationSchema = Yup.object({
+        title: Yup.string()
+            .required('Tiêu đề là bắt buộc'),
+        content: Yup.string()
+            .required('Nội dung là bắt buộc'),
+        file: Yup.mixed()
+            .required('Ảnh là bắt buộc')
+    });
 
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
+    const saveNews = async (values) => {
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        if (file) {
-            formData.append('file', file);
-        }
-        // Gửi userId mặc định về backend
-        formData.append('userId', defaultUserId);
+        formData.append('title', values.title);
+        formData.append('content', values.content);
+        formData.append('file', values.file);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/news/create', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            console.log('News created:', response.data);
-        } catch (err) {
-            setError('Failed to create news');
-            console.error(err);
+            const response = await newsService.createNews(formData);
+            if (response) {
+                toast.success('Tin tức được tạo thành công!');
+                // navigate('/admin');
+            }
+        } catch (error) {
+            toast.error('Tạo tin tức thất bại');
         }
+    };
+
+    const handleCancel = () => {
+        navigate('/admin');
     };
 
     return (
-        <div>
-            <div className="main-content">
-                <div className="section-body">
-            <h1>Create News</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="title">Title</label>
-                    <input
-                        type="text"
-                        id="title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
+        <div className="main-content">
+            <div className="section-body">
+        <div className="container mt-4">
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <h2>Tạo Tin Tức Mới</h2>
+                    <Formik
+                        initialValues={{
+                            title: '',
+                            content: '',
+                            file: null
+                        }}
+                        onSubmit={saveNews}
+                        validationSchema={validationSchema}
+                    >
+                        {({ setFieldValue }) => (
+                            <Form>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="title">Tiêu Đề:</label>
+                                    <Field name="title" type="text" className="form-control"/>
+                                    <ErrorMessage name="title" component="p" className="text-danger"/>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="content">Nội Dung:</label>
+                                    <Field name="content" as="textarea" rows="3" className="form-control"/>
+                                    <ErrorMessage name="content" component="p" className="text-danger"/>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="file">Ảnh:</label>
+                                    <input
+                                        name="file"
+                                        type="file"
+                                        className="form-control"
+                                        onChange={(event) => setFieldValue('file', event.currentTarget.files[0])}
+                                    />
+                                    <ErrorMessage name="file" component="p" className="text-danger"/>
+                                </div>
+                                <div className="d-flex justify-content-between">
+                                    <button type="submit" className="btn btn-primary">Tạo Tin</button>
+                                    <button type="button" className="btn btn-secondary" onClick={handleCancel}>Hủy</button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
-                <div>
-                    <label htmlFor="content">Content</label>
-                    <textarea
-                        id="content"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="file">Image</label>
-                    <input
-                        type="file"
-                        id="file"
-                        onChange={handleFileChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Submit</button>
-                {error && <p>{error}</p>}
-            </form>
-                </div>
+            </div>
+            <ToastContainer />
+        </div>
             </div>
         </div>
     );
