@@ -20,15 +20,16 @@
 
 .pagination-button {
     text-align: center;
-    display: inline-flex; /* Thay đổi từ inline-block sang inline-flex */
-    align-items: center;  /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
     line-height: 40px;
-    border-radius: 50%;
-    border: 1px solid #674c27;
-    font-size: 16px; /* Đảm bảo rằng kích thước chữ không quá lớn */
+    border-radius: 50% !important;
+    border: 1px solid #674c27 !important;
+    font-size: 16px;
     margin: 0 2px;
 }
+
 
