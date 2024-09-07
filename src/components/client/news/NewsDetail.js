@@ -40,7 +40,7 @@ const NewsDetail = () => {
                         <p>{news.content}</p>
                         {news.imageUrl && (
                             <p>
-                                <img src={`/images/${news.imageUrl}`} alt={news.title} className="img-fluid"/>
+                                <img src={`${news.imageUrl}`} alt={news.title} className="img-fluid"/>
                             </p>
                         )}
                         <div className="tag-widget post-tag-container mb-5 mt-5">
