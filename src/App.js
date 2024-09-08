@@ -37,6 +37,8 @@ function App() {
                             <link rel="stylesheet" href="/css/jquery.timepicker.css"/>
                             <link rel="stylesheet" href="/css/flaticon.css"/>
                             <link rel="stylesheet" href="/css/icomoon.css"/>
+                            {/*<link rel="stylesheet" href="/css/owl.carousel.min.css"/>*/}
+                            {/*<link rel="stylesheet" href="/css/owl.theme.default.min.css"/>*/}
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
@@ -51,6 +53,7 @@ function App() {
                 <Route path="/menu" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
@@ -62,10 +65,11 @@ function App() {
                 <Route path="/news" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                            <Slider/>
+                        <Slider/>
                             <NewsList/>
                         </ClientLayout>
                     </>
@@ -73,10 +77,11 @@ function App() {
                 <Route path="/news/:newsId" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                            <Slider/>
+                        <Slider/>
                             <NewsDetail/>
                         </ClientLayout>
                     </>
