@@ -62,7 +62,7 @@ const TableService = () => {
                                 <tbody>
                                 {services.map((service, index) => (
                                     <tr key={service.id}>
-                                        <td>{index + 1}</td>
+                                        <td>{page * itemsPerPage + index + 1}</td>
                                         <td>{service.serviceName}</td>
                                         <td>{service.price.toLocaleString('vi-VN', {
                                             style: 'currency',
