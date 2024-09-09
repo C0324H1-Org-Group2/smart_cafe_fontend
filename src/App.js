@@ -11,6 +11,7 @@ import TopMostOrderServices from "./components/client/home/TopMostOrderServices"
 import Menu from "./components/client/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
+import CounterSection from "./components/client/home/CounterSection";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
@@ -19,17 +20,18 @@ import TableService from "./components/admin/manager/TableService";
 import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
-import CounterSection from "./components/client/home/CounterSection";
+import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
+
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Các route cho Client */}
+                {/* Client Routes */}
                 <Route path="/" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của client */}
+                            {/* Import client CSS */}
                             <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css"/>
                             <link rel="stylesheet" href="/css/animate.css"/>
                             <link rel="stylesheet" href="/css/magnific-popup.css"/>
@@ -39,8 +41,6 @@ function App() {
                             <link rel="stylesheet" href="/css/jquery.timepicker.css"/>
                             <link rel="stylesheet" href="/css/flaticon.css"/>
                             <link rel="stylesheet" href="/css/icomoon.css"/>
-                            {/*<link rel="stylesheet" href="/css/owl.carousel.min.css"/>*/}
-                            {/*<link rel="stylesheet" href="/css/owl.theme.default.min.css"/>*/}
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
@@ -71,7 +71,7 @@ function App() {
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                        <Slider/>
+                            <Slider/>
                             <NewsList/>
                         </ClientLayout>
                     </>
@@ -83,39 +83,35 @@ function App() {
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                        <Slider/>
+                            <Slider/>
                             <NewsDetail/>
                         </ClientLayout>
                     </>
                 }/>
 
-                {/* Route cho Admin */}
+                {/* Admin Routes */}
                 <Route path="/admin" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của admin */}
+                            {/* Import admin CSS */}
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
-
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
-
                             <link rel="stylesheet" href="/assets/css/components.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
                             <Sidebar/>
                         </AdminLayout>
                     </>
                 }/>
-
                 <Route path="/admin/service" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của admin */}
+                            {/* Import admin CSS */}
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
@@ -134,20 +130,17 @@ function App() {
                 <Route path="/admin/order" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của admin */}
+                            {/* Import admin CSS */}
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
-
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
-
                             <link rel="stylesheet" href="/assets/css/components.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
                             <OrderList/>
                             <Sidebar/>
                         </AdminLayout>
@@ -156,34 +149,52 @@ function App() {
                 <Route path="/admin/news" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của admin */}
+                            {/* Import admin CSS */}
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
-
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
-
                             <link rel="stylesheet" href="/assets/css/components.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
                             <NewsForm />
                             <Sidebar/>
                         </AdminLayout>
                     </>
                 }/>
 
-                {/* Thêm route cho Admin Login */}
+                {/* Admin Login Route */}
                 <Route path="/admin/login" element={
                     <>
                         <Helmet>
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
-                        <LoginForm/> {/* Hiển thị form đăng nhập */}
+                        <LoginForm/>
+                    </>
+                }/>
+
+                {/* Employee Details Route */}
+                <Route path="/admin/employee/:employeeId" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <EmployeeDetailService/>
+                            <Sidebar/>
+                        </AdminLayout>
                     </>
                 }/>
             </Routes>
