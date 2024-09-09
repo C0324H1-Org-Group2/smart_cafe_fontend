@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import NewsNotification from '../news/NewsNotification';
-
+import './Navbar.css';
 const Navbar = () => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
