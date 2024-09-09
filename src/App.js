@@ -16,6 +16,7 @@ import NewsDetail from "./components/client/news/NewsDetail";
 import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
 import TableService from "./components/admin/manager/TableService";
+import OrderList from "./components/admin/manager/OrderList";
 
 function App() {
     return (
@@ -119,6 +120,28 @@ function App() {
                         <AdminLayout>
                             {/* Thêm các component admin ở đây */}
                             <TableService />
+                            <Sidebar/>
+                        </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/order" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            {/* Thêm các component admin ở đây */}
+                            <OrderList/>
                             <Sidebar/>
                         </AdminLayout>
                     </>
