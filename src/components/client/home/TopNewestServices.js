@@ -12,6 +12,14 @@ const TopNewestServices = () => {
         findTop5NewestServices();
     }, []);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            handleNextPage();
+        }, 3000);
+
+        return () => clearInterval(intervalId);
+    }, [currentPage, coffeeItems]);
+
     const findTop5NewestServices = async () => {
         const data = await serviceService.getTop5NewestServices();
         setCoffeeItems(data);
@@ -21,24 +29,18 @@ const TopNewestServices = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = coffeeItems.slice(indexOfFirstItem, indexOfLastItem);
 
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setIsTransitioning(true);
-            setTimeout(() => {
-                setCurrentPage(currentPage - 1);
-                setIsTransitioning(false);
-            }, 300);
-        }
-    };
-
     const handleNextPage = () => {
-        if (currentPage < Math.ceil(coffeeItems.length / itemsPerPage)) {
-            setIsTransitioning(true);
-            setTimeout(() => {
-                setCurrentPage(currentPage + 1);
-                setIsTransitioning(false);
-            }, 300);
-        }
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setCurrentPage(prevPage => {
+                if (prevPage < Math.ceil(coffeeItems.length / itemsPerPage)) {
+                    return prevPage + 1;
+                } else {
+                    return 1;
+                }
+            });
+            setIsTransitioning(false);
+        }, 300);
     };
 
     return (
@@ -68,16 +70,6 @@ const TopNewestServices = () => {
                             </div>
                         ))
                     )}
-                </div>
-
-                <div className="row justify-content-center mt-5">
-                    <div className="col-md-6 text-center">
-                        <div className="btn-group" role="group" aria-label="Pagination controls">
-                            <button className="btn btn-primary" onClick={handlePrevPage} disabled={currentPage === 1}>&lt;</button>
-                            <button className="btn btn-primary" onClick={handleNextPage} disabled={currentPage === Math.ceil(coffeeItems.length / itemsPerPage)}>&gt;
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

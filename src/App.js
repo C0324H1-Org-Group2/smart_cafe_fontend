@@ -17,6 +17,8 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
 import TableService from "./components/admin/manager/TableService";
 import LoginForm from "./components/admin/Login/LoginForm";
+import NewsForm from "./components/admin/news/NewsForm";
+import CounterSection from "./components/client/home/CounterSection";
 
 function App() {
     return (
@@ -36,12 +38,15 @@ function App() {
                             <link rel="stylesheet" href="/css/jquery.timepicker.css"/>
                             <link rel="stylesheet" href="/css/flaticon.css"/>
                             <link rel="stylesheet" href="/css/icomoon.css"/>
+                            {/*<link rel="stylesheet" href="/css/owl.carousel.min.css"/>*/}
+                            {/*<link rel="stylesheet" href="/css/owl.theme.default.min.css"/>*/}
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
                             <Slider/>
                             <MainComponent/>
                             <TopNewestServices/>
+                            <CounterSection />
                             <TopMostOrderServices/>
                         </ClientLayout>
                     </>
@@ -49,6 +54,7 @@ function App() {
                 <Route path="/menu" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
@@ -60,10 +66,11 @@ function App() {
                 <Route path="/news" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                            <Slider/>
+                        <Slider/>
                             <NewsList/>
                         </ClientLayout>
                     </>
@@ -71,10 +78,11 @@ function App() {
                 <Route path="/news/:newsId" element={
                     <>
                         <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
                             <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
                         <ClientLayout>
-                            <Slider/>
+                        <Slider/>
                             <NewsDetail/>
                         </ClientLayout>
                     </>
@@ -116,6 +124,28 @@ function App() {
                         </Helmet>
                         <AdminLayout>
                             <TableService />
+                            <Sidebar/>
+                        </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/news" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            {/* Thêm các component admin ở đây */}
+                            <NewsForm />
                             <Sidebar/>
                         </AdminLayout>
                     </>

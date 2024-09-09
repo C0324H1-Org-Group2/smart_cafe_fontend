@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {getNewsById} from "../services/NewsService";
 import {format} from "date-fns";
+import SearchForm from "./SearchForm";
 
 const NewsDetail = () => {
     const { newsId } = useParams();
@@ -31,6 +32,7 @@ const NewsDetail = () => {
     const formattedDate = news.publishDate ? format(new Date(news.publishDate), 'dd MMM yy') : 'Unknown Date';
 
     return (
+        <body>
         <section className="ftco-section">
             <div className="container">
                 <div className="row">
@@ -40,7 +42,7 @@ const NewsDetail = () => {
                         <p>{news.content}</p>
                         {news.imageUrl && (
                             <p>
-                                <img src={`/images/${news.imageUrl}`} alt={news.title} className="img-fluid"/>
+                                <img src={`${news.imageUrl}`} alt={news.title} className="img-fluid"/>
                             </p>
                         )}
                         <div className="tag-widget post-tag-container mb-5 mt-5">
@@ -52,9 +54,11 @@ const NewsDetail = () => {
                             </div>
                         </div>
                     </div>
+                    <SearchForm/>
                 </div>
             </div>
         </section>
+        </body>
     );
 };
 
