@@ -6,6 +6,7 @@ import FullHeightComponent from "./FullHeightComponent";
 import OnePageNav from "./OnePageNav";
 import Loader from "./Loader";
 import DropdownHover from "./DropdownHover";
+import 'aos/dist/aos.css';
 const MainComponent = () => {
     useEffect(() => {
         AOS.init({
