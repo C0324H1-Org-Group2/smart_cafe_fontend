@@ -17,6 +17,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
 import TableService from "./components/admin/manager/TableService";
 import LoginForm from "./components/admin/Login/LoginForm";
+import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
 import CounterSection from "./components/client/home/CounterSection";
 
@@ -95,10 +96,12 @@ function App() {
                             {/* Import CSS của admin */}
                             <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
                             <link rel="stylesheet" href="/assets/css/components.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
@@ -124,6 +127,28 @@ function App() {
                         </Helmet>
                         <AdminLayout>
                             <TableService />
+                            <Sidebar/>
+                        </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/order" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            {/* Thêm các component admin ở đây */}
+                            <OrderList/>
                             <Sidebar/>
                         </AdminLayout>
                     </>
