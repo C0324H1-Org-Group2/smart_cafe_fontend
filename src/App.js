@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Helmet } from 'react-helmet';
-
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer} from "react-toastify";
 // Client Components
 import Slider from "./components/client/common/Slider";
 import MainComponent from "./components/client/MainComponent";
@@ -23,6 +24,7 @@ import CounterSection from "./components/client/home/CounterSection";
 
 function App() {
     return (
+        <>
         <BrowserRouter>
             <Routes>
                 {/* Các route cho Client */}
@@ -188,6 +190,8 @@ function App() {
                 }/>
             </Routes>
         </BrowserRouter>
+        <ToastContainer/>
+        </>
     );
 }
 
