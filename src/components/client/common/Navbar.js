@@ -1,6 +1,19 @@
-import React from 'react';
-import {Link, NavLink} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import NewsNotification from '../news/NewsNotification';
+
 const Navbar = () => {
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const handleNewNotifications = (count) => {
+        setNotificationCount(count);
+    };
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!isDropdownOpen);
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
             <div className="container">
@@ -25,10 +38,22 @@ const Navbar = () => {
                                 <a className="dropdown-item" href="checkout.html">Checkout</a>
                             </div>
                         </li>
-                        <li className="nav-item"><a href="contact.html" className="nav-link">Contact</a></li>
-                        <li className="nav-item cart"><a href="cart.html" className="nav-link"><span
-                            className="icon icon-shopping_cart"></span><span
-                            className="bag d-flex justify-content-center align-items-center"><small>1</small></span></a>
+                        <li className="nav-item cart">
+                            <a onClick={toggleDropdown} className="nav-link">
+                                <span className="icon icon-bell"></span>
+                                <span className="bag d-flex justify-content-center align-items-center">
+                                    <small>{notificationCount}</small> {/* Display notification count */}
+                                </span>
+                            </a>
+                            <NewsNotification onNewNotifications={handleNewNotifications} isDropdownOpen={isDropdownOpen} />
+                        </li>
+                        <li className="nav-item cart">
+                            <a href="cart.html" className="nav-link">
+                                <span className="icon icon-shopping_cart"></span>
+                                <span className="bag d-flex justify-content-center align-items-center">
+                                    <small>0</small> {/* Placeholder for cart count */}
+                                </span>
+                            </a>
                         </li>
                     </ul>
                 </div>
