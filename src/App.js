@@ -9,6 +9,7 @@ import Menu from "./components/client/Menu";
 import {Route, BrowserRouter, Routes} from "react-router-dom";
 import NewsList from "./components/news/NewsList";
 import NewsDetail from "./components/news/NewsDetail";
+import FeedbackList from "./components/admin/feedbackList";
 
 function App() {
   return (
