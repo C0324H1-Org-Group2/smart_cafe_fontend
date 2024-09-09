@@ -12,6 +12,7 @@ import TopMostOrderServices from "./components/client/home/TopMostOrderServices"
 import Menu from "./components/client/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
+import CounterSection from "./components/client/home/CounterSection";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
