@@ -4,10 +4,16 @@ import * as newsService from "../services/NewsService";
 import useScrollToHash from "../common/UseScrollToHash";
 const NewsList = () => {
     const [newsEntries, setNewsEntries] = useState([]);
+    const [visibleEntries, setVisibleEntries] = useState(3);
     useScrollToHash([newsEntries]);
 
     useEffect(() => {
         findAllNews();
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+        };
     }, []);
 
     const findAllNews = async () => {
@@ -16,12 +22,22 @@ const NewsList = () => {
         setNewsEntries(data);
     };
 
+    const handleScroll = () => {
+        if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+            loadMoreEntries();
+        }
+    };
+
+    const loadMoreEntries = () => {
+        setVisibleEntries((prevVisibleEntries) => prevVisibleEntries + 3);
+    };
+
     return (
         <section className="ftco-section" id="news-list">
             <div className="container">
                 <h2 className="mb-5">News List</h2>
                 <div className="row d-flex">
-                    {newsEntries.map((entry) => (
+                    {newsEntries.slice(0, visibleEntries).map((entry) => (
                         <NewsEntry
                             key={entry.newsId}
                             newsId={entry.newsId}
