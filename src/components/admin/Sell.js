@@ -1,12 +1,29 @@
-import React, { useEffect, useState } from "react";
-import * as sellService from '../client/services/SellService';
+import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
+import * as sellService from "./service/SellService";
+import {useReactToPrint} from "react-to-print";
+import alert from "bootstrap/js/src/alert";
+import {boolean} from "yup";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 function Sell() {
-    const [tables, setTables] = useState([]);
+    const navigate = useNavigate()
+    const [tables,setTables] = useState([{
+            tableId : 0,
+            code : "",
+            state : "",
+            isOn : false,
+            isDelete : false,
+            isBill : false
+        }])
     const [bills, setBills] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [itemsPerPage] = useState(4); // Số lượng phản hồi trên mỗi trang
+    const [itemsPerPage] = useState(8); // Số lượng phản hồi trên mỗi trang
+    const componentPDF = useRef();
+    const [selectedTableId, setSelectedTableId] = useState(null);
+
+
 
     useEffect(() => {
         getAllTables();
@@ -24,6 +41,7 @@ function Sell() {
 
     const getBillByTableId = async (tableId) => {
         try {
+            setSelectedTableId(tableId); // Lưu lại tableId hiện tại
             let bills = await sellService.getBillByTableId(tableId);
             setBills(bills);
         } catch (e) {
@@ -53,6 +71,31 @@ function Sell() {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const generatePDF = useReactToPrint({
+        content: () => componentPDF.current,
+        documentTitle: "Chi tiết hóa đơn",
+        onAfterPrint: async () => {
+            await changeStatusBillByTableId(selectedTableId);
+            await getAllTables();
+        }
+    });
+
+
+    const changeStatusBillByTableId = async (tableId) => {
+        try {
+            let isSuccess = await sellService.changeStatusBillByTableId(tableId);
+            if (isSuccess) {
+                toast.success("Tính tiền thành công");
+                navigate("/admin/sell");
+            } else {
+                toast.error("Tính tiền thất bại");
+            }
+        } catch (e) {
+            console.error("Lỗi khi cập nhật trạng thái hóa đơn", e);
+        }
+    };
+
     return (
         <div className="main-content my-4">
             <div className="section-body">
@@ -60,11 +103,11 @@ function Sell() {
             </div>
             <div className="row">
                 {/* Khu vực bàn */}
-                <div className="col-md-6">
-                    <div className="row">
+                <div className="col-md-4">
+                    <div className="row g-4">
                         {currentTables.map((table) => (
                             <div className="col-4" key={table.tableId} onClick={() => getBillByTableId(table.tableId)}>
-                                <div className="table-card">
+                                <div className={table.bill === false ? "table-card" : "table-card-red"}>
                                     {table.code}
                                 </div>
                             </div>
@@ -72,8 +115,9 @@ function Sell() {
                     </div>
                 </div>
 
+
                 {/* Bảng thông tin hóa đơn */}
-                <div className="col-md-6">
+                <div ref={componentPDF} style={{width: '100%'}} className="col-md-8">
                     <table className="table table-bordered menu-table">
                         <thead>
                         <tr>
@@ -86,28 +130,28 @@ function Sell() {
                         </tr>
                         </thead>
                         <tbody>
-                        {bills.map((bill, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{bill.name}</td>
-                                <td>{bill.quantity}</td>
-                                <td>{formatCurrency(bill.price)}</td>
-                                <td>{bill.numberTable}</td>
-                                <td>{formatCurrency(bill.price * bill.quantity)}</td>
-                            </tr>
-                        ))}
+                        {bills.length === 0 ? <h3>Bàn này chưa có bill</h3> :
+                            bills.map((bill, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{bill.name}</td>
+                                    <td>{bill.quantity}</td>
+                                    <td>{formatCurrency(bill.price)}</td>
+                                    <td>{bill.numberTable}</td>
+                                    <td>{formatCurrency(bill.price * bill.quantity)}</td>
+                                </tr>
+                            ))}
                         <tr>
                             <td colSpan="5" className="text-right">Tổng tiền</td>
                             <td>{formatCurrency(calculateTotal())}</td>
                         </tr>
                         </tbody>
                     </table>
-
-                    {/* Nút tính tiền và làm mới */}
-                    <div className="d-flex justify-content-between mt-3">
-                        <button className="btn btn-primary">Tính tiền</button>
-                        <button className="btn btn-secondary" onClick={()=>getAllTables()}>Làm mới bảng</button>
-                    </div>
+                </div>
+                {/* Nút tính tiền và làm mới */}
+                <div className="d-flex m-md-auto">
+                    <button className="btn btn-primary" onClick={generatePDF}>Tính tiền</button>
+                    <button className="btn btn-secondary" onClick={() => getAllTables()}>Làm mới bảng</button>
                 </div>
             </div>
 

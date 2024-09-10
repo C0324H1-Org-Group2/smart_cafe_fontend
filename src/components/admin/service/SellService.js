@@ -14,10 +14,19 @@ export const getAllTables= async () => {
 export const getBillByTableId= async (tableId) => {
     try {
         let res = await axios.get(`http://localhost:8080/api/bills/${tableId}`)
-        console.log(res);
         return res.data;
     } catch (e) {
         console.error(e);
         return [];
+    }
+}
+
+export const changeStatusBillByTableId = async (tableId) => {
+    try {
+        await axios.patch(`http://localhost:8080/api/bills/delete/${tableId}`)
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
     }
 }

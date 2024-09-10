@@ -4,10 +4,17 @@
     text-align: center;
     cursor: pointer;
 }
-
+.table-card-red {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: violet;
+}
 .table-card:hover {
     background-color: #f8f9fa;
 }
+
 
 .pagination-container {
     display: flex;
