@@ -19,3 +19,21 @@ export const getNewsById = async (newsId) => {
         return null;
     }
 }
+
+export const getTopViewedNews = async () => {
+    try {
+        const response = await axios.get("http://localhost:8080/api/news/top-viewed");
+        return response.data;
+    } catch (e) {
+        console.error("Lỗi lấy tin tức có lượt xem nhiều nhất: " + e);
+        return [];
+    }
+}
+
+export const incrementViewCount = async (newsId) => {
+    try {
+        await axios.put(`http://localhost:8080/api/news/${newsId}/increase-views`);
+    } catch (e) {
+        console.error("Lỗi tăng lượt xem: " + e);
+    }
+};

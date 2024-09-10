@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {getNewsById} from "../services/NewsService";
+import * as newsService from "../services/NewsService";
 import {format} from "date-fns";
 import SearchForm from "./SearchForm";
 
@@ -13,8 +13,9 @@ const NewsDetail = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const newsData = await getNewsById(newsId);
+                const newsData = await newsService.getNewsById(newsId);
                 setNews(newsData);
+                await newsService.incrementViewCount(newsId);
             } catch (e) {
                 setError(e);
             } finally {
@@ -29,7 +30,9 @@ const NewsDetail = () => {
     if (error) return <p>Error: {error.message}</p>;
     if (!news) return <p>No news found</p>;
 
-    const formattedDate = news.publishDate ? format(new Date(news.publishDate), 'dd MMM yy') : 'Unknown Date';
+    const formattedDate = news.publishDate
+        ? format(new Date(news.publishDate), 'dd MMM yyyy HH:mm')
+        : 'Unknown Date';
 
     return (
         <body>
