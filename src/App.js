@@ -23,7 +23,6 @@ import Sell from "./components/admin/Sell";
 import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
-import CounterSection from "./components/client/home/CounterSection";
 import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
 
