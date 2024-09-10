@@ -20,6 +20,11 @@ import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
 import CounterSection from "./components/client/home/CounterSection";
+import ManagerRevenue from "./components/admin/manager/ManagerRevenue";
+import ChartComponent from "./components/admin/manager/ChartComponent";
+import ExpensesChart from "./components/admin/manager/ExpensesChart";
+import TopSellService from "./components/admin/manager/TopServiceComponent";
+import TopServiceComponent from "./components/admin/manager/TopServiceComponent";
 
 function App() {
     return (
@@ -106,6 +111,10 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
+                            <ManagerRevenue/>
+                            <ChartComponent/>
+                            <ExpensesChart/>
+                            <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
                         </AdminLayout>
