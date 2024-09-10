@@ -20,6 +20,7 @@ import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
 import CounterSection from "./components/client/home/CounterSection";
+import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 
 function App() {
     return (
@@ -111,6 +112,44 @@ function App() {
                         </AdminLayout>
                     </>
                 }/>
+                <Route path="/admin/tables/list" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableList />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+                <Route path="/admin/tables/create" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableCreate />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+
+                <Route path="/admin/tables/edit/:tableId" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableEdit />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+
 
                 <Route path="/admin/service" element={
                     <>
