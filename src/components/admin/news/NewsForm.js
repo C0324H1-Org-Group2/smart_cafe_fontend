@@ -24,6 +24,8 @@ const NewsForm = () => {
         formData.append('title', values.title);
         formData.append('content', values.content);
         formData.append('file', values.file);
+        const userId = localStorage.getItem("userId");
+        formData.append('userId', userId);
 
         try {
             const response = await newsService.createNews(formData);
