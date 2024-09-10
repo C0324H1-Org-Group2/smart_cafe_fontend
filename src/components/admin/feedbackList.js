@@ -75,7 +75,7 @@
                         </div>
                         <div className="card-body p-0">
                             <div className="table-responsive">
-                                <table className="table table-striped table-md">
+                                <table className="table table-hover">
                                     <thead>
                                     <tr>
                                         <th>STT</th>
@@ -87,16 +87,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {currentFeedbacks.map((item, index) => (
-                                        <tr key={item.feedbackId}>
-                                            <td>{indexOfFirstItem + index + 1}</td>
-                                            <td>{item.feedbackId}</td>
-                                            <td>{formatDate(item.feedbackDate)}</td>
-                                            <td>{item.creator.employee.fullName}</td>
-                                            <td>{item.email}</td>
-                                            <td>{item.content}</td>
+                                    {feedbacks.length === 0 ?
+                                        <tr>
+                                            <td colSpan="6" className="text-center">Không có feedback nào trong thời
+                                                gian này
+                                            </td>
                                         </tr>
-                                    ))}
+                                        : currentFeedbacks.map((item, index) => (
+                                            <tr key={item.feedbackId}>
+                                                <td>{indexOfFirstItem + index + 1}</td>
+                                                <td>{item.feedbackId}</td>
+                                                <td>{formatDate(item.feedbackDate)}</td>
+                                                <td>{item.creator.employee.fullName}</td>
+                                                <td>{item.email}</td>
+                                                <td>{item.content}</td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>

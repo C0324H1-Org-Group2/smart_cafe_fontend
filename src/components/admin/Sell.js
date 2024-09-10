@@ -2,28 +2,17 @@ import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
 import * as sellService from "./service/SellService";
 import {useReactToPrint} from "react-to-print";
-import alert from "bootstrap/js/src/alert";
-import {boolean} from "yup";
 import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
 
 function Sell() {
-    const navigate = useNavigate()
-    const [tables,setTables] = useState([{
-            tableId : 0,
-            code : "",
-            state : "",
-            isOn : false,
-            isDelete : false,
-            isBill : false
-        }])
+    const [tables, setTables] = useState([])
     const [bills, setBills] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [itemsPerPage] = useState(8); // Số lượng phản hồi trên mỗi trang
+    const [itemsPerPage] = useState(9); // Số lượng phản hồi trên mỗi trang
     const componentPDF = useRef();
     const [selectedTableId, setSelectedTableId] = useState(null);
-
-
+    const [selectedIsBill, setSelectedIsBill] = useState(false)
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getAllTables();
@@ -39,13 +28,42 @@ function Sell() {
         }
     };
 
-    const getBillByTableId = async (tableId) => {
+    // const getBillByTableId = async (tableId, isBill) => {
+    //     try {
+    //         setLoading(true);
+    //         setSelectedIsBill(isBill);
+    //         setSelectedTableId(tableId);
+    //         let bills = await sellService.getBillByTableId(tableId);
+    //         setBills(bills);
+    //     } catch (e) {
+    //         console.error("Lỗi danh sách hóa đơn", e);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const getBillByTableId = async (tableId, isBill) => {
         try {
-            setSelectedTableId(tableId); // Lưu lại tableId hiện tại
-            let bills = await sellService.getBillByTableId(tableId);
+            setLoading(true); // Bắt đầu hiển thị loading
+            setSelectedIsBill(isBill);
+            setSelectedTableId(tableId);
+
+            // Hàm giả lập chờ trong một khoảng thời gian (ở đây là 500ms)
+            const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            // Bắt đầu tải dữ liệu hóa đơn và chờ ít nhất 500ms
+            const billsPromise = sellService.getBillByTableId(tableId);
+            const bills = await billsPromise;
+
+            // Chờ thêm 500ms để đảm bảo spinner hiển thị
+            await delay(500);
+
+            // Sau khi cả dữ liệu và delay hoàn tất
             setBills(bills);
         } catch (e) {
             console.error("Lỗi danh sách hóa đơn", e);
+        } finally {
+            setLoading(false); // Ẩn loading khi hoàn tất
         }
     };
 
@@ -65,20 +83,30 @@ function Sell() {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentTables = tables.slice(indexOfFirstItem, indexOfLastItem); // Lấy các bàn cho trang hiện tại
-
     const totalPages = Math.ceil(tables.length / itemsPerPage); // Tổng số trang
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
+
+    const checkBillBeforPay = () => {
+        if (selectedIsBill === true && bills.length > 0) {
+            generatePDF();
+        } else {
+            toast.warning("Không tìm thấy bill hoặc chưa có yêu cầu tính tiền ");
+        }
+    }
+
     const generatePDF = useReactToPrint({
         content: () => componentPDF.current,
         documentTitle: "Chi tiết hóa đơn",
         onAfterPrint: async () => {
             await changeStatusBillByTableId(selectedTableId);
+            await getBillByTableId(selectedTableId, false);
             await getAllTables();
         }
+
     });
 
 
@@ -87,7 +115,6 @@ function Sell() {
             let isSuccess = await sellService.changeStatusBillByTableId(tableId);
             if (isSuccess) {
                 toast.success("Tính tiền thành công");
-                navigate("/admin/sell");
             } else {
                 toast.error("Tính tiền thất bại");
             }
@@ -101,13 +128,18 @@ function Sell() {
             <div className="section-body">
                 <h2 className="section-title">Quản lý bán hàng</h2>
             </div>
+
             <div className="row">
                 {/* Khu vực bàn */}
                 <div className="col-md-4">
                     <div className="row g-4">
                         {currentTables.map((table) => (
-                            <div className="col-4" key={table.tableId} onClick={() => getBillByTableId(table.tableId)}>
-                                <div className={table.bill === false ? "table-card" : "table-card-red"}>
+                            <div
+                                className={`col-4 ${selectedTableId === table.tableId ? "selected-table" : ""}`}
+                                key={table.tableId}
+                                onClick={() => getBillByTableId(table.tableId, table.bill)}>
+                                <div className={table.bill === false ? "table-card" : "table-card-red"}
+                                     style={{marginBottom: '20px'}}>
                                     {table.code}
                                 </div>
                             </div>
@@ -118,8 +150,8 @@ function Sell() {
 
                 {/* Bảng thông tin hóa đơn */}
                 <div ref={componentPDF} style={{width: '100%'}} className="col-md-8">
-                    <table className="table table-bordered menu-table">
-                        <thead>
+                    <table className="table table-striped">
+                        <thead className="table-active">
                         <tr>
                             <th>STT</th>
                             <th>Tên món</th>
@@ -130,17 +162,37 @@ function Sell() {
                         </tr>
                         </thead>
                         <tbody>
-                        {bills.length === 0 ? <h3>Bàn này chưa có bill</h3> :
-                            bills.map((bill, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{bill.name}</td>
-                                    <td>{bill.quantity}</td>
-                                    <td>{formatCurrency(bill.price)}</td>
-                                    <td>{bill.numberTable}</td>
-                                    <td>{formatCurrency(bill.price * bill.quantity)}</td>
-                                </tr>
-                            ))}
+
+
+                        {loading ? (
+                            <tr>
+                                <td colSpan="6" className="text-center">
+                                    <div className="spinner-border" role="status">
+                                        <span className="sr-only">Đang tải hóa đơn...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            <>
+                                {bills.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center">Bàn này chưa có bill</td>
+                                    </tr>
+                                ) : (
+                                    bills.map((bill, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{bill.name}</td>
+                                            <td>{bill.quantity}</td>
+                                            <td>{formatCurrency(bill.price)}</td>
+                                            <td>{bill.tableCode}</td>
+                                            <td>{formatCurrency(bill.price * bill.quantity)}</td>
+                                        </tr>
+                                    ))
+                                )}
+                            </>
+                        )}
+
                         <tr>
                             <td colSpan="5" className="text-right">Tổng tiền</td>
                             <td>{formatCurrency(calculateTotal())}</td>
@@ -150,7 +202,7 @@ function Sell() {
                 </div>
                 {/* Nút tính tiền và làm mới */}
                 <div className="d-flex m-md-auto">
-                    <button className="btn btn-primary" onClick={generatePDF}>Tính tiền</button>
+                    <button className="btn btn-primary" onClick={checkBillBeforPay}>Tính tiền</button>
                     <button className="btn btn-secondary" onClick={() => getAllTables()}>Làm mới bảng</button>
                 </div>
             </div>
