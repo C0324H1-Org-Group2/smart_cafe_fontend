@@ -1,0 +1,25 @@
+.table-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.table-card:hover {
+    background-color: #f8f9fa;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.menu-table {
+    width: 100%;
+}
+
+.menu-table th, .menu-table td {
+    text-align: center;
+    vertical-align: middle;
+}
