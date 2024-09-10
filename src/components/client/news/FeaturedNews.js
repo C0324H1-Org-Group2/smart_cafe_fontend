@@ -25,7 +25,7 @@ const FeaturedNews = () => {
                         <h3 className="heading"><Link to={`/news/${news.newsId}`}>{news.title}</Link></h3>
                         <div className="meta">
                             <div><Link to={`/news/${news.newsId}`}><span
-                                className="icon-calendar"></span> {news.publishDate ? format(new Date(news.publishDate), 'dd-MM-yyyy') : 'Unknown Date'}
+                                className="icon-calendar"></span> {news.publishDate ? format(new Date(news.publishDate), 'dd MMM yyyy') : 'Unknown Date'}
                             </Link></div>
                             {/*<div><Link to={`/news/${news.newsId}`}><span*/}
                             {/*    className="icon-person"></span> {news.creator.username}</Link></div>*/}

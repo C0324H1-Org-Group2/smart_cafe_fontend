@@ -13,8 +13,12 @@ const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) =
                 </Link>
                 <div className="text py-4 d-block">
                     <div className="meta">
-                        <div><a href="#">{formattedDate || "Unknown Date"}</a></div>
-                        <div><a href="#">{creator || "Unknown Author"}</a></div>
+                        <div>
+                            <span className="icon-calendar"></span> {formattedDate || "Unknown Date"}
+                        </div>
+                        <div>
+                            <span className="icon-person"></span> {creator || "Unknown Author"}
+                        </div>
                     </div>
                     <h3 className="heading mt-2"><Link to={`/news/${newsId}`}>{title}</Link></h3>
                     <p className="news-content">{content}</p>

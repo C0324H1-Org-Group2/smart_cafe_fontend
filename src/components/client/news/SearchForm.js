@@ -1,6 +1,5 @@
 import React from 'react';
 import Categories from "./Categories";
-import RecentBlog from "./FeaturedNews";
 import TagCloud from "./TagCloud";
 import FeaturedNews from "./FeaturedNews";
 

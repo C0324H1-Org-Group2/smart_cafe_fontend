@@ -35,7 +35,6 @@ const NewsDetail = () => {
         : 'Unknown Date';
 
     return (
-        <body>
         <section className="ftco-section">
             <div className="container">
                 <div className="row">
@@ -61,7 +60,6 @@ const NewsDetail = () => {
                 </div>
             </div>
         </section>
-        </body>
     );
 };
 
