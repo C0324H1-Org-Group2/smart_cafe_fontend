@@ -9,7 +9,7 @@ import MainComponent from "./components/client/MainComponent";
 import TopNewestServices from "./components/client/home/TopNewestServices";
 import ClientLayout from "./components/client/ClientLayout";
 import TopMostOrderServices from "./components/client/home/TopMostOrderServices";
-import Menu from "./components/client/Menu";
+import Menu from "./components/client/menu/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
 import CounterSection from "./components/client/home/CounterSection";
