@@ -25,6 +25,7 @@ import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
 import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
+import NewsListManagement from "./components/admin/news/NewsListManagement";
 
 
 function App() {
@@ -276,7 +277,7 @@ function App() {
                         </AdminLayout>
                     </>
                 }/>
-                <Route path="/admin/news" element={
+                <Route path="/admin/news/create" element={
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -294,6 +295,28 @@ function App() {
                         <AdminLayout>
                             {/* Thêm các component admin ở đây */}
                             <NewsForm />
+                            <Sidebar/>
+                        </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/news" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            {/* Thêm các component admin ở đây */}
+                            <NewsListManagement />
                             <Sidebar/>
                         </AdminLayout>
                     </>

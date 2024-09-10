@@ -46,6 +46,7 @@ const NewsList = () => {
                             creator={entry.creator.username}
                             title={entry.title}
                             content={entry.content}
+                            // viewCount={entry.viewCount}
                         />
                     ))}
                 </div>

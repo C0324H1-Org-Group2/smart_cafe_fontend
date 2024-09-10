@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { parseISO } from "date-fns";
 import "./NewsEntry.css";
-const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) => {
+
+const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId, viewCount }) => {
     const formattedDate = formatDistanceToNow(parseISO(publishDate), { addSuffix: true });
 
     return (
@@ -19,6 +20,11 @@ const NewsEntry = ({ imageUrl, publishDate, creator, title, content, newsId }) =
                         <div>
                             <span className="icon-person"></span> {creator || "Unknown Author"}
                         </div>
+                        {/*<div>*/}
+                        {/*    <Link to={`/news/${newsId}`}>*/}
+                        {/*        <span className="icon-eye"></span> {viewCount || 0} views*/}
+                        {/*    </Link>*/}
+                        {/*</div>*/}
                     </div>
                     <h3 className="heading mt-2"><Link to={`/news/${newsId}`}>{title}</Link></h3>
                     <p className="news-content">{content}</p>
