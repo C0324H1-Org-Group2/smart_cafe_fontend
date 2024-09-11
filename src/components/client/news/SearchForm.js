@@ -1,7 +1,7 @@
 import React from 'react';
 import Categories from "./Categories";
-import RecentBlog from "./RecentBlog";
 import TagCloud from "./TagCloud";
+import FeaturedNews from "./FeaturedNews";
 
 const SearchForm = () => (
                 <div className="col-md-4 sidebar">
@@ -16,7 +16,7 @@ const SearchForm = () => (
                         </form>
                     </div>
                     <Categories/>
-                    <RecentBlog/>
+                    <FeaturedNews/>
                     <TagCloud/>
                 </div>
 );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import NewsNotification from '../news/NewsNotification';
-
+import './Navbar.css';
 const Navbar = () => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -26,7 +26,7 @@ const Navbar = () => {
                         <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
                         <li className="nav-item"><NavLink to="/menu" className="nav-link">Menu</NavLink></li>
                         <li className="nav-item"><a href="services.html" className="nav-link">Services</a></li>
-                        <li className="nav-item"><NavLink to="/news" className="nav-link">News</NavLink></li>
+                        <li className="nav-item"><NavLink to="/news#news-list" className="nav-link">News</NavLink></li>
                         <li className="nav-item"><a href="about.html" className="nav-link">About</a></li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="room.html" id="dropdown04"

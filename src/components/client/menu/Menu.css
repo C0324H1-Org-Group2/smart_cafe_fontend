@@ -32,4 +32,14 @@
     margin: 0 2px;
 }
 
+/* Chỉnh lại giao diện bảng nhưng không có nền */
+.table-custom {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho bảng */
+    border-radius: 8px; /* Bo góc bảng */
+    overflow: hidden;
+    border: none; /* Xóa viền của bảng */
+}
+
+
+
 
