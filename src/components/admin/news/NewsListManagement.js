@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import * as newsService from "../../client/services/NewsService";
 import { format } from "date-fns";
 import {Button, Modal} from "react-bootstrap";
+import 'react-toastify/dist/ReactToastify.css';
+import {toast, ToastContainer} from "react-toastify";
 
 const NewsListManagement = () => {
     const [newsEntries, setNewsEntries] = useState([]);
@@ -31,6 +33,9 @@ const NewsListManagement = () => {
             setNewsEntries(newsEntries.filter((n) => n.newsId !== selectedNews.newsId))
             setShowDeleteModal(false);
             setSelectedNews(null);
+            toast.success('Tin tức được xóa thành công!');
+        } else {
+            toast.error('Tin tức được xóa thất bại!');
         }
     };
 
@@ -86,7 +91,7 @@ const NewsListManagement = () => {
                                                   title="Detail">
                                                 <i className="fas fa-info-circle"></i>
                                             </Link>
-                                            <Link to={`/news/edit/${news.newsId}`} className="btn btn-primary ml-2"
+                                            <Link to={`/admin/news/update/${news.newsId}`} className="btn btn-primary ml-2"
                                                   title="Edit">
                                                 <i className="fas fa-edit"></i>
                                             </Link>
@@ -159,6 +164,7 @@ const NewsListManagement = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer/>
         </>
     );
 };
