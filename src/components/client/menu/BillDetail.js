@@ -22,7 +22,6 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
 
             updateRemainTime();
             const interval = setInterval(updateRemainTime, 1000);
-
             return () => clearInterval(interval);
         }
     }, [item.isOrder, item.service.waitTime]);
