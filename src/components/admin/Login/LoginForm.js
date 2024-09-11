@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
+import {toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import {login} from "../services/Api";
 
@@ -16,10 +16,10 @@ const LoginForm = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             await login(values);
-            alert('Đăng nhập thành công!');
+            toast.success('Đăng nhập thành công!');
             navigate('/admin');
         } catch (error) {
-            alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
+            toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }
         setSubmitting(false);
     };

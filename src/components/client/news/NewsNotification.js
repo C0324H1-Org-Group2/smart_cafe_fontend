@@ -28,7 +28,7 @@ const NewsNotification = ({ onNewNotifications, isDropdownOpen }) => {
             stompClient.subscribe('/topic/news', (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages((prevMessages) => {
-                    const updatedMessages = [...prevMessages, newMessage];
+                    const updatedMessages = [newMessage, ...prevMessages];
                     onNewNotifications(updatedMessages.length);
                     return updatedMessages;
                 });
