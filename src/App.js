@@ -9,10 +9,9 @@ import MainComponent from "./components/client/MainComponent";
 import TopNewestServices from "./components/client/home/TopNewestServices";
 import ClientLayout from "./components/client/ClientLayout";
 import TopMostOrderServices from "./components/client/home/TopMostOrderServices";
-import Menu from "./components/client/Menu";
+import Menu from "./components/client/menu/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
-import CounterSection from "./components/client/home/CounterSection";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
@@ -23,7 +22,15 @@ import Sell from "./components/admin/Sell";
 import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
+import CounterSection from "./components/client/home/CounterSection";
+import ManagerRevenue from "./components/admin/manager/ManagerRevenue";
+import ChartComponent from "./components/admin/manager/ChartComponent";
+import ExpensesChart from "./components/admin/manager/ExpensesChart";
+import TopSellService from "./components/admin/manager/TopServiceComponent";
+import TopServiceComponent from "./components/admin/manager/TopServiceComponent";
+import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
+import NewsListManagement from "./components/admin/news/NewsListManagement";
 import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
 
 
@@ -113,12 +120,54 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
+                            <ManagerRevenue/>
+                            <ChartComponent/>
+                            <ExpensesChart/>
+                            <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
 
                         </AdminLayout>
                     </>
                 }/>
+                <Route path="/admin/tables/list" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableList />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+                <Route path="/admin/tables/create" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableCreate />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+
+                <Route path="/admin/tables/edit/:tableId" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <TableEdit />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+
 
 
                 <Route path="/admin/service" element={
@@ -238,7 +287,7 @@ function App() {
                         </AdminLayout>
                     </>
                 }/>
-                <Route path="/admin/news" element={
+                <Route path="/admin/news/create" element={
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -256,6 +305,28 @@ function App() {
                         <AdminLayout>
                             {/* Thêm các component admin ở đây */}
                             <NewsForm />
+                            <Sidebar/>
+                        </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/news" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            {/* Thêm các component admin ở đây */}
+                            <NewsListManagement />
                             <Sidebar/>
                         </AdminLayout>
                     </>
