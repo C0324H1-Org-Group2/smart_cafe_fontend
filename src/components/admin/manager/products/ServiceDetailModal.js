@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import './ManagerOrder.css';
+import '../ManagerOrder.css';
 
 const ServiceDetailModal = ({ show, handleClose, serviceDetails }) => {
 

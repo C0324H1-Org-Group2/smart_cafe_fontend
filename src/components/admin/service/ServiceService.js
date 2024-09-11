@@ -24,3 +24,13 @@ export const getServiceDetails = async (id) => {
         throw error;
     }
 };
+
+export const createService = async (service) => {
+    try {
+        const response = await axios.post('/api/services/add', service);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to create service', error);
+        throw error;
+    }
+};

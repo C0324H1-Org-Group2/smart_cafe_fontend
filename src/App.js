@@ -16,7 +16,7 @@ import NewsDetail from "./components/client/news/NewsDetail";
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
-import TableService from "./components/admin/manager/TableService";
+import TableService from "./components/admin/manager/products/TableService";
 import FeedbackList from "./components/admin/feedbackList";
 import Sell from "./components/admin/Sell";
 import LoginForm from "./components/admin/Login/LoginForm";
@@ -31,6 +31,7 @@ import TopServiceComponent from "./components/admin/manager/TopServiceComponent"
 import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
 import NewsListManagement from "./components/admin/news/NewsListManagement";
+import ServiceFormAdd from "./components/admin/manager/products/ServiceFormAdd";
 
 
 function App() {
@@ -192,6 +193,29 @@ function App() {
                         </AdminLayout>
                     </>
                 }/>
+                <Route path="/admin/service/add" element={
+                    <>
+                        <Helmet>
+                            {/* Import CSS của admin */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        <AdminLayout>
+                            <ServiceFormAdd />
+                            <Sidebar />
+                        </AdminLayout>
+                    </>
+                } />
+
+
                 <Route path="/admin/feedback/:date" element={
                     <>
                         <Helmet>
