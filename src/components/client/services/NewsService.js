@@ -20,6 +20,15 @@ export const getNewsById = async (newsId) => {
     }
 }
 
+export const deleteNews = async (newsId) => {
+    try {
+        await axios.delete(`http://localhost:8080/api/news/${newsId}`);
+    } catch (e) {
+        console.error("Lỗi: " + e);
+        return null;
+    }
+};
+
 export const getTopViewedNews = async () => {
     try {
         const response = await axios.get("http://localhost:8080/api/news/top-viewed");

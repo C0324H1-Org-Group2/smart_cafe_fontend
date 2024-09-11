@@ -31,7 +31,7 @@ const NewsForm = () => {
             const response = await newsService.createNews(formData);
             if (response) {
                 toast.success('Tin tức được tạo thành công!');
-                navigate('/admin');
+                navigate('/admin/news');
             }
         } catch (error) {
             toast.error('Tạo tin tức thất bại');
