@@ -13,11 +13,28 @@ const Menu = () => {
     const [cartItems, setCartItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [tableInfo, setTableInfo] = useState(null);
+    const [billInfo, setBillInfo] = useState(null);
     const itemsPerPage = 8;
 
     useEffect(() => {
-        allMenuItems();
+        createTableAndBill()
     }, []);
+
+    const createTableAndBill = async () => {
+        try {
+            const table = await serviceService.getRandomAvailableTable();
+            if (table) {
+                const bill = await serviceService.updateTableStatusAndCreateBill(table.tableId);
+                console.log("Created bill:", bill);
+                setTableInfo(table);
+                setBillInfo(bill);
+                allMenuItems();
+            }
+        } catch (error) {
+            console.error('Error creating table and bill:', error);
+        }
+    };
 
     const allMenuItems = async () => {
         const data = await serviceService.getMenuItems();
@@ -37,15 +54,22 @@ const Menu = () => {
     };
 
     const handleAddToCart = (service) => {
-        const existingItem = cartItems.find(item => item.serviceId === service.serviceId);
+        const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId);
+
         if (existingItem) {
             setCartItems(cartItems.map(item =>
-                item.serviceId === service.serviceId
+                item.service.serviceId === service.serviceId
                     ? { ...item, quantity: item.quantity + 1 }
                     : item
             ));
         } else {
-            const newItem = { ...service, quantity: 1, status: false };
+            const newItem = {
+                service: { ...service },
+                isOrder: false,
+                bill: billInfo ? { ...billInfo } : null, // Lưu toàn bộ đối tượng billInfo
+                quantity: 1,
+                tableId: tableInfo?.tableId ?? null
+            };
             setCartItems([...cartItems, newItem]);
         }
     };
@@ -59,6 +83,10 @@ const Menu = () => {
     const handleDeleteCartItems = (updatedItems) => {
         setCartItems(updatedItems);
     };
+
+    const handleSentBillDetail = (updatedItems) => {
+        setCartItems(updatedItems);
+    }
 
     return (
         <section className="ftco-section">
@@ -85,6 +113,8 @@ const Menu = () => {
                     cartItems={cartItems}
                     handleStatusChange={handleStatusChange}
                     handleDeleteCartItems={handleDeleteCartItems}
+                    handleSentBillDetail={handleSentBillDetail}
+                    tableInfo={tableInfo}
                 />
             </Container>
         </section>
