@@ -105,7 +105,7 @@ function App() {
                 }/>
 
                 {/* Route cho Admin */}
-                <Route path="/admin" element={
+                <Route path="/admin/home" element={
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
