@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from "axios";
-
-const getAllServices = async (page) => {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/services/all-services?page=${page}&size=10`);
-        return response.data;
-    } catch (e) {
-        console.error('Lỗi lấy tất cả :', e);
-        return [];
-    }
-}
+import './ManagerOrder.css';
+import {getAllServices, getServiceDetails} from "../service/ServiceService";
+import ServiceDetailModal from "./ServiceDetailModal";
 
 const TableService = () => {
+
+
     const [allServices, setAllServices] = useState([]);
     const [services, setServices] = useState([]);
     const [page, setPage] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedService, setSelectedService] = useState(null);
     const itemsPerPage = 10;
+    const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,18 +28,26 @@ const TableService = () => {
     }, [page]);
 
     useEffect(() => {
-        // Calculate start and end index
         const startIndex = page * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-
-        // Get services for current page
         const servicesForCurrentPage = allServices.slice(startIndex, endIndex);
-
         setServices(servicesForCurrentPage);
     }, [page, allServices]);
 
+    const handleShowModal = (service) => {
+        setSelectedService(service);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedService(null);
+        setShowModal(false);
+    };
+
+
     return (
         <>
+
             <div className="main-content">
                 <div className="section-body">
                     <h2 className="section-title">Table</h2>
@@ -73,7 +81,11 @@ const TableService = () => {
                                                 {service.status}
                                             </div>
                                         </td>
-                                        <td><Link to="#" className="btn btn-secondary">Detail</Link></td>
+                                        <td>
+                                            <button className="btn btn-secondary"
+                                                    onClick={() => handleShowModal(service)}>Detail
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                                 </tbody>
@@ -98,6 +110,12 @@ const TableService = () => {
                     </div>
                 </div>
             </div>
+
+            <ServiceDetailModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                serviceDetails={selectedService}
+            />
         </>
     );
 };
