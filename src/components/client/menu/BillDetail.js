@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import moment from "moment";
+import moment from 'moment';
 
 const BillDetail = ({ item, index, handleStatusChange }) => {
-    const [remainTime, setRemainTime] = useState(item.waitTime);
+    const [remainTime, setRemainTime] = useState(item.service.waitTime);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            let time = moment(remainTime, "HH:mm:ss");
+        if (item.isOrder) {
+            const waitTimeDuration = moment.duration(item.service.waitTime, "HH:mm:ss");
+            const endTime = moment().add(waitTimeDuration);
 
-            time = time.subtract(1, 'seconds');
+            const updateRemainTime = () => {
+                const now = moment();
+                const remainingDuration = moment.duration(endTime.diff(now));
 
-            if (time.isBefore(moment().startOf('day'))) {
-                clearInterval(interval);
-                setRemainTime("00:00:00");
-            } else {
-                setRemainTime(time.format("HH:mm:ss"));
-            }
-        }, 1000);
+                if (remainingDuration.asSeconds() <= 0) {
+                    setRemainTime("00:00:00");
+                } else {
+                    setRemainTime(moment.utc(remainingDuration.asMilliseconds()).format("HH:mm:ss"));
+                }
+            };
 
-        return () => clearInterval(interval);
-    }, [remainTime]);
+            updateRemainTime();
+            const interval = setInterval(updateRemainTime, 1000);
 
-    const orderStatus = remainTime === "00:00:00" ? "Ordering" : "Wait";
+            return () => clearInterval(interval);
+        }
+    }, [item.isOrder, item.service.waitTime]);
 
     return (
-        <tbody>
         <tr key={index}>
             <td>
                 <input
@@ -34,14 +37,13 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
                 />
             </td>
             <td>{index + 1}</td>
-            <td>{item.serviceName}</td>
+            <td>{item.service.serviceName}</td>
             <td>{item.quantity}</td>
-            <td>{item.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</td>
-            <td>{(item.quantity * item.price).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}</td>
+            <td>{item.service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+            <td>{(item.quantity * item.service.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
             <td>{remainTime}</td>
-            <td>{orderStatus}</td>
+            <td>{item.isOrder ? "Ordering" : "Wait"}</td>
         </tr>
-        </tbody>
     );
 };
 
