@@ -24,6 +24,7 @@ import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
+import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
 
 
 function App() {
@@ -289,6 +290,22 @@ function App() {
                             <EmployeeDetailService/>
                             <Sidebar/>
                         </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/forgot-password" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                            <ForgotPasswordService/>
                     </>
                 }/>
             </Routes>
