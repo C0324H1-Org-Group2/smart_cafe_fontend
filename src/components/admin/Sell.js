@@ -201,9 +201,9 @@ function Sell() {
                     </table>
                 </div>
                 {/* Nút tính tiền và làm mới */}
-                <div className="d-flex m-md-auto">
+                <div className="d-flex justify-content-end me-3 mb-5 ">
                     <button className="btn btn-primary" onClick={checkBillBeforPay}>Tính tiền</button>
-                    <button className="btn btn-secondary" onClick={() => getAllTables()}>Làm mới bảng</button>
+                    <button className="btn btn-secondary" onClick={()=>getBillByTableId(selectedTableId,selectedIsBill)}>Làm mới bảng</button>
                 </div>
             </div>
 
