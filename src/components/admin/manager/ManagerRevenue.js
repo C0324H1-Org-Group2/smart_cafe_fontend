@@ -53,35 +53,39 @@ const ManagerRevenue = () => {
         }, []);
 
         return (
-            <div className="container mt-5">
-                <div className="row justify-content-center">
-                    <div className="col-12">
-                        <div className="row flex-column flex-md-row">
-                            <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
-                                <div className="revenue-card">
-                                    <h3>today's revenue: {todayRevenue.toLocaleString()} đ</h3>
-                                    <p>
-                                        {todayPercentageChange}%{' '}
-                                        {todayPercentageChange > 0 ? '🔼' : todayPercentageChange < 0 ? '🔽' : '⚖️'}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
-                                <div className="revenue-card">
-                                    <h3>this month's revenue: {thisMonthRevenue.toLocaleString()} đ</h3>
-                                    <p>
-                                        {monthPercentageChange}%{' '}
-                                        {monthPercentageChange > 0 ? '🔼' : monthPercentageChange < 0 ? '🔽' : '⚖️'}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
-                                <div className="revenue-card">
-                                    <h3>this year's revenue: {thisYearRevenue.toLocaleString()} đ</h3>
-                                    <p>
-                                       {yearPercentageChange}%{' '}
-                                        {yearPercentageChange > 0 ? '🔼' : yearPercentageChange < 0 ? '🔽' : '⚖️'}
-                                    </p>
+            <div className="main-content">
+                <div className="section-body">
+                    <div className="container mt-5">
+                        <div className="row justify-content-center">
+                            <div className="col-12">
+                                <div className="row flex-column flex-md-row">
+                                    <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
+                                        <div className="revenue-card">
+                                            <h3>today's revenue: {todayRevenue.toLocaleString()} đ</h3>
+                                            <p>
+                                                {todayPercentageChange}%{' '}
+                                                {todayPercentageChange > 0 ? '🔼' : todayPercentageChange < 0 ? '🔽' : '⚖️'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
+                                        <div className="revenue-card">
+                                            <h3>this month's revenue: {thisMonthRevenue.toLocaleString()} đ</h3>
+                                            <p>
+                                                {monthPercentageChange}%{' '}
+                                                {monthPercentageChange > 0 ? '🔼' : monthPercentageChange < 0 ? '🔽' : '⚖️'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
+                                        <div className="revenue-card">
+                                            <h3>this year's revenue: {thisYearRevenue.toLocaleString()} đ</h3>
+                                            <p>
+                                               {yearPercentageChange}%{' '}
+                                                {yearPercentageChange > 0 ? '🔼' : yearPercentageChange < 0 ? '🔽' : '⚖️'}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
