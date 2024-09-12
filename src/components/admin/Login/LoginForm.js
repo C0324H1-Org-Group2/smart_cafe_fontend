@@ -49,16 +49,19 @@ const LoginForm = () => {
                                             <Form className="login-form">
                                                 <div className="form-group">
                                                     <label htmlFor="username">Tên đăng nhập</label>
-                                                    <Field name="username" type="text" className="form-control" />
-                                                    <ErrorMessage name="username" component="div" className="error-message" />
+                                                    <Field name="username" type="text" className="form-control"/>
+                                                    <ErrorMessage name="username" component="div"
+                                                                  className="error-message"/>
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="password">Mật khẩu</label>
-                                                    <Field name="password" type="password" className="form-control" />
-                                                    <ErrorMessage name="password" component="div" className="error-message" />
+                                                    <Field name="password" type="password" className="form-control"/>
+                                                    <ErrorMessage name="password" component="div"
+                                                                  className="error-message"/>
                                                 </div>
                                                 <div className="form-group">
-                                                    <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={isSubmitting}>
+                                                    <button type="submit" className="btn btn-primary btn-lg btn-block"
+                                                            disabled={isSubmitting}>
                                                         Đăng Nhập
                                                     </button>
                                                 </div>
@@ -66,6 +69,11 @@ const LoginForm = () => {
                                                 <div className="form-group text-center">
                                                     <a href="/forgot-password" className="text-small">
                                                         Quên mật khẩu?
+                                                    </a>
+                                                </div>
+                                                <div className="form-group text-center">
+                                                    <a href="/register" className="text-small">
+                                                        Đăng ký tài khoản
                                                     </a>
                                                 </div>
                                             </Form>
