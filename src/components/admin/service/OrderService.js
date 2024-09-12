@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllOrders = async (codeSearch, dateSearch, page = 0, size = 2) => {
+export const getAllOrders = async (codeSearch, dateSearch, page = 0, size = 10) => {
     try {
         const response = await axios.get('http://localhost:8080/api/orders', {
             params: {

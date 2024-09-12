@@ -22,7 +22,7 @@ function OrderList() {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            const response = await getAllOrders(searchParams.codeSearch, searchParams.dateSearch, page, 2);
+            const response = await getAllOrders(searchParams.codeSearch, searchParams.dateSearch, page, 10); // Fetch 10 orders per page
             if (response && response.content) {
                 setOrders(response.content.map(order => ({
                     ...order,
@@ -85,7 +85,7 @@ function OrderList() {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Tìm theo mã hóa đơn"
+                                    placeholder="Search by code"
                                     value={codeSearch}
                                     onChange={(e) => setCodeSearch(e.target.value)}
                                 />
@@ -100,7 +100,7 @@ function OrderList() {
                                 />
                             </div>
                             <div className="col-md-4">
-                                <button className="btn btn-primary" onClick={handleSearch}>Tìm kiếm</button>
+                                <button className="btn btn-primary" onClick={handleSearch}>Search</button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ function OrderList() {
                                 {orders && orders.length > 0 ? (
                                     orders.map((order, index) => (
                                         <tr key={order.billCode}>
-                                            <td>{index + 1 + page * 2}</td>
+                                            <td>{index + 1 + page * 10}</td> {/* Adjust for 10 records per page */}
                                             <td>{order.billCode}</td>
                                             <td>{order.dateCreated}</td>
                                             <td>{order.nameCreated}</td>

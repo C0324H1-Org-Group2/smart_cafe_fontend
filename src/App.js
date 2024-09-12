@@ -12,7 +12,6 @@ import TopMostOrderServices from "./components/client/home/TopMostOrderServices"
 import Menu from "./components/client/menu/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
-import CounterSection from "./components/client/home/CounterSection";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
@@ -23,9 +22,16 @@ import Sell from "./components/admin/Sell";
 import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
 import NewsForm from "./components/admin/news/NewsForm";
+import CounterSection from "./components/client/home/CounterSection";
+import ManagerRevenue from "./components/admin/manager/ManagerRevenue";
+import ChartComponent from "./components/admin/manager/ChartComponent";
+import ExpensesChart from "./components/admin/manager/ExpensesChart";
+import TopSellService from "./components/admin/manager/TopServiceComponent";
+import TopServiceComponent from "./components/admin/manager/TopServiceComponent";
 import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tables";
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
 import NewsListManagement from "./components/admin/news/NewsListManagement";
+import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
 
 
 function App() {
@@ -114,6 +120,10 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
+                            <ManagerRevenue/>
+                            <ChartComponent/>
+                            <ExpensesChart/>
+                            <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
 
@@ -179,92 +189,92 @@ function App() {
                             {/* Thêm các component admin ở đây */}
                             <TableService />
 
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
-                }/>
-                <Route path="/admin/feedback/:date" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
+                    <Route path="/admin/feedback/:date" element={
+                        <>
+                            <Helmet>
+                                {/* Import CSS của admin */}
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
 
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <FeedbackList/>
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
-                }/>
-                <Route path="/admin/feedback" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                {/* Thêm các component admin ở đây */}
+                                <FeedbackList/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
+                    <Route path="/admin/feedback" element={
+                        <>
+                            <Helmet>
+                                {/* Import CSS của admin */}
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
 
                             <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                             <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <FeedbackList/>
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
-                }/>
-                <Route path="/admin/sell" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                {/* Thêm các component admin ở đây */}
+                                <FeedbackList/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
+                    <Route path="/admin/sell" element={
+                        <>
+                            <Helmet>
+                                {/* Import CSS của admin */}
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                            <link rel="stylesheet"
-                                  href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                            <link rel="stylesheet"
-                                  href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                            <link rel="stylesheet" href="/assets/css/admin.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <Sell/>
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
-                }/>
-                <Route path="/admin/order" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                                <link rel="stylesheet" href="/assets/css/admin.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                {/* Thêm các component admin ở đây */}
+                                <Sell/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
+                    <Route path="/admin/order" element={
+                        <>
+                            <Helmet>
+                                {/* Import CSS của admin */}
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                            <link rel="stylesheet"
-                                  href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                            <link rel="stylesheet"
-                                  href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
                             <link rel="stylesheet" href="/assets/css/components.css"/>
                             <link rel="stylesheet" href="/assets/css/style.css"/>
@@ -351,6 +361,22 @@ function App() {
                             <EmployeeDetailService/>
                             <Sidebar/>
                         </AdminLayout>
+                    </>
+                }/>
+                <Route path="/admin/forgot-password" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                            <ForgotPasswordService/>
                     </>
                 }/>
             </Routes>
