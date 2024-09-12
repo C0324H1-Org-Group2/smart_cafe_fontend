@@ -66,6 +66,10 @@ const UpdateNewsForm = () => {
         }
     };
 
+    const handleCancel = () => {
+        navigate('/admin/news');
+    };
+
     return (
         <div className="main-content">
             <div className="section-body">
@@ -93,7 +97,7 @@ const UpdateNewsForm = () => {
                                 onChange={handleChange}
                                 rows={10}
                                 placeholder="Nhập nội dung tin tức"
-                                style={{ minHeight: "170px" }}
+                                style={{minHeight: "170px"}}
                                 required
                             />
                         </Form.Group>
@@ -108,14 +112,17 @@ const UpdateNewsForm = () => {
                             />
                             {previewImage && (
                                 <div className="mt-3">
-                                    <img src={previewImage} alt="News Thumbnail" style={{ width: "150px", height: "auto" }}/>
+                                    <img src={previewImage} alt="News Thumbnail"
+                                         style={{width: "150px", height: "auto"}}/>
                                 </div>
                             )}
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" className="mt-3">
-                            Cập nhật tin tức
-                        </Button>
+                        <div className="d-flex justify-content-between">
+                            <Button variant="primary" type="submit" className="mt-3">Cập nhật</Button>
+                            <Button type="button" variant="secondary" className="mt-3"
+                                    onClick={handleCancel}>Hủy</Button>
+                        </div>
                     </Form>
                 </Container>
             </div>
