@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import {toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import * as newsService from '../services/NewsService';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
+import { Button, Container, Form as BootstrapForm } from 'react-bootstrap';
 
 const NewsForm = () => {
     const navigate = useNavigate();
@@ -39,66 +40,70 @@ const NewsForm = () => {
     };
 
     const handleCancel = () => {
-        navigate('/admin');
+        navigate('/admin/news');
     };
 
     return (
         <div className="main-content">
             <div className="section-body">
-                <div className="container mt-4">
-                    <div className="row justify-content-center">
-                        <div className="col-md-8">
-                            <h2>Tạo Tin Tức Mới</h2>
-                            <Formik
-                                initialValues={{
-                                    title: '',
-                                    content: '',
-                                    file: null
-                                }}
-                                onSubmit={saveNews}
-                                validationSchema={validationSchema}
-                            >
-                                {({ setFieldValue }) => (
-                                    <Form>
-                                        <div className="form-group mb-3">
-                                            <label htmlFor="title">Tiêu Đề:</label>
-                                            <Field name="title" type="text" className="form-control" />
-                                            <ErrorMessage name="title" component="p" className="text-danger" />
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label htmlFor="content">Nội Dung:</label>
-                                            <Field name="content" as="textarea" rows="3" className="form-control"/>
-                                            <ErrorMessage name="content" component="p" className="text-danger" />
-                                        </div>
-                                        <div className="form-group mb-3">
-                                            <label htmlFor="file">Ảnh:</label>
-                                            <input
-                                                name="file"
-                                                type="file"
-                                                className="form-control"
-                                                onChange={(event) => {
-                                                    setFieldValue('file', event.currentTarget.files[0]);
-                                                    setPreviewImage(URL.createObjectURL(event.currentTarget.files[0]));
-                                                }}
-                                            />
-                                            <ErrorMessage name="file" component="p" className="text-danger" />
-                                        </div>
-                                        {previewImage && (
-                                            <div className="mb-3">
-                                                <img src={previewImage} alt="Preview" className="img-fluid" style={{ width: '150px', height: '150px', objectFit: 'cover' }}/>
-                                            </div>
-                                        )}
-                                        <div className="d-flex justify-content-between">
-                                            <button type="submit" className="btn btn-primary">Tạo Tin</button>
-                                            <button type="button" className="btn btn-secondary" onClick={handleCancel}>Hủy</button>
-                                        </div>
-                                    </Form>
+                <Container className="mt-4">
+                    <h2>Tạo Tin Tức Mới</h2>
+                    <Formik
+                        initialValues={{
+                            title: '',
+                            content: '',
+                            file: null
+                        }}
+                        onSubmit={saveNews}
+                        validationSchema={validationSchema}
+                    >
+                        {({ setFieldValue }) => (
+                            <Form encType="multipart/form-data">
+                                <BootstrapForm.Group className="mb-3" controlId="title">
+                                    <BootstrapForm.Label>Tiêu Đề:</BootstrapForm.Label>
+                                    <Field name="title" type="text" className="form-control" />
+                                    <ErrorMessage name="title" component="p" className="text-danger" />
+                                </BootstrapForm.Group>
+
+                                <BootstrapForm.Group className="mb-3" controlId="content">
+                                    <BootstrapForm.Label>Nội Dung:</BootstrapForm.Label>
+                                    <Field
+                                        name="content"
+                                        as="textarea"
+                                        className="form-control"
+                                        style={{ minHeight: '170px' }}
+                                    />
+                                    <ErrorMessage name="content" component="p" className="text-danger" />
+                                </BootstrapForm.Group>
+
+                                <BootstrapForm.Group className="mb-3" controlId="file">
+                                    <BootstrapForm.Label>Ảnh:</BootstrapForm.Label>
+                                    <input
+                                        name="file"
+                                        type="file"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            setFieldValue('file', event.currentTarget.files[0]);
+                                            setPreviewImage(URL.createObjectURL(event.currentTarget.files[0]));
+                                        }}
+                                    />
+                                    <ErrorMessage name="file" component="p" className="text-danger" />
+                                </BootstrapForm.Group>
+
+                                {previewImage && (
+                                    <div className="mb-3">
+                                        <img src={previewImage} alt="Preview" className="img-fluid" style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
+                                    </div>
                                 )}
-                            </Formik>
-                        </div>
-                    </div>
-                    <ToastContainer />
-                </div>
+
+                                <div className="d-flex justify-content-between">
+                                    <Button type="submit" variant="primary">Tạo Tin</Button>
+                                    <Button type="button" variant="secondary" onClick={handleCancel}>Hủy</Button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </Container>
             </div>
         </div>
     );
