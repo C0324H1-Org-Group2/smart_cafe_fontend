@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Button } from 'react-bootstrap';
+import QuantityModal from './QuantityModal'; // Import modal
 
 const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedService, setSelectedService] = useState(null);
+    const [quantity, setQuantity] = useState(1); // Thêm state để lưu số lượng
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentServices = services.slice(indexOfFirstItem, indexOfLastItem);
@@ -36,6 +41,21 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
         }, 300);
     };
 
+    const handleShowModal = (service) => {
+        setSelectedService(service);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setQuantity(1); // Reset số lượng khi đóng modal
+    };
+
+    const handleConfirmModal = (quantity) => {
+        handleAddToCart(selectedService, quantity); // Gửi số lượng về component cha
+        handleCloseModal(); // Đóng modal và reset số lượng
+    };
+
     return (
         <Col md={10}>
             <Row className={`row ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
@@ -49,7 +69,7 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                                 <div className="text text-center pt-4">
                                     <h3><a href="#">{service.serviceName}</a></h3>
                                     <p className="price"><span>{service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span></p>
-                                    <p><Button onClick={() => handleAddToCart(service)} className="btn btn-primary btn-outline-primary">Add to Cart</Button></p>
+                                    <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary">Add to Cart</Button></p>
                                 </div>
                             </div>
                         </Col>
@@ -70,6 +90,16 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                     </div>
                 </Col>
             </Row>
+
+            {/* Hiển thị modal nhập số lượng */}
+            <QuantityModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                service={selectedService}
+                handleConfirm={handleConfirmModal}
+                quantity={quantity}
+                setQuantity={setQuantity} // Thêm hàm này để cập nhật số lượng
+            />
         </Col>
     );
 };
