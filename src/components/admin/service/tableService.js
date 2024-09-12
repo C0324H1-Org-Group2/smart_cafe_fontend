@@ -9,8 +9,24 @@ export const getAllTables = async (page = 0, size = 10) => {
         });
         return response.data;
     } catch (error) {
-        console.error('Lỗi khi lấy danh sách bảng:', error);
+        console.error('Error fetching tables:', error);
         throw error;
+    }
+};
+
+export const searchTableById = async (id) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/search`, {
+            params: { id }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.status === 404) {
+            return 'Not found!';
+        } else {
+            console.error('Error searching table by ID:', error);
+            throw error;
+        }
     }
 };
 

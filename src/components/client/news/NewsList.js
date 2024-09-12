@@ -4,7 +4,7 @@ import * as newsService from "../services/NewsService";
 import useScrollToHash from "../common/UseScrollToHash";
 const NewsList = () => {
     const [newsEntries, setNewsEntries] = useState([]);
-    const [visibleEntries, setVisibleEntries] = useState(3);
+    const [visibleEntries, setVisibleEntries] = useState(6);
     useScrollToHash([newsEntries]);
 
     useEffect(() => {
