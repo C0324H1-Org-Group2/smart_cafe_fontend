@@ -20,9 +20,15 @@ function OrderList() {
     const [orderDetails, setOrderDetails] = useState([]);
     const [isAscending, setIsAscending] = useState(true); // Trạng thái sắp xếp
 
+    // Cập nhật searchParams khi codeSearch hoặc dateSearch thay đổi
+    useEffect(() => {
+        setSearchParams({ codeSearch, dateSearch });
+    }, [codeSearch, dateSearch]);
+
+    // Fetch dữ liệu khi searchParams hoặc page thay đổi
     useEffect(() => {
         const fetchOrders = async () => {
-            const response = await getAllOrders(searchParams.codeSearch, searchParams.dateSearch, page, 2);
+            const response = await getAllOrders(searchParams.codeSearch, searchParams.dateSearch, page, 10); // Fetch 10 orders per page
             if (response && response.content) {
                 setOrders(response.content.map(order => ({
                     ...order,
@@ -53,6 +59,13 @@ function OrderList() {
         setPage(0);
     };
 
+    const handleReset = () => {
+        setCodeSearch('');
+        setDateSearch('');
+        setSearchParams({ codeSearch: '', dateSearch: '' });
+        setPage(0);
+    };
+
     const handleShowModal = async (orderId) => {
         setSelectedOrderId(orderId);
         try {
@@ -60,7 +73,7 @@ function OrderList() {
             setOrderDetails(details);
             setShowModal(true);
         } catch (error) {
-            console.error("ko tìm thấy chi tiết đơn hàng:", error);
+            console.error("Không tìm thấy chi tiết đơn hàng:", error);
         }
     };
 
@@ -85,7 +98,7 @@ function OrderList() {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Tìm theo mã hóa đơn"
+                                    placeholder="Search by code"
                                     value={codeSearch}
                                     onChange={(e) => setCodeSearch(e.target.value)}
                                 />
@@ -99,8 +112,8 @@ function OrderList() {
                                     onChange={(e) => setDateSearch(e.target.value)}
                                 />
                             </div>
-                            <div className="col-md-4">
-                                <button className="btn btn-primary" onClick={handleSearch}>Tìm kiếm</button>
+                            <div className="col-md-4 d-flex align-items-end">
+                                <button className="btn btn-primary mr-2" onClick={handleReset}>Show List Bill</button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +141,7 @@ function OrderList() {
                                 {orders && orders.length > 0 ? (
                                     orders.map((order, index) => (
                                         <tr key={order.billCode}>
-                                            <td>{index + 1 + page * 2}</td>
+                                            <td>{index + 1 + page * 10}</td> {/* Adjust for 10 records per page */}
                                             <td>{order.billCode}</td>
                                             <td>{order.dateCreated}</td>
                                             <td>{order.nameCreated}</td>
