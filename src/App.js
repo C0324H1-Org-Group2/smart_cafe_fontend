@@ -33,6 +33,7 @@ import EmployeeDetailService from "./components/admin/services/EmployeeDetailSer
 import NewsListManagement from "./components/admin/news/NewsListManagement";
 import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
 import UpdateNewsForm from "./components/admin/news/UpdateNewsForm";
+import RevenueByDate from "./components/admin/manager/RevenueByDate";
 
 
 function App() {
@@ -121,9 +122,10 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
+                            <RevenueByDate/>
                             <ManagerRevenue/>
-                            <ChartComponent/>
                             <ExpensesChart/>
+                            <ChartComponent/>
                             <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
