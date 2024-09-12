@@ -32,6 +32,7 @@ import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tabl
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
 import NewsListManagement from "./components/admin/news/NewsListManagement";
 import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
+import ResetPassword from "./components/admin/Login/ResetPassword";
 
 
 function App() {
@@ -377,6 +378,22 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                             <ForgotPasswordService/>
+                    </>
+                }/>
+                <Route path="/admin/reset-password" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        {<ResetPassword/>}
                     </>
                 }/>
             </Routes>
