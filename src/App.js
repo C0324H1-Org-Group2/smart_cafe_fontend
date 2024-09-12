@@ -12,6 +12,7 @@ import TopMostOrderServices from "./components/client/home/TopMostOrderServices"
 import Menu from "./components/client/menu/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
+import Feedback from "./components/client/menu/Feedback";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
@@ -32,6 +33,7 @@ import {TableCreate, TableEdit, TableList} from "./components/admin/manager/tabl
 import EmployeeDetailService from "./components/admin/services/EmployeeDetailService";
 import NewsListManagement from "./components/admin/news/NewsListManagement";
 import ForgotPasswordService from "./components/admin/Login/ForgotPasswordService";
+
 
 
 function App() {
@@ -75,6 +77,7 @@ function App() {
                         <ClientLayout>
                             <Slider/>
                             <Menu/>
+                            <Feedback/>
                         </ClientLayout>
                     </>
                 }/>
