@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTableById, updateTable } from '../../service/tableService'; // Đảm bảo đường dẫn đúng
+import { getTableById, updateTable } from '../../service/tableService';
+import { toast } from 'react-toastify';
 
 const TableEdit = () => {
     const { tableId } = useParams();
@@ -17,9 +18,10 @@ const TableEdit = () => {
                 setTable(data);
                 setCode(data.code);
                 setState(data.state);
-                setIsOn(data.isOn);
+                setIsOn(data.on); // Sửa từ isOn thành on
             } catch (error) {
                 console.error('Lỗi khi lấy thông tin bàn:', error);
+                toast.error('Lỗi khi lấy thông tin bàn.');
             }
         };
 
@@ -29,12 +31,12 @@ const TableEdit = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await updateTable(tableId, { code, state, isOn });
-            alert('Cập nhật bàn thành công!');
+            await updateTable(tableId, { code, state, on: isOn }); // Sửa từ isOn thành on
+            toast.success('Cập nhật bàn thành công!');
             navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
         } catch (error) {
             console.error('Lỗi khi cập nhật bàn:', error);
-            alert('Cập nhật bàn thất bại.');
+            toast.error('Cập nhật bàn thất bại.');
         }
     };
 
