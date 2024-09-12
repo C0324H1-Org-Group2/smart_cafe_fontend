@@ -51,3 +51,18 @@ export const getTopSellService = async (year) => {
         return [];
     }
 }
+
+export const getRevenueByDate = async (dateFrom, dateTo) => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/revenue/search', {
+            params: {
+                dateFrom,
+                dateTo
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching revenue data:', error);
+        throw error;
+    }
+};
