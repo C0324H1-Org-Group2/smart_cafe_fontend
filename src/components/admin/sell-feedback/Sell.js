@@ -16,8 +16,11 @@ function Sell() {
 
     useEffect(() => {
         getAllTables();
+        const interval = setInterval(() => {
+            getAllTables();
+        }, 1000);
+        return () => clearInterval(interval);
     }, []);
-
 
     const getAllTables = async () => {
         try {

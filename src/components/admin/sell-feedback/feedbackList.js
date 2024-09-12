@@ -64,7 +64,7 @@
             <>
                 <div className="main-content">
                     <div className="section-body">
-                        <h2 className="section-title">Feedback</h2>
+                        <h2 className="section-title">Phản hồi</h2>
                         <div className="card-header">
                             <label htmlFor="date">Ngày phản hồi:</label>
                             <input
