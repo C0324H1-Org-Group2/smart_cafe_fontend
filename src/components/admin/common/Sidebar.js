@@ -18,19 +18,20 @@ const Sidebar = () => {
                             <span>Quản lý món</span>
                         </Link>
                     <li className="menu-header">Starter</li>
-                    <li className="dropdown">
-                        <a href="#" className="nav-link has-dropdown" data-toggle="dropdown">
-                            <i className="fas fa-columns"></i> <span>Layout</span>
-                        </a>
-                        <ul className="dropdown-menu">
-                            <li><Link className="nav-link" to="layout-default.html">Default Layout</Link></li>
-                            <li><Link className="nav-link" to="layout-transparent.html">Transparent Sidebar</Link></li>
-                            <li><Link className="nav-link" to="layout-top-navigation.html">Top Navigation</Link></li>
-                        </ul>
+                    <li >
+                        <Link to="/admin/sell" className="nav-link">
+                            <i className="fas "></i>
+                            <span>Bán hàng</span>
+                        </Link>
                     </li>
-                    <li><Link className="nav-link" to="blank.html"><i className="far fa-square"></i> <span>Blank Page</span></Link></li>
+                    <li >
+                        <Link to="/admin/feedback" className="nav-link">
+                            <i className="fas "></i>
+                            <span>Feedback</span>
+                        </Link>
+                    </li>
                     <li className="dropdown">
-                        <a href="#" className="nav-link has-dropdown">
+                    <a href="#" className="nav-link has-dropdown">
                             <i className="fas fa-th"></i> <span>Bootstrap</span>
                         </a>
                         <ul className="dropdown-menu">

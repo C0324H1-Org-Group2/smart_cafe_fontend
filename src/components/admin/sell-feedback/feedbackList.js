@@ -1,12 +1,12 @@
     import React, { useEffect, useState } from 'react';
     import { useParams, useNavigate, Link } from 'react-router-dom';
-    import * as feedbackService from "./service/FeedbackService";
+    import * as feedbackService from "../service/FeedbackService";
 
     function FeedbackList() {
         const { date } = useParams(); // Lấy giá trị `date` từ URL
         const [feedbacks, setFeedbacks] = useState([]);
         const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-        const [itemsPerPage] = useState(2); // Số lượng phản hồi trên mỗi trang
+        const [itemsPerPage] = useState(10); // Số lượng phản hồi trên mỗi trang
         const navigate = useNavigate();
 
         useEffect(() => {
@@ -64,7 +64,7 @@
             <>
                 <div className="main-content">
                     <div className="section-body">
-                        <h2 className="section-title">Quản lý Feedback</h2>
+                        <h2 className="section-title">Feedback</h2>
                         <div className="card-header">
                             <label htmlFor="date">Ngày phản hồi:</label>
                             <input
