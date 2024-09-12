@@ -12,6 +12,7 @@ import TopMostOrderServices from "./components/client/home/TopMostOrderServices"
 import Menu from "./components/client/menu/Menu";
 import NewsList from "./components/client/news/NewsList";
 import NewsDetail from "./components/client/news/NewsDetail";
+import Feedback from "./components/client/menu/Feedback";
 
 // Admin Components
 import AdminLayout from "./components/admin/AdminLayout";
@@ -37,6 +38,7 @@ import RevenueByDate from "./components/admin/manager/RevenueByDate";
 import ResetPassword from "./components/admin/Login/ResetPassword";
 import ServiceFormAdd from "./components/admin/manager/products/ServiceFormAdd";
 import ServiceFormUpdate from "./components/admin/manager/products/ServiceFormUpdate";
+
 
 
 function App() {
@@ -80,6 +82,7 @@ function App() {
                         <ClientLayout>
                             <Slider/>
                             <Menu/>
+                            <Feedback/>
                         </ClientLayout>
                     </>
                 }/>

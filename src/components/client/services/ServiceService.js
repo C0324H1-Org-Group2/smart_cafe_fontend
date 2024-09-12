@@ -95,6 +95,17 @@ export const getAllTables = async() => {
     }
 }
 
+export const sendFeedback = async (feedback) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/feedback_client`, feedback);
+        return response.data;
+    } catch (e) {
+        throw new Error('Error sending feedback: ' + e.message);
+    }
+};
+
+
+
 
 
 
