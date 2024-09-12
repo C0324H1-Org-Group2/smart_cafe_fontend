@@ -55,13 +55,25 @@ export const getRandomAvailableTable = async () => {
 // Gọi API để cập nhật trạng thái bảng và tạo hóa đơn
 export const updateTableStatusAndCreateBill = async (tableId) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/tables/${tableId}/status`);
+        const response = await axios.patch(`${API_BASE_URL}/tables/${tableId}/status_createBill`);
         return response.data;
     } catch (error) {
         console.error('Error updating table status and creating bill:', error);
         throw error;
     }
 };
+
+// Cập nhật trạng thái bảng mà không tạo hóa đơn
+export const updateTableStatus = async (tableId) => {
+    try {
+        const response = await axios.patch(`${API_BASE_URL}/tables/${tableId}/status`);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating table status:', error);
+        throw error;
+    }
+};
+
 
 // Gửi yêu cầu gọi món
 export const orderItems = async (items) => {
@@ -72,5 +84,17 @@ export const orderItems = async (items) => {
         throw error;
     }
 };
+
+export const getAllTables = async() => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tables`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all tables:', error);
+        throw error;
+    }
+}
+
+
 
 
