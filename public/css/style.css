@@ -8076,41 +8076,41 @@ h1, h2, h3, h4, h5,
   /*min-width: 1000px !important;*/
   width: 100%;
   text-align: center; }
-  .table th {
-    font-weight: 500; }
-  .table .thead-primary {
-    background: #c49b63; }
-    .table .thead-primary tr th {
-      padding: 20px 10px;
-      color: #fff !important;
-      border: 1px solid transparent !important; }
-  .table tbody tr td {
-    text-align: center !important;
-    vertical-align: middle;
-    padding: 40px 10px;
-    border: 1px solid transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
-    .table tbody tr td.product-remove a {
-      bordeR: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 5px 10px; }
-      .table tbody tr td.product-remove a:hover {
-        background: #c49b63; }
-        .table tbody tr td.product-remove a:hover span {
-          color: #000; }
-    .table tbody tr td.quantity {
-      width: 20%; }
-    .table tbody tr td.image-prod .img {
-      display: block;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto; }
-    .table tbody tr td.product-name {
-      width: 30%; }
-      .table tbody tr td.product-name h3 {
-        font-size: 16px;
-        text-transform: uppercase; }
-    .table tbody tr td.total, .table tbody tr td.price {
-      color: #fff; }
+.table th {
+  font-weight: 500; }
+.table .thead-primary {
+  background: #c49b63; }
+.table .thead-primary tr th {
+  padding: 20px 10px;
+  color: #fff !important;
+  border: 1px solid transparent !important; }
+.table tbody tr td {
+  text-align: center !important;
+  vertical-align: middle;
+  padding: 15px 10px;
+  border: 1px solid transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
+.table tbody tr td.product-remove a {
+  bordeR: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 10px; }
+.table tbody tr td.product-remove a:hover {
+  background: #c49b63; }
+.table tbody tr td.product-remove a:hover span {
+  color: #000; }
+.table tbody tr td.quantity {
+  width: 20%; }
+.table tbody tr td.image-prod .img {
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto; }
+.table tbody tr td.product-name {
+  width: 30%; }
+.table tbody tr td.product-name h3 {
+  font-size: 16px;
+  text-transform: uppercase; }
+.table tbody tr td.total, .table tbody tr td.price {
+  color: #fff; }
 
 .cart-wrap .btn-primary {
   display: block;
