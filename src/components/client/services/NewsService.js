@@ -29,6 +29,16 @@ export const deleteNews = async (newsId) => {
     }
 };
 
+export const updateNews = async (newsId, updatedData) => {
+    try {
+        const response = await axios.put(`http://localhost:8080/api/news/update/${newsId}`, updatedData);
+        return response.data;
+    } catch (e) {
+        console.error("Lỗi cập nhật tin tức: " + e);
+        return null;
+    }
+};
+
 export const getTopViewedNews = async () => {
     try {
         const response = await axios.get("http://localhost:8080/api/news/top-viewed");
