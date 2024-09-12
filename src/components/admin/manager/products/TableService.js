@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import '../ManagerOrder.css';
-import {getAllServices, getServiceDetails} from "../../service/ServiceService";
+import {getAllServices} from "../../service/ServiceService";
 import ServiceDetailModal from "./ServiceDetailModal";
 
 const TableService = () => {
@@ -14,7 +14,9 @@ const TableService = () => {
     const [selectedService, setSelectedService] = useState(null);
     const itemsPerPage = 10;
     const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate(); // Khởi tạo useNavigate
+    const navigate = useNavigate();
+    const totalPages = Math.ceil(allServices.length / itemsPerPage);
+    const isLastPage = page >= totalPages - 1;
 
 
 
@@ -93,7 +95,7 @@ const TableService = () => {
                             </thead>
                             <tbody>
                             {services.map((service, index) => (
-                                <tr key={service.id}>
+                                <tr key={service.serviceId}>
                                     <td>{page * itemsPerPage + index + 1}</td>
                                     <td>{service.serviceName}</td>
                                     <td>{service.price.toLocaleString('vi-VN', {
@@ -109,6 +111,10 @@ const TableService = () => {
                                         <button className="btn btn-secondary"
                                                 onClick={() => handleShowModal(service)}>Detail
                                         </button>
+                                        <Link to={`/admin/service/update/${service.serviceId}`} className="btn btn-primary">
+                                            Update
+                                        </Link>
+
                                     </td>
                                 </tr>
                             ))}
@@ -125,8 +131,8 @@ const TableService = () => {
                             </li>
                             <li className="page-item active"><Link className="page-link" to="#">{page + 1} <span
                                 className="sr-only">(current)</span></Link></li>
-                            <li className="page-item">
-                                <Link className="page-link" to="#" onClick={() => setPage(page + 1)}><i
+                            <li className={`page-item ${isLastPage ? 'disabled' : ''}`}>
+                                <Link className="page-link" to="#" onClick={() => !isLastPage && setPage(page + 1)}><i
                                     className="fas fa-chevron-right"></i></Link>
                             </li>
                         </ul>
@@ -141,7 +147,7 @@ const TableService = () => {
             serviceDetails={selectedService}
         />
     </>
-);
+    );
 };
 
 export default TableService;
