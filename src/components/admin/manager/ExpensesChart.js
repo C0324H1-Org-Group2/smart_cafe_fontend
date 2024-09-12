@@ -65,7 +65,7 @@ const ExpensesChart = () => {
                         },
                         total: {
                             show: true,
-                            label: 'Tổng',
+                            label: 'Total',
                             formatter: function (w) {
                                 // Hiển thị tổng phần trăm với 2 chữ số
                                 return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toFixed(2) + '%';
@@ -78,7 +78,7 @@ const ExpensesChart = () => {
         legend: {
             position: 'bottom',
             formatter: function (val, opts) {
-                return val + " - " + (opts.w.globals.series[opts.seriesIndex] || 0).toFixed(2) + "%";
+                return val + ": " + (opts.w.globals.series[opts.seriesIndex] || 0).toFixed(2) + "%";
             }
         },
         responsive: [{
@@ -103,7 +103,7 @@ const ExpensesChart = () => {
                     {/* Biểu đồ năm trước */}
                     <div id="lastYear-chart" style={{width: '45%', height: '400px'}}>
                         <ApexCharts
-                            options={options('Doanh thu năm trước (%)')}
+                            options={options('last year\'s revenue (%)')}
                             series={chartData.lastYearSeries}
                             type="donut"
                             width="100%"
@@ -114,7 +114,7 @@ const ExpensesChart = () => {
                     {/* Biểu đồ năm nay */}
                     <div id="thisYear-chart" style={{width: '45%', height: '400px'}}>
                         <ApexCharts
-                            options={options('Doanh thu năm nay (%)')}
+                            options={options('this year\'s revenue (%)')}
                             series={chartData.thisYearSeries}
                             type="donut"
                             width="100%"

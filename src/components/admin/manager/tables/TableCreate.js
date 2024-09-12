@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTable } from '../../service/tableService'; // Đảm bảo đường dẫn đúng
+import { toast } from 'react-toastify';
 
 const TableCreate = () => {
     const navigate = useNavigate();
@@ -12,11 +13,11 @@ const TableCreate = () => {
         e.preventDefault();
         try {
             await createTable({ code, state, isOn });
-            alert('Table created successfully!');
+            toast.success('Table created successfully!');
             navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
         } catch (error) {
             console.error('Error creating table:', error);
-            alert('Failed to create table.');
+            toast.error('Failed to create table.');
         }
     };
 

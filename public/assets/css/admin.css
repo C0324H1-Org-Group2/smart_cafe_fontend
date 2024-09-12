@@ -4,10 +4,17 @@
     text-align: center;
     cursor: pointer;
 }
-
+.table-card-red {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #b21f2d;
+}
 .table-card:hover {
     background-color: #f8f9fa;
 }
+
 
 .pagination-container {
     display: flex;
@@ -22,4 +29,10 @@
 .menu-table th, .menu-table td {
     text-align: center;
     vertical-align: middle;
+}
+
+.selected-table .table-card {
+    /* Các kiểu CSS cho bàn đang được chọn */
+    border: 2px solid #007bff; /* Màu sắc của border khi chọn */
+    background-color: #f0f8ff; /* Màu nền khi chọn (tùy chọn) */
 }
