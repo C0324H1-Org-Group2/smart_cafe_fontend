@@ -1,9 +1,26 @@
 import axios from "axios";
 
+export async function setStatusOrder(tableId) {
+    try {
+        await axios.patch(`http://localhost:8080/api/table/order/${tableId}`)
+    }catch (e){
+        console.error(e)
+    }
+}
+
+
+export async function setStatusEmployee(tableId) {
+    try {
+        await axios.patch(`http://localhost:8080/api/table/employee/${tableId}`)
+    }catch (e){
+        console.error(e)
+    }
+}
+
+
 export const getAllTables= async () => {
     try {
         let res = await axios.get("http://localhost:8080/api/table")
-        console.log(res);
         return res.data;
     } catch (e) {
         console.error(e);
