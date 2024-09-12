@@ -62,9 +62,8 @@ const LoginForm = () => {
                                                         Đăng Nhập
                                                     </button>
                                                 </div>
-                                                {/* Quên mật khẩu */}
                                                 <div className="form-group text-center">
-                                                    <a href="/forgot-password" className="text-small">
+                                                    <a href="/admin/forgot-password" className="text-small">
                                                         Quên mật khẩu?
                                                     </a>
                                                 </div>
