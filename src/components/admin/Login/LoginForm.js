@@ -17,7 +17,7 @@ const LoginForm = () => {
         try {
             await login(values);
             toast.success('Đăng nhập thành công!');
-            navigate('/admin');
+            navigate('/admin/home');
         } catch (error) {
             toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }
@@ -62,9 +62,8 @@ const LoginForm = () => {
                                                         Đăng Nhập
                                                     </button>
                                                 </div>
-                                                {/* Quên mật khẩu */}
                                                 <div className="form-group text-center">
-                                                    <a href="/forgot-password" className="text-small">
+                                                    <a href="/admin/forgot-password" className="text-small">
                                                         Quên mật khẩu?
                                                     </a>
                                                 </div>

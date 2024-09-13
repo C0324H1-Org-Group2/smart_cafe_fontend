@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
-import * as sellService from "./service/SellService";
+import * as sellService from "../service/SellService";
 import {useReactToPrint} from "react-to-print";
 import {toast} from "react-toastify";
 
@@ -8,16 +8,19 @@ function Sell() {
     const [tables, setTables] = useState([])
     const [bills, setBills] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const [itemsPerPage] = useState(9); // Số lượng phản hồi trên mỗi trang
+    const [itemsPerPage] = useState(6); // Số lượng ban trên mỗi trang
     const componentPDF = useRef();
     const [selectedTableId, setSelectedTableId] = useState(null);
-    const [selectedIsBill, setSelectedIsBill] = useState(false)
+    const [selectedIsPay, setSelectedIsPay] = useState(false)
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getAllTables();
+        const interval = setInterval(() => {
+            getAllTables();
+        }, 1000);
+        return () => clearInterval(interval);
     }, []);
-
 
     const getAllTables = async () => {
         try {
@@ -28,24 +31,10 @@ function Sell() {
         }
     };
 
-    // const getBillByTableId = async (tableId, isBill) => {
-    //     try {
-    //         setLoading(true);
-    //         setSelectedIsBill(isBill);
-    //         setSelectedTableId(tableId);
-    //         let bills = await sellService.getBillByTableId(tableId);
-    //         setBills(bills);
-    //     } catch (e) {
-    //         console.error("Lỗi danh sách hóa đơn", e);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    const getBillByTableId = async (tableId, isBill) => {
+    const getBillByTableId = async (tableId, isPay) => {
         try {
             setLoading(true); // Bắt đầu hiển thị loading
-            setSelectedIsBill(isBill);
+            setSelectedIsPay(isPay);
             setSelectedTableId(tableId);
 
             // Hàm giả lập chờ trong một khoảng thời gian (ở đây là 500ms)
@@ -91,7 +80,7 @@ function Sell() {
 
 
     const checkBillBeforPay = () => {
-        if (selectedIsBill === true && bills.length > 0) {
+        if (selectedIsPay === true && bills.length > 0) {
             generatePDF();
         } else {
             toast.warning("Không tìm thấy bill hoặc chưa có yêu cầu tính tiền ");
@@ -123,33 +112,65 @@ function Sell() {
         }
     };
 
+    const setStatusEmployee = async (tableId)=> {
+       try {
+           await sellService.setStatusEmployee(tableId);
+           await getAllTables();
+       } catch (e){
+           console.log("loi set status employee")
+       }
+    }
+
+    const setStatusOrder = async (tableId) => {
+        try {
+            await sellService.setStatusOrder(tableId);
+            await getAllTables();
+
+        }catch (e){
+            console.log("loi set status isBill")
+        }
+    }
+
     return (
         <div className="main-content my-4">
-            <div className="section-body">
-                <h2 className="section-title">Quản lý bán hàng</h2>
+            <div className="section-body mb-5">
+                <h2 className="section-title">Bán hàng</h2>
             </div>
 
             <div className="row">
                 {/* Khu vực bàn */}
-                <div className="col-md-4">
+                <div className="col-md-6">
                     <div className="row g-4">
                         {currentTables.map((table) => (
-                            <div
-                                className={`col-4 ${selectedTableId === table.tableId ? "selected-table" : ""}`}
-                                key={table.tableId}
-                                onClick={() => getBillByTableId(table.tableId, table.bill)}>
-                                <div className={table.bill === false ? "table-card" : "table-card-red"}
-                                     style={{marginBottom: '20px'}}>
+
+                            <div className={`col-4 ${selectedTableId === table.tableId ? "selected-table" : ""}`}
+                                 key={table.tableId}>
+                                <div className={ table.on === false ? "table-card" : "table-card-grey"} style={{marginBottom: '20px'}}
+                                     onClick={() => getBillByTableId(table.tableId, table.bill)}>
                                     {table.code}
                                 </div>
+
+                                <button className={ table.pay === true ? " button-def btn-red" :"button-def"}
+                                        onClick={() => getBillByTableId(table.tableId, table.pay)}>Pay</button>
+
+                                <button className={ table.bill === true ? " button-def btn-yellow" :"button-def"}
+                                        onClick={() => {
+                                            getBillByTableId(table.tableId, table.pay);
+                                            setStatusOrder(table.tableId);
+                                        }}>Order</button>
+
+                                <button className={ table.callEmployee === true ? " button-def btn-green" :"button-def"}
+                                        onClick={()=> setStatusEmployee(table.tableId)}>Employee</button>
                             </div>
+
+
                         ))}
                     </div>
                 </div>
 
 
                 {/* Bảng thông tin hóa đơn */}
-                <div ref={componentPDF} style={{width: '100%'}} className="col-md-8">
+                <div ref={componentPDF} style={{width: '100%'}} className="col-md-6">
                     <table className="table table-striped">
                         <thead className="table-active">
                         <tr>
@@ -162,8 +183,6 @@ function Sell() {
                         </tr>
                         </thead>
                         <tbody>
-
-
                         {loading ? (
                             <tr>
                                 <td colSpan="6" className="text-center">
@@ -203,7 +222,9 @@ function Sell() {
                 {/* Nút tính tiền và làm mới */}
                 <div className="d-flex justify-content-end me-3 mb-5 ">
                     <button className="btn btn-primary" onClick={checkBillBeforPay}>Tính tiền</button>
-                    <button className="btn btn-secondary" onClick={()=>getBillByTableId(selectedTableId,selectedIsBill)}>Làm mới bảng</button>
+                    <button className="btn btn-secondary"
+                            onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng
+                    </button>
                 </div>
             </div>
 

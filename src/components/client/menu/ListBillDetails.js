@@ -4,12 +4,15 @@ import BillDetail from "./BillDetail";
 import TableSelectionModal from './TableSelectionModal'; // Import modal component
 import * as serviceService from "../services/ServiceService";
 import { toast } from "react-toastify";
+import FeedbackModal from "./FeedbackModal";
+import {NavLink} from "react-router-dom";
 
 const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
     const [items, setItems] = useState(cartItems);
     const [showTableModal, setShowTableModal] = useState(false); // State để điều khiển modal
     const [selectedTable, setSelectedTable] = useState(tableInfo);
     const [currentBill, setCurrentBill] = useState(null);
+    const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
     useEffect(() => {
         setItems(cartItems);
@@ -75,7 +78,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
             // Gọi lại API để lấy danh sách các bàn mới cập nhật
             const updatedTables = await serviceService.getAllTables();
-            onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId)); // Cập nhật thông tin bàn hiện tại
+            onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
 
             toast.success("Order placed successfully.");
         } catch (error) {
@@ -99,7 +102,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
         try {
             // Cập nhật trạng thái bàn trên server
-            await serviceService.updateTableStatus(selectedTable.tableId);
+            // await serviceService.updateTableStatus(selectedTable.tableId);
             
             const updatedTables = await serviceService.getAllTables();
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
@@ -123,13 +126,12 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         handleSentBillDetail(updatedItems);
     };
 
-
-    const btnAction = [
-        { text: "Xóa", handleAction: () => handleDelete(), variant: "danger" },
-        { text: "Gọi món", handleAction: () => handleOrder(), variant: "primary" },
-        { text: "Thanh toán", handleAction: () => handlePay(), variant: "success" },
-        { text: "Phản hồi", handleAction: () => console.log("Phản hồi"), variant: "secondary" },
-    ];
+    // Hàm xử lý dữ liệu phản hồi từ modal
+    const handleFeedbackSubmit = (feedbackData) => {
+        console.log("Dữ liệu phản hồi:", feedbackData);
+        // Thực hiện các xử lý khác, ví dụ: gửi feedback lên server hoặc lưu lại
+        toast.success("Phản hồi đã được gửi!");
+    };
 
     return (
         <>
@@ -166,10 +168,17 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                     </Table>
 
                     <div className="d-flex justify-content-center mb-3">
-                        {btnAction.map(btn => (
-                            <Button className="btn-lg rounded-pill" onClick={btn.handleAction}
-                                    variant={btn.variant ? btn.variant : 'default'}>{btn.text}</Button>
-                        ))}
+                        <Button className="btn-lg rounded-pill" onClick={handleDelete} variant="danger">Xóa</Button>
+                        <Button className="btn-lg rounded-pill" onClick={handleOrder} variant="primary">Gọi món</Button>
+                        <Button className="btn-lg rounded-pill" onClick={handlePay} variant="success">Thanh toán</Button>
+                        <NavLink
+                            to="/menu#feedback"
+                            onClick={() => console.log("Phản hồi")}
+                            className="btn btn-info btn-lg rounded-pill ms-3"
+                        >
+                            Phản hồi
+                        </NavLink>
+
                     </div>
                 </Col>
             </Row>
@@ -179,6 +188,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                 onHide={() => setShowTableModal(false)}
                 tables={allTables}
                 onSelectTable={handleSelectTable}
+            />
+
+            {/* Hiển thị modal Phản hồi */}
+            <FeedbackModal
+                show={showFeedbackModal}
+                onHide={() => setShowFeedbackModal(false)}
+                onSubmit={handleFeedbackSubmit} // Truyền hàm xử lý dữ liệu phản hồi
             />
         </>
     );
