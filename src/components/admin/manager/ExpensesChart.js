@@ -98,7 +98,7 @@ const ExpensesChart = () => {
 
         <div className="main-content">
             <div className="section-body">
-                <h2 className="section-title">Revenue by Service Type</h2>
+                <h3 className="section-title text-center">Revenue by Service Type</h3>
                 <div className="section-body" style={{display: 'flex', justifyContent: 'space-around'}}>
                     {/* Biểu đồ năm trước */}
                     <div id="lastYear-chart" style={{width: '45%', height: '400px'}}>
