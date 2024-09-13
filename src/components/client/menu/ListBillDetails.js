@@ -13,6 +13,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     const [selectedTable, setSelectedTable] = useState(tableInfo);
     const [currentBill, setCurrentBill] = useState(null);
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+    const [isTableLocked, setIsTableLocked] = useState(false);
 
     useEffect(() => {
         setItems(cartItems);
@@ -83,7 +84,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             // Gọi lại API để lấy danh sách các bàn mới cập nhật
             const updatedTables = await serviceService.getAllTables();
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
-
+            setIsTableLocked(true);
             toast.success("Order placed successfully.");
         } catch (error) {
             toast.error("Error placing order.");
@@ -92,6 +93,14 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
 
     const handlePay = async () => {
+
+        const isBill = await serviceService.checkIsBillTable(selectedTable.tableId)
+
+        if (isBill) {
+            toast.error("This table has already been ordered. You cannot make a payment.");
+            return;
+        }
+
         const orderItems = items.filter(item => item.isOrder);
 
         if (orderItems.length === 0) {
@@ -109,7 +118,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             
             const updatedTables = await serviceService.getAllTables();
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
-
+            setIsTableLocked(false);
             toast.success("Payment processed successfully.");
         } catch (error) {
             toast.error("Error processing payment.");
@@ -143,7 +152,14 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                 <Col md={10} className="text-center mb-4">
                     <div className="d-flex flex-column align-items-start mb-3" style={{ width: '400px', margin: '0 auto' }}>
                         <div className="d-flex justify-content-start align-items-center mb-3" style={{ width: '100%' }}>
-                            <Button onClick={() => setShowTableModal(true)} variant="info" className="btn-lg rounded-pill ms-3">Chọn bàn</Button>
+                            <Button
+                                onClick={() => setShowTableModal(true)}
+                                variant="info"
+                                className="btn-lg rounded-pill ms-3"
+                                disabled={isTableLocked} // Khóa nút chọn bàn nếu đã gọi món
+                            >
+                                Chọn bàn
+                            </Button>
                             <Button onClick={() => console.log("Gọi phục vụ")} variant="info" className="btn-lg rounded-pill ms-3">Gọi phục vụ</Button>
                             <span><strong>Bàn của bạn :</strong> {selectedTable ? selectedTable.code : 'N/A'}</span>
                         </div>
