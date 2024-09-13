@@ -67,7 +67,7 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                             <div className="menu-entry">
                                 <a href="#" className="img" style={{ backgroundImage: `url(/images/${service.imageUrl})` }}></a>
                                 <div className="text text-center pt-4">
-                                    <h3><a href="#">{service.serviceName}</a></h3>
+                                    <h3 title={service.serviceName}><a href="#">{service.serviceName}</a></h3>
                                     <p className="price"><span>{service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span></p>
                                     <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary">Add to Cart</Button></p>
                                 </div>

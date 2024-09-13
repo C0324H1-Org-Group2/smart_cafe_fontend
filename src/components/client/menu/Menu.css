@@ -31,6 +31,40 @@
     font-size: 16px;
     margin: 0 2px;
 }
+.menu-entry {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px; /* Giữ bo tròn góc nếu cần, có thể loại bỏ nếu không muốn */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Có thể giữ hoặc loại bỏ nếu không cần */
+}
+
+.menu-entry .img {
+    background-size: cover;
+    background-position: center;
+    height: 200px; /* Điều chỉnh chiều cao ảnh nếu cần */
+    width: 100%;
+}
+
+.menu-entry .text {
+    padding: 15px;
+    text-align: center;
+}
+
+.menu-entry .text h3 {
+    font-size: 1.2rem;
+    white-space: nowrap; /* Ngăn cản việc xuống dòng */
+    overflow: hidden; /* Ẩn phần văn bản không thể hiện */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi văn bản dài */
+}
+
+.menu-entry .text .price {
+    font-size: 1rem;
+    color: #333;
+}
+
+.menu-entry .text .btn {
+    margin-top: 10px;
+}
 
 
 
