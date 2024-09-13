@@ -24,6 +24,9 @@ const ResetPassword = () => {
         try {
             const data = await resetPassword(token, password, confirmPassword);
             setSuccess(data.message);
+            setTimeout(() => {
+                window.location.href = "/admin/login";
+            }, 2000);
         } catch (error) {
             setError("Error resetting password.");
         }
