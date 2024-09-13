@@ -38,6 +38,7 @@ import RevenueByDate from "./components/admin/manager/RevenueByDate";
 import ResetPassword from "./components/admin/Login/ResetPassword";
 import ServiceFormAdd from "./components/admin/manager/products/ServiceFormAdd";
 import ServiceFormUpdate from "./components/admin/manager/products/ServiceFormUpdate";
+import CreateServiceForm from "./components/admin/manager/products/CreateServiceForm";
 
 
 
@@ -218,7 +219,8 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         <AdminLayout>
-                            <ServiceFormAdd />
+                            {/*<ServiceFormAdd />*/}
+                            <CreateServiceForm/>
                             <Sidebar />
                         </AdminLayout>
                     </>
