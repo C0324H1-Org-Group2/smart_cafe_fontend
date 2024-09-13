@@ -38,12 +38,12 @@ const RevenueByDate = () => {
     return (
         <div className="main-content">
             <div className="section-body">
-                <h2 className="section-title">Revenue During Period</h2>
+                <h3 className="section-title text-center mt-4">Revenue During Period</h3>
                 <div className="container mt-2">
-                    <div className="row justify-content-center">
-                        <div className="col-12">
-                            <form className="row flex-column flex-md-row">
-                                <div className="col-md-4 mb-3">
+                    <div className="row justify-content-between">
+                        <div className="col-md-8">
+                            <form className="row">
+                                <div className="col-md-12 mb-3">
                                     <label htmlFor="dateFrom">From Date:</label>
                                     <input
                                         type="date"
@@ -53,7 +53,7 @@ const RevenueByDate = () => {
                                         onChange={(e) => setDateFrom(e.target.value)}
                                     />
                                 </div>
-                                <div className="col-md-4 mb-3">
+                                <div className="col-md-12 mb-3">
                                     <label htmlFor="dateTo">To Date:</label>
                                     <input
                                         type="date"
@@ -63,16 +63,22 @@ const RevenueByDate = () => {
                                         onChange={(e) => setDateTo(e.target.value)}
                                     />
                                 </div>
-                                <div className="col-md-4 mb-3 d-flex justify-content-end">
-                                    <div className="revenue-card">
-                                        <h3>Total Revenue: {thisYearRevenue.toLocaleString()} đ</h3>
-                                        <p>
-                                            Change from this time last year: {yearPercentageChange}%{' '}
-                                            {yearPercentageChange > 0 ? '🔼' : yearPercentageChange < 0 ? '🔽' : '⚖️'}
-                                        </p>
-                                    </div>
-                                </div>
                             </form>
+                        </div>
+                        <div className="col-md-4 d-flex align-items-center">
+                            <div className="revenue-card">
+                                <h4>Total Revenue: {thisYearRevenue.toLocaleString()} đ</h4>
+                                <p>
+                                    Change from this time last year: {yearPercentageChange}%{' '}
+                                    {yearPercentageChange > 0 ? (
+                                        <i className="fas fa-arrow-up text-success"></i>
+                                    ) : yearPercentageChange < 0 ? (
+                                        <i className="fas fa-arrow-down text-danger"></i>
+                                    ) : (
+                                        <i className="fas fa-equals text-secondary"></i>
+                                    )}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -54,35 +54,53 @@ const ManagerRevenue = () => {
         return (
             <div className="main-content">
                 <div className="section-body">
-                    <h2 className="section-title">Revenue Overview</h2>
+                    <h3 className="section-title text-center">Revenue Overview</h3>
                     <div className="container mt-2">
                         <div className="row justify-content-center">
                             <div className="col-12">
                                 <div className="row flex-column flex-md-row">
                                     <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
                                         <div className="revenue-card">
-                                            <h3>today's revenue: {todayRevenue.toLocaleString()} đ</h3>
+                                            <h4>Today's revenue: {todayRevenue.toLocaleString()} đ</h4>
                                             <p>
                                                 Change from yesterday: {todayPercentageChange}%{' '}
-                                                {todayPercentageChange > 0 ? '🔼' : todayPercentageChange < 0 ? '🔽' : '⚖️'}
+                                                {todayPercentageChange > 0 ? (
+                                                    <i className="fas fa-arrow-up text-success"></i>
+                                                ) : todayPercentageChange < 0 ? (
+                                                    <i className="fas fa-arrow-down text-danger"></i>
+                                                ) : (
+                                                    <i className="fas fa-equals text-secondary"></i>
+                                                )}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
                                         <div className="revenue-card">
-                                            <h3>this month's revenue: {thisMonthRevenue.toLocaleString()} đ</h3>
+                                            <h4>This month's revenue: {thisMonthRevenue.toLocaleString()} đ</h4>
                                             <p>
-                                                Change from Last Month: {monthPercentageChange}%{' '}
-                                                {monthPercentageChange > 0 ? '🔼' : monthPercentageChange < 0 ? '🔽' : '⚖️'}
+                                                Change from last month: {monthPercentageChange}%{' '}
+                                                {monthPercentageChange > 0 ? (
+                                                    <i className="fas fa-arrow-up text-success"></i>
+                                                ) : monthPercentageChange < 0 ? (
+                                                    <i className="fas fa-arrow-down text-danger"></i>
+                                                ) : (
+                                                    <i className="fas fa-equals text-secondary"></i>
+                                                )}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="col-12 col-md-4 mb-3 d-flex justify-content-end">
                                         <div className="revenue-card">
-                                            <h3>this year's revenue: {thisYearRevenue.toLocaleString()} đ</h3>
+                                            <h4>This year's revenue: {thisYearRevenue.toLocaleString()} đ</h4>
                                             <p>
-                                                Change from Last Year: {yearPercentageChange}%{' '}
-                                                {yearPercentageChange > 0 ? '🔼' : yearPercentageChange < 0 ? '🔽' : '⚖️'}
+                                                Change from last year: {yearPercentageChange}%{' '}
+                                                {yearPercentageChange > 0 ? (
+                                                    <i className="fas fa-arrow-up text-success"></i>
+                                                ) : yearPercentageChange < 0 ? (
+                                                    <i className="fas fa-arrow-down text-danger"></i>
+                                                ) : (
+                                                    <i className="fas fa-equals text-secondary"></i>
+                                                )}
                                             </p>
                                         </div>
                                     </div>
