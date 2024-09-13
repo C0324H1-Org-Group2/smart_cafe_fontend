@@ -1,0 +1,25 @@
+/* TableList.css */
+.main-content {
+    padding: 20px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+.card-header {
+    margin-bottom: 20px;
+}
+
+.table-responsive {
+    margin-top: 20px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.pagination .page-link {
+    border-radius: 0;
+}

@@ -7,12 +7,13 @@ const TableCreate = () => {
     const navigate = useNavigate();
     const [code, setCode] = useState('');
     const [state, setState] = useState('');
-    const [isOn, setIsOn] = useState(true);
+    const [on, setOn] = useState(true); // Sử dụng đúng tên trường 'on'
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await createTable({ code, state, isOn });
+            // Gửi dữ liệu với đúng tên trường 'on'
+            await createTable({ code, state, on });
             toast.success('Table created successfully!');
             navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
         } catch (error) {
@@ -51,11 +52,11 @@ const TableCreate = () => {
                             <label>Status</label>
                             <select
                                 className="form-control"
-                                value={isOn}
-                                onChange={(e) => setIsOn(e.target.value === 'true')}
+                                value={on}
+                                onChange={(e) => setOn(e.target.value === 'true')}
                             >
-                                <option value={true}>On</option>
-                                <option value={false}>Off</option>
+                                <option value="true">On</option>
+                                <option value="false">Off</option>
                             </select>
                         </div>
                         <button type="submit" className="btn btn-primary">Create</button>
