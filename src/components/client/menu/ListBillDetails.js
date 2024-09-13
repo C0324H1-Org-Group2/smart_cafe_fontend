@@ -53,8 +53,12 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                 // Nếu chưa có bill, tạo bill mới
                 bill = await serviceService.updateTableStatusAndCreateBill(selectedTable.tableId);
                 setSelectedTable(bill.table);
-                setCurrentBill(bill); // Cập nhật vào state, sẽ được render ở lần sau
+                setCurrentBill(bill);
+            } else {
+                // Nếu đã có bill, chỉ cần cập nhật lại trạng thái isBill
+                await serviceService.updateTableStatusBill(selectedTable.tableId)
             }
+
 
             // Cập nhật các mặt hàng vào bill hiện tại
             const updatedOrderItems = orderItems.map(orderItem => ({
@@ -101,8 +105,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         handleSentBillDetail(updatedItems);
 
         try {
-            // Cập nhật trạng thái bàn trên server
-            // await serviceService.updateTableStatus(selectedTable.tableId);
+            await serviceService.updateTableStatus(selectedTable.tableId);
             
             const updatedTables = await serviceService.getAllTables();
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));

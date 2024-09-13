@@ -34,6 +34,27 @@ export const createService = async (service) => {
         throw error;
     }
 };
+
+export const addService = async (formData) => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/services', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Server responded with error:', error.response.data);
+            console.error('Status code:', error.response.status);
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+        } else {
+            console.error('Error setting up request:', error.message);
+        }
+        throw error;
+    }
+};
 export const getServiceTypes = async () => {
     try {
         const response = await axios.get('http://localhost:8080/api/services/list-service-types');

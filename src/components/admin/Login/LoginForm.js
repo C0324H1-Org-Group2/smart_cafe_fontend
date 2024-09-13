@@ -17,7 +17,7 @@ const LoginForm = () => {
         try {
             await login(values);
             toast.success('Đăng nhập thành công!');
-            navigate('/admin');
+            navigate('/admin/home');
         } catch (error) {
             toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }

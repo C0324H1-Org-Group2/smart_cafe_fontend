@@ -74,6 +74,16 @@ export const updateTableStatus = async (tableId) => {
     }
 };
 
+export const updateTableStatusBill = async (tableId) => {
+    try {
+        const response = await axios.patch(`${API_BASE_URL}/tables/${tableId}/statusBill`);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating table status:', error);
+        throw error;
+    }
+};
+
 
 // Gửi yêu cầu gọi món
 export const orderItems = async (items) => {
