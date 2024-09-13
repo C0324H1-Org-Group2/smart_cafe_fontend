@@ -93,7 +93,7 @@ const ChartComponent = () => {
     return (
         <div className="main-content">
             <div className="section-body">
-                <h2 className="section-title">Monthly Revenue Summary</h2>
+                <h3 className="section-title text-center">Monthly Revenue Summary</h3>
                 <div className="row justify-content-center">
                     <div className="col-12 col-lg-8">
                         <div className="card">
