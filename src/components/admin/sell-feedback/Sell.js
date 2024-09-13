@@ -41,7 +41,7 @@ function Sell() {
             const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
             // Bắt đầu tải dữ liệu hóa đơn và chờ ít nhất 500ms
-            const billsPromise = sellService.getBillByTableId(tableId);
+            const billsPromise = await sellService.getBillByTableId(tableId);
             const bills = await billsPromise;
 
             // Chờ thêm 500ms để đảm bảo spinner hiển thị
@@ -146,16 +146,17 @@ function Sell() {
                             <div className={`col-4 ${selectedTableId === table.tableId ? "selected-table" : ""}`}
                                  key={table.tableId}>
                                 <div className={ table.on === false ? "table-card" : "table-card-grey"} style={{marginBottom: '20px'}}
-                                     onClick={() => getBillByTableId(table.tableId, table.bill)}>
+                                     onClick={() => getBillByTableId(table.tableId, table.pay)}>
                                     {table.code}
                                 </div>
 
                                 <button className={ table.pay === true ? " button-def btn-red" :"button-def"}
-                                        onClick={() => getBillByTableId(table.tableId, table.pay)}>Pay</button>
+                                        onChange={setSelectedIsPay === table.pay}
+                                >Pay</button>
 
                                 <button className={ table.bill === true ? " button-def btn-yellow" :"button-def"}
                                         onClick={() => {
-                                            getBillByTableId(table.tableId, table.pay);
+                                            // getBillByTableId(table.tableId, table.pay);
                                             setStatusOrder(table.tableId);
                                         }}>Order</button>
 
