@@ -114,6 +114,22 @@ export const sendFeedback = async (feedback) => {
     }
 };
 
+export const checkIsBillTable = async (id) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tables/${id}/check-is-bill`);
+        return response.data; // Phản hồi nên là boolean
+    } catch (error) {
+        console.error('Error checking table bill status:', error);
+        throw error;
+    }
+};
+
+export const callEmployee = async (id) => {
+    try {
+        await axios.post(`${API_BASE_URL}/tables/${id}/callEmployee`);
+    } catch (error) {
+    }
+}
 
 
 
