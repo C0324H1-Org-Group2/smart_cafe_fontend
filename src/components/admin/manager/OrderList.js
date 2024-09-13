@@ -131,7 +131,7 @@ function OrderList() {
                                     <th>Date Created</th>
                                     <th>Name Created</th>
                                     <th>Table Code</th>
-                                    <th onClick={handleSort} style={{ cursor: 'pointer' }}>
+                                    <th onClick={handleSort} style={{cursor: 'pointer'}}>
                                         Total Amount {isAscending ? '↑' : '↓'}
                                     </th>
                                     <th>Action</th>
@@ -141,7 +141,8 @@ function OrderList() {
                                 {orders && orders.length > 0 ? (
                                     orders.map((order, index) => (
                                         <tr key={order.billCode}>
-                                            <td>{index + 1 + page * 10}</td> {/* Adjust for 10 records per page */}
+                                            <td>{index + 1 + page * 10}</td>
+                                            {/* Adjust for 10 records per page */}
                                             <td>{order.billCode}</td>
                                             <td>{order.dateCreated}</td>
                                             <td>{order.nameCreated}</td>
@@ -176,25 +177,29 @@ function OrderList() {
                         <nav className="d-inline-block">
                             <ul className="pagination mb-0">
                                 <li className={`page-item ${page === 0 ? 'disabled' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
+                                    <button className="page-link" onClick={() => handlePageChange(page - 1)}
+                                            disabled={page === 0}>
                                         <i className="fas fa-chevron-left"></i>
                                     </button>
                                 </li>
-                                {[...Array(totalPages).keys()].map((pageIndex) => (
-                                    <li key={pageIndex} className={`page-item ${pageIndex === page ? 'active' : ''}`}>
-                                        <button className="page-link" onClick={() => handlePageChange(pageIndex)}>
-                                            {pageIndex + 1}
-                                        </button>
-                                    </li>
-                                ))}
+
+                                {/* Hiển thị chỉ trang hiện tại */}
+                                <li className="page-item active">
+                                    <button className="page-link">
+                                        {page + 1} {/* Hiển thị số của trang hiện tại */}
+                                    </button>
+                                </li>
+
                                 <li className={`page-item ${page === totalPages - 1 ? 'disabled' : ''}`}>
-                                    <button className="page-link" onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1}>
+                                    <button className="page-link" onClick={() => handlePageChange(page + 1)}
+                                            disabled={page === totalPages - 1}>
                                         <i className="fas fa-chevron-right"></i>
                                     </button>
                                 </li>
                             </ul>
                         </nav>
                     </div>
+
                 </div>
             </div>
 
