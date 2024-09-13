@@ -6,7 +6,11 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
 
     useEffect(() => {
         if (item.isOrder) {
-            const waitTimeDuration = moment.duration(item.service.waitTime, "HH:mm:ss");
+            const savedRemainTime = sessionStorage.getItem(`remainTime_${index}`);
+            const waitTimeDuration = savedRemainTime
+                ? moment.duration(savedRemainTime, "HH:mm:ss")
+                : moment.duration(item.service.waitTime, "HH:mm:ss");
+
             const endTime = moment().add(waitTimeDuration);
 
             const updateRemainTime = () => {
@@ -15,8 +19,13 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
 
                 if (remainingDuration.asSeconds() <= 0) {
                     setRemainTime("00:00:00");
+                    sessionStorage.removeItem(`remainTime_${index}`); // Xóa khỏi sessionStorage khi hết thời gian
                 } else {
-                    setRemainTime(moment.utc(remainingDuration.asMilliseconds()).format("HH:mm:ss"));
+                    const formattedTime = moment
+                        .utc(remainingDuration.asMilliseconds())
+                        .format("HH:mm:ss");
+                    setRemainTime(formattedTime);
+                    sessionStorage.setItem(`remainTime_${index}`, formattedTime); // Lưu vào sessionStorage
                 }
             };
 
@@ -24,7 +33,7 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
             const interval = setInterval(updateRemainTime, 1000);
             return () => clearInterval(interval);
         }
-    }, [item.isOrder, item.service.waitTime]);
+    }, [item.isOrder, item.service.waitTime, index]);
 
     return (
         <tr key={index}>

@@ -124,6 +124,13 @@ export const checkIsBillTable = async (id) => {
     }
 };
 
+export const callEmployee = async (id) => {
+    try {
+        await axios.post(`${API_BASE_URL}/tables/${id}/callEmployee`);
+    } catch (error) {
+    }
+}
+
 
 
 

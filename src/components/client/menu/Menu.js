@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as serviceService from "../services/ServiceService";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import ListBillDetails from './ListBillDetails';
 import ServiceTypes from './ServiceTypes';
 import ListServiceByType from './ListServiceByType';
@@ -18,9 +18,27 @@ const Menu = () => {
     const itemsPerPage = 8;
 
     useEffect(() => {
+        // Khôi phục dữ liệu từ sessionStorage khi component được khởi tạo
+        const savedCartItems = sessionStorage.getItem('cartItems');
+        const savedTableInfo = sessionStorage.getItem('tableInfo');
+
+        if (savedCartItems) {
+            setCartItems(JSON.parse(savedCartItems));
+        }
+
+        if (savedTableInfo) {
+            setTableInfo(JSON.parse(savedTableInfo));
+        }
+
         allMenuItems();
         getAllTables();
     }, []);
+
+    useEffect(() => {
+        // Lưu dữ liệu vào sessionStorage khi cartItems hoặc tableInfo thay đổi
+        sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+        sessionStorage.setItem('tableInfo', JSON.stringify(tableInfo));
+    }, [cartItems, tableInfo]);
 
     const getAllTables = async () => {
         try {
@@ -47,26 +65,6 @@ const Menu = () => {
         setSelectedType(typeId);
         setCurrentPage(1);
     };
-
-    // const handleAddToCart = (service) => {
-    //     const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId);
-    //
-    //     if (existingItem) {
-    //         setCartItems(cartItems.map(item =>
-    //             item.service.serviceId === service.serviceId
-    //                 ? { ...item, quantity: item.quantity + 1 }
-    //                 : item
-    //         ));
-    //     } else {
-    //         const newItem = {
-    //             service: { ...service },
-    //             isOrder: false,
-    //             quantity: 1,
-    //             tableId: tableInfo?.tableId ?? null
-    //         };
-    //         setCartItems([...cartItems, newItem]);
-    //     }
-    // };
 
     const handleAddToCart = (service, quantity) => {
         const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId && item.isOrder === true);
@@ -99,7 +97,6 @@ const Menu = () => {
             }
         }
     };
-
 
     const handleStatusChange = (index) => {
         const updatedItems = [...cartItems];

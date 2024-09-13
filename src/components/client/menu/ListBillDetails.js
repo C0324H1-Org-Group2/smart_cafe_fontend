@@ -6,6 +6,7 @@ import * as serviceService from "../services/ServiceService";
 import { toast } from "react-toastify";
 import FeedbackModal from "./FeedbackModal";
 import {NavLink} from "react-router-dom";
+import {callEmplouyee} from "../services/ServiceService";
 
 const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
     const [items, setItems] = useState(cartItems);
@@ -18,6 +19,51 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     useEffect(() => {
         setItems(cartItems);
     }, [cartItems]);
+
+    // Khôi phục bàn đã chọn từ sessionStorage
+    useEffect(() => {
+        const savedTable = sessionStorage.getItem('selectedTable');
+        const saveItem = sessionStorage.getItem('item');
+        const saveCurrentBill = sessionStorage.getItem('currentBill');
+        const saveIsTableLocked = sessionStorage.getItem('isTableLocked');
+
+        if (savedTable) {
+            setSelectedTable(JSON.parse(savedTable));
+        }
+
+        if (saveCurrentBill) {
+            setCurrentBill(JSON.parse(saveCurrentBill));
+        }
+
+        if (saveItem) {
+            setItems(JSON.parse(saveItem));
+        }
+
+        if (saveIsTableLocked) {
+            setIsTableLocked(JSON.parse(saveIsTableLocked));
+        }
+    }, []);
+
+
+    // Lưu bàn đã chọn vào sessionStorage khi selectedTable thay đổi
+    useEffect(() => {
+        if (items) {
+            sessionStorage.setItem('item', JSON.stringify(items));
+        }
+
+        if (currentBill) {
+            sessionStorage.setItem('currentBill', JSON.stringify(currentBill));
+        }
+
+        if (selectedTable) {
+            sessionStorage.setItem('selectedTable', JSON.stringify(selectedTable));
+        }
+
+        if (isTableLocked) {
+            sessionStorage.setItem('isTableLocked', JSON.stringify(isTableLocked));
+        }
+    }, [selectedTable, items, currentBill, isTableLocked]);
+
 
     console.log(items);
     const handleDelete = () => {
@@ -115,15 +161,37 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
         try {
             await serviceService.updateTableStatus(selectedTable.tableId);
-            
+
             const updatedTables = await serviceService.getAllTables();
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
+
             setIsTableLocked(false);
+            sessionStorage.setItem('isTableLocked', JSON.stringify(false));
+
             toast.success("Payment processed successfully.");
         } catch (error) {
             toast.error("Error processing payment.");
         }
     }
+
+    const handleCall = async () => {
+        // Kiểm tra nếu selectedTable.tableId là null hoặc không tồn tại
+        if (!selectedTable) {
+            toast.error("Vui lòng chọn bàn trước khi gọi phục vụ.");
+            return; // Dừng thực thi hàm nếu không có tableId
+        }
+
+        try {
+            // Gọi API để phục vụ nhân viên
+            await serviceService.callEmployee(selectedTable.tableId);
+            toast.success("Đã gọi phục vụ thành công.");
+        } catch (error) {
+            // Xử lý lỗi nếu có
+            toast.error("Đã xảy ra lỗi khi gọi phục vụ.");
+        }
+    };
+
+
 
     const handleSelectTable = (table) => {
         setSelectedTable(table);
@@ -151,16 +219,15 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                 <Col md={2}></Col>
                 <Col md={10} className="text-center mb-4">
                     <div className="d-flex flex-column align-items-start mb-3" style={{ width: '400px', margin: '0 auto' }}>
-                        <div className="d-flex justify-content-start align-items-center mb-3" style={{ width: '100%' }}>
+                        <div className="d-flex justify-content-start align-items-center mb-3" style={{width: '100%'}}>
                             <Button
                                 onClick={() => setShowTableModal(true)}
                                 variant="info"
                                 className="btn-lg rounded-pill ms-3"
                                 disabled={isTableLocked} // Khóa nút chọn bàn nếu đã gọi món
-                            >
-                                Chọn bàn
-                            </Button>
-                            <Button onClick={() => console.log("Gọi phục vụ")} variant="info" className="btn-lg rounded-pill ms-3">Gọi phục vụ</Button>
+                            >Chọn bàn</Button>
+                            <Button onClick={handleCall}
+                                    variant="info" className="btn-lg rounded-pill ms-3">Gọi phục vụ</Button>
                             <span><strong>Bàn của bạn :</strong> {selectedTable ? selectedTable.code : 'N/A'}</span>
                         </div>
                     </div>
