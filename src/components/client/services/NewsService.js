@@ -75,3 +75,13 @@ export const incrementViewCount = async (newsId) => {
         console.error("Lỗi tăng lượt xem: " + e);
     }
 };
+
+export const searchNewsByTitle = async (title) => {
+    try {
+        const response = await axios.get("http://localhost:8080/api/news/search?title=" + title);
+        return response.data;
+    } catch (e) {
+        console.error("Lỗi tìm kiếm title tin tức");
+        return [];
+    }
+}
