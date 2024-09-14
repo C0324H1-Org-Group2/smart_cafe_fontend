@@ -1,5 +1,15 @@
 import axios from "axios";
 
+export const getAllActiveNews = async () => {
+    try {
+        const response = await axios.get("http://localhost:8080/api/news/active");
+        return response.data;
+    } catch (e) {
+        console.error("Lỗi lấy ra tất cả tin tức: " + e);
+        return [];
+    }
+}
+
 export const getAllNews = async () => {
     try {
         const response = await axios.get("http://localhost:8080/api/news");
@@ -20,9 +30,18 @@ export const getNewsById = async (newsId) => {
     }
 }
 
-export const deleteNews = async (newsId) => {
+export const deleteHardNews = async (newsId) => {
     try {
-        await axios.delete(`http://localhost:8080/api/news/${newsId}`);
+        await axios.delete(`http://localhost:8080/api/news/hard-delete/${newsId}`);
+    } catch (e) {
+        console.error("Lỗi: " + e);
+        return null;
+    }
+};
+
+export const deleteSoftNews = async (newsId) => {
+    try {
+        await axios.put(`http://localhost:8080/api/news/soft-delete/${newsId}`);
     } catch (e) {
         console.error("Lỗi: " + e);
         return null;

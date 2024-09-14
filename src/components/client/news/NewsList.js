@@ -17,7 +17,7 @@ const NewsList = () => {
     }, []);
 
     const findAllNews = async () => {
-        const data = await newsService.getAllNews();
+        const data = await newsService.getAllActiveNews();
         data.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
         setNewsEntries(data);
     };
