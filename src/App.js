@@ -225,7 +225,7 @@ function App() {
                         </AdminLayout>
                     </>
                 } />
-                <Route path="/admin/service/update/:id" element={
+                <Route path="/admin/service/update/:serviceId" element={
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}

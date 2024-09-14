@@ -1,245 +1,111 @@
-// import React, { useEffect, useState } from 'react';
-// import { useParams, useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
-// import { Formik, Form, Field, ErrorMessage } from 'formik';
-// import * as Yup from 'yup';
-// import {getServiceDetails, getServiceTypes, updateService} from "../../service/ServiceService";
-//
-// const ServiceFormUpdate = () => {
-//     const { id } = useParams();
-//     const navigate = useNavigate();
-//     const [service, setService] = useState(null);
-//     const [types, setTypes] = useState([]);
-//
-//
-//     useEffect(() => {
-//         const fetchService = async () => {
-//             try {
-//                 const data = await getServiceDetails(id);
-//                 setService(data);
-//             } catch (error) {
-//                 console.error('Lỗi khi lấy thông tin sản phẩm:', error);
-//                 toast.error('Lỗi khi lấy thông tin sản phẩm');
-//             }
-//         };
-//
-//         fetchService();
-//     }, [id]);
-//
-//     useEffect(() => {
-//         const fetchTypes = async () => {
-//             try {
-//                 const data = await getServiceTypes(); // Hàm này cần được định nghĩa để lấy danh sách các loại dịch vụ từ server
-//                 setTypes(data);
-//             } catch (error) {
-//                 console.error('Lỗi khi lấy danh sách loại dịch vụ:', error);
-//                 toast.error('Lỗi khi lấy danh sách loại dịch vụ');
-//             }
-//         };
-//
-//         fetchTypes();
-//     }, []);
-//     const handleSubmit = async (values) => {
-//         try {
-//             await updateService(id, values);
-//             toast.success('Dịch vụ được cập nhật thành công!');
-//             navigate('/admin/service');
-//         } catch (error) {
-//             console.error('Cập nhật dịch vụ thất bại:', error);
-//             toast.error('Cập nhật dịch vụ thất bại');
-//         }
-//     };
-//     const handleCancel = () => {
-//         navigate('/admin/service');
-//     };
-//
-//     if (!service) return <p>Đang tải...</p>;
-//
-//     const validationSchema = Yup.object().shape({
-//         serviceCode: Yup.string()
-//             .required('Trường không được bỏ trống')
-//             .test('is-format-correct', function (value) {
-//                 const { typeId } = this.parent;
-//                 let prefix;
-//                 let errorMessage;
-//                 switch (typeId) {
-//                     case 'Cà Phê':
-//                         prefix = 'CF';
-//                         errorMessage = 'Yêu cầu cú pháp:  "CF + 4 chữ số"';
-//                         break;
-//                     case 'Freeze':
-//                         prefix = 'FZ';
-//                         errorMessage = 'Yêu cầu cú pháp:  "FZ + 4 chữ số"';
-//                         break;
-//                     case 'Trà':
-//                         prefix = 'TEA';
-//                         errorMessage = 'Yêu cầu cú pháp:  "TEA + 4 chữ số"';
-//                         break;
-//                     default:
-//                         prefix = 'OT';
-//                         errorMessage = 'Yêu cầu cú pháp:  "OT + 4 chữ số"';
-//                         break;
-//                 }
-//                 const regex = new RegExp(`^${prefix}\\d{4}$`);
-//                 return regex.test(value) ? true : this.createError({ message: errorMessage });
-//             }),
-//         serviceName: Yup.string()
-//             .required('Trường không được bỏ trống'),
-//         typeId: Yup.string()
-//             .required('Trường không được bỏ trống'),
-//         price: Yup.number()
-//             .required('Trường không được bỏ trống')
-//             .positive('Giá tiền phải là một số dương')
-//             .max(30000000, 'Giá không được vượt quá 30 triệu'),
-//         description: Yup.string()
-//             .notRequired()
-//             .default(null)
-//             .min(3, 'Mô tả phải có ít nhất 3 từ')
-//             .max(1000, 'Mô tả không được vượt quá 1000 từ'),
-//         imageUrl: Yup.string()
-//             .required('URL ảnh là bắt buộc'),
-//         waitTime: Yup.string()
-//             .required('Trường không được bỏ trống')
-//             .matches(
-//                 /^([0-5]?[0-9]):([0-5]?[0-9])$/,
-//                 'Thời gian chờ phải có định dạng mm:ss'
-//             ),
-//         status: Yup.string()
-//             .required('Trạng thái là bắt buộc'),
-//         delete: Yup.boolean()
-//     });
-//
-//
-//     return (
-//         <div className="main-content">
-//             <div className="section-body">
-//                 <h2 className="section-title">Cập nhật Dịch Vụ</h2>
-//                 <div className="card-body">
-//                     <Formik
-//                         initialValues={{...service, typeId: service.type.typeId.toString()}}
-//                         onSubmit={(values) => {
-//                             const valuesToSend = {...values, typeId: {typeId: values.typeId}};
-//                             handleSubmit(valuesToSend);
-//                         }}
-//                         validationSchema={validationSchema}
-//                     >
-//                         {({ setFieldValue, values }) => (
-//                             <Form>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="serviceCode">Mã Sản Phẩm </label><br/>
-//                                     <small>Chọn loại dịch vụ trước</small>
-//                                     <Field name="serviceCode" type="text" className="form-control"
-//                                            disabled={!values.typeId}/>
-//                                     <ErrorMessage name="serviceCode" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="serviceName">Tên Sản Phẩm</label>
-//                                     <Field name="serviceName" type="text" className="form-control"/>
-//                                     <ErrorMessage name="serviceName" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="typeId">Loại Dịch Vụ:</label>
-//                                     <Field as="select" name="typeId" className="form-control">
-//                                         <option value="">Chọn loại dịch vụ</option>
-//                                         {types.map(type => (
-//                                             <option key={type.id} value={type.id}>
-//                                                 {type.typeName}
-//                                             </option>
-//                                         ))}
-//                                     </Field>
-//                                     <ErrorMessage name="typeId" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="price">Giá:</label>
-//                                     <Field name="price" type="number" className="form-control"/>
-//                                     <ErrorMessage name="price" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="description">Mô Tả:</label>
-//                                     <Field as="textarea" name="description" className="form-control"/>
-//                                     <ErrorMessage name="description" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="imageUrl">URL Ảnh:</label>
-//                                     <Field name="imageUrl" type="text" className="form-control"/>
-//                                     <ErrorMessage name="imageUrl" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="form-group mb-3">
-//                                     <label htmlFor="status">Trạng Thái:</label>
-//                                     <Field as="select" name="status" className="form-control">
-//                                         <option value="available">Available</option>
-//                                         <option value="unavailable">Unavailable</option>
-//                                         <option value="out_of_stock">Out of Stock</option>
-//                                     </Field>
-//                                     <ErrorMessage name="status" component="p" className="text-danger"/>
-//                                 </div>
-//                                 <div className="d-flex justify-content-between">
-//                                     <button type="submit" className="btn btn-primary">Tạo Dịch Vụ</button>
-//                                     <button type="button" className="btn btn-secondary"
-//                                             onClick={handleCancel}>Hủy
-//                                     </button>
-//                                 </div>
-//                             </Form>
-//                         )}
-//                     </Formik>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-//
-// };
-//
-//
-// export default ServiceFormUpdate;
-
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Form, Button, Container } from 'react-bootstrap';
-import { getServiceDetails, updateService } from "../../service/ServiceService";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import * as serviceService from '../../service/ServiceService';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from 'react';
+import { Button, Container, Form as BootstrapForm } from 'react-bootstrap';
 
 const ServiceFormUpdate = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
-    const [service, setService] = useState({
-        serviceCode: "",
-        serviceName: "",
-        typeId: "",
-        price: "",
-        description: "",
-        imageUrl: "",
-        status: "",
-        is_delete: false,
+    const { serviceId } = useParams();
+    const [service, setService] = useState(null);
+    const [serviceTypes, setServiceTypes] = useState([]);
+    const [previewImage, setPreviewImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    });
+
+
 
     useEffect(() => {
         const fetchService = async () => {
             try {
-                const data = await getServiceDetails(id);
-                setService(data);
+                const response = await serviceService.getServiceDetails(serviceId);
+                const waitTime = response.waitTime; // get the waitTime from the response
+                const hoursMinutes = waitTime.split(':'); // split the time into hours and minutes
+                const minutes = (+hoursMinutes[0]) * 60 + (+hoursMinutes[1]); // convert hours and minutes to total minutes
+                setService({
+                    ...response,
+                    waitTime: minutes // set the waitTime in minutes
+                });
+                setService(response);
+                setPreviewImage(response.imageUrl); // set the image URL to previewImage
             } catch (error) {
-                console.error('Lỗi khi lấy thông tin sản phẩm:', error);
-                toast.error('Lỗi khi lấy thông tin sản phẩm');
+                toast.error('Không thể tải dịch vụ');
+            }
+        };
+
+        const fetchServiceTypes = async () => {
+            try {
+                const response = await serviceService.getServiceTypes();
+                setServiceTypes(response);
+            } catch (error) {
+                toast.error('Không thể tải loại dịch vụ');
             }
         };
 
         fetchService();
-    }, [id]);
+        fetchServiceTypes();
+    }, [serviceId]);
 
-    const handleChange = (e) => {
-        setService({ ...service, [e.target.name]: e.target.value });
-    };
+    const validationSchema = Yup.object({
+        serviceCode: Yup.string().required('Mã món là bắt buộc'),
+        serviceName: Yup.string().required('Tên món là bắt buộc'),
+        typeId: Yup.number().required('Loại món là bắt buộc'),
+        price: Yup.number().required('Giá là bắt buộc'),
+        description: Yup.string().required('Mô tả là bắt buộc'),
+        imageUrl: Yup.mixed().required('Ảnh là bắt buộc'),
+        waitTime: Yup.number().required('Thời gian chờ là bắt buộc')
+            .min(0, 'Thời gian chờ không được âm'),
+        status: Yup.string().required('Trạng thái là bắt buộc')
+    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const updateService = async (values) => {
         try {
-            await updateService(id, service);
-            toast.success('Dịch vụ được cập nhật thành công!');
-            navigate('/admin/service');
+            const minutes = values.waitTime;
+            const hours = Math.floor(minutes / 60);
+            const minutesPart = minutes % 60;
+            const localTime = `${String(hours).padStart(2, '0')}:${String(minutesPart).padStart(2, '0')}:00`;
+            // const waitTime = `PT${values.waitTime}M`; // convert minutes to ISO-8601 duration format
+
+
+            const formData = new FormData();
+            formData.append('serviceCode', values.serviceCode);
+            formData.append('serviceName', values.serviceName);
+            formData.append('typeId', values.typeId);
+            formData.append('price', values.price);
+            formData.append('description', values.description);
+            formData.append('imageUrl', values.imageUrl);
+            formData.append('waitTime', localTime);
+            formData.append('status', values.status);
+            // Kiểm tra xem người dùng có chọn file mới để tải lên hay không
+            if (selectedFile) {
+                // Nếu có, sử dụng file mới
+                formData.append('imageUrl', selectedFile);
+            } else {
+                // Nếu không, sử dụng URL ảnh đã lưu
+                formData.append('imageUrl', service.imageUrl);
+            }
+            const response = await serviceService.updateService(serviceId, formData);
+            if (response) {
+                toast.success('Dịch vụ được cập nhật thành công!');
+                navigate('/admin/service');
+            } else {
+                toast.error('Cập nhật dịch vụ thất bại');
+            }
         } catch (error) {
-            console.error('Cập nhật dịch vụ thất bại:', error);
-            toast.error('Cập nhật dịch vụ thất bại');
+            if (error.response) {
+                console.error('Server responded with error:', error.response.data);
+                console.error('Status code:', error.response.status);
+                toast.error(`Cập nhật dịch vụ thất bại: ${error.response.data}`);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+                toast.error('Cập nhật dịch vụ thất bại: No response received');
+            } else {
+                console.error('Error setting up request:', error.message);
+                toast.error(`Cập nhật dịch vụ thất bại: ${error.message}`);
+            }
         }
     };
 
@@ -247,93 +113,107 @@ const ServiceFormUpdate = () => {
         navigate('/admin/service');
     };
 
+    const handleImageChange = (event, setFieldValue) => {
+        const file = event.target.files[0];
+        if (file) {
+            setFieldValue('imageUrl', file);
+            setPreviewImage(URL.createObjectURL(file));
+        }
+    };
     return (
-        <Container>
-            <h2 className="mt-4">Cập nhật Dịch Vụ</h2>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="serviceCode">
-                    <Form.Label>Mã Sản Phẩm</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="serviceCode"
-                        value={service.serviceCode}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+        <div className="main-content">
+            <div className="section-body">
+                <Container className="mt-4">
+                    <h2>Cập Nhật Dịch Vụ</h2>
+                    {service && (
+                        <Formik
+                            initialValues={service}
+                            onSubmit={updateService}
+                            validationSchema={validationSchema}
+                        >
+                            {({ setFieldValue }) => (
+                                <Form encType="multipart/form-data">
+                                    <BootstrapForm.Group className="mb-3" controlId="serviceCode">
+                                        <BootstrapForm.Label>Mã Món:</BootstrapForm.Label>
+                                        <Field name="serviceCode" type="text" className="form-control" />
+                                        <ErrorMessage name="serviceCode" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="serviceName">
-                    <Form.Label>Tên Sản Phẩm</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="serviceName"
-                        value={service.serviceName}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+                                    <BootstrapForm.Group className="mb-3" controlId="serviceName">
+                                        <BootstrapForm.Label>Tên Món:</BootstrapForm.Label>
+                                        <Field name="serviceName" type="text" className="form-control" />
+                                        <ErrorMessage name="serviceName" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="typeId">
-                    <Form.Label>Loại Dịch Vụ:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="typeId"
-                        value={service.typeId}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+                                    <BootstrapForm.Group className="mb-3" controlId="typeId">
+                                        <BootstrapForm.Label>Loại Món:</BootstrapForm.Label>
+                                        <Field as="select" name="typeId" className="form-control">
+                                            <option value="">Chọn loại món</option>
+                                            {serviceTypes.map(type => (
+                                                <option key={type.typeId} value={type.typeId}>
+                                                    {type.typeName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name="typeId" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="price">
-                    <Form.Label>Giá:</Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="price"
-                        value={service.price}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+                                    <BootstrapForm.Group className="mb-3" controlId="price">
+                                        <BootstrapForm.Label>Giá:</BootstrapForm.Label>
+                                        <Field name="price" type="number" className="form-control" />
+                                        <ErrorMessage name="price" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="description">
-                    <Form.Label>Mô Tả:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="description"
-                        value={service.description}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                                    <BootstrapForm.Group className="mb-3" controlId="description">
+                                        <BootstrapForm.Label>Mô Tả:</BootstrapForm.Label>
+                                        <Field name="description" as="textarea" className="form-control" />
+                                        <ErrorMessage name="description" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="imageUrl">
-                    <Form.Label>URL Ảnh:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="imageUrl"
-                        value={service.imageUrl}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+                                    <BootstrapForm.Group className="mb-3" controlId="imageUrl">
+                                        <BootstrapForm.Label>Ảnh:</BootstrapForm.Label>
+                                        <input
+                                            name="imageUrl"
+                                            type="file"
+                                            className="form-control"
+                                            onChange={(event) => handleImageChange(event, setFieldValue)}
+                                        />
+                                        <ErrorMessage name="imageUrl" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
 
-                <Form.Group controlId="status">
-                    <Form.Label>Trạng Thái:</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="status"
-                        value={service.status}
-                        onChange={handleChange}
-                        required
-                    />
-                </Form.Group>
+                                    {previewImage && (
+                                        <div className="mb-3">
+                                            <img src={previewImage} alt="Preview" className="img-fluid" style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
+                                        </div>
+                                    )}
 
-                <div className="d-flex justify-content-between">
-                    <Button variant="primary" type="submit" className="mt-3">Cập nhật</Button>
-                    <Button type="button" variant="secondary" className="mt-3"
-                            onClick={handleCancel}>Hủy</Button>
-                </div>
-            </Form>
-        </Container>
+                                    <BootstrapForm.Group className="mb-3" controlId="waitTime">
+                                        <BootstrapForm.Label>Thời Gian Chờ (phút):</BootstrapForm.Label>
+                                        <Field name="waitTime" type="number" className="form-control" min="0" />
+                                        <ErrorMessage name="waitTime" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
+
+                                    <BootstrapForm.Group className="mb-3" controlId="status">
+                                        <BootstrapForm.Label>Trạng Thái:</BootstrapForm.Label>
+                                        <Field as="select" name="status" className="form-control">
+                                            <option value="available">Available</option>
+                                            <option value="unavailable">Unavailable</option>
+                                            <option value="out_of_stock">Out of Stock</option>
+                                        </Field>
+                                        <ErrorMessage name="status" component="p" className="text-danger" />
+                                    </BootstrapForm.Group>
+
+                                    <div className="d-flex justify-content-between">
+                                        <Button type="submit" variant="primary">Tạo Món</Button>
+                                        <Button type="button" variant="secondary" onClick={handleCancel}>Hủy</Button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    )}
+                </Container>
+            </div>
+        </div>
     );
 };
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import '../ManagerOrder.css';
-import {getAllServices} from "../../service/ServiceService";
 import ServiceDetailModal from "./ServiceDetailModal";
+import {deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted} from "../../service/ServiceService";
 
 const TableService = () => {
 
@@ -17,6 +17,7 @@ const TableService = () => {
     const navigate = useNavigate();
     const totalPages = Math.ceil(allServices.length / itemsPerPage);
     const isLastPage = page >= totalPages - 1;
+    const [showDeleted, setShowDeleted] = useState(true);
 
 
 
@@ -24,12 +25,17 @@ const TableService = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getAllServices(page);
+            let data;
+            if (showDeleted) {
+                data = await getAllServicesIdDesc(page);
+            } else {
+                data = await getAllServicesIdDescNotDeleted(page);
+            }
             setAllServices(data);
         };
 
         fetchData();
-    }, [page]);
+    }, [page,showDeleted]);
 
     useEffect(() => {
         const startIndex = page * itemsPerPage;
@@ -65,9 +71,22 @@ const TableService = () => {
             <div className="section-body">
                 <h2 className="section-title">Service List</h2>
                 <div className="card-body">
+                    <div className="mb-3">
+                        <button className="btn btn-primary" onClick={handleCreateClick}>+ Create Product</button>
+                        <button className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} float-right`}
+                                onClick={() => {
+                                    setShowDeleted(!showDeleted);
+                                }}>
+                            {showDeleted ? 'Hide' : 'Show'}
+                        </button>
+                    </div>
+                    <div>
+
+                    </div>
+
                     <div className="row">
-                        <div className="col-md-8">
-                            <input
+                        <div className="col-md-2">
+                        <input
                                 type="text"
                                 className="form-control"
                                 placeholder="Search by service name"
@@ -77,8 +96,8 @@ const TableService = () => {
                         </div>
                         <div className="col-md-4">
                             <button className="btn btn-primary" onClick={handleSearch}>Search</button>
-                            <button className="btn btn-primary" onClick={handleCreateClick}>Add</button>
                         </div>
+
                     </div>
                 </div>
                 <div className="card-body p-0">
@@ -103,18 +122,23 @@ const TableService = () => {
                                         currency: 'VND'
                                     })}</td>
                                     <td>
-                                        <div className="badge badge-success">
-                                            {service.status}
+                                        <div
+                                            className={`badge ${service.is_delete === 'true' ? 'badge-secondary' : 'badge-success'}`}>
+                                            {service.is_delete === 'true' ? 'Hide' : 'Showed'}
                                         </div>
                                     </td>
                                     <td>
                                         <button className="btn btn-secondary"
                                                 onClick={() => handleShowModal(service)}>Detail
                                         </button>
-                                        <Link to={`/admin/service/update/${service.serviceId}`} className="btn btn-primary">
+                                        <Link to={`/admin/service/update/${service.serviceId}`}
+                                              className="btn btn-primary">
                                             Update
                                         </Link>
-
+                                        <button className="btn btn-danger"
+                                                onClick={() => deleteService(service.serviceId)}>
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
