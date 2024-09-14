@@ -12,22 +12,26 @@ const NewsListManagement = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedNews, setSelectedNews] = useState(null);
     const [isHardDelete, setIsHardDelete] = useState(false);
-    const [sortOrder, setSortOrder] = useState('desc');
+    const [sortOrder, setSortOrder] = useState('asc');
     const [userRole, setUserRole] = useState('ROLE_ADMIN');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const pageSize = 6;
 
     useEffect(() => {
-        loadNews();
-    }, []);
+        loadNews(currentPage);
+    }, [currentPage]);
 
-    const loadNews = async () => {
+    const loadNews = async (page) => {
         try {
             let data;
             if (userRole === 'ROLE_ADMIN') {
-                data = await newsService.getAllNews();
+                data = await newsService.getAllNews(page, pageSize);
             } else if (userRole === 'ROLE_EMPLOYEE') {
-                data = await newsService.getAllActiveNews();
+                data = await newsService.getAllActiveNews(page, pageSize);
             }
-            setNewsEntries(data);
+            setNewsEntries(data.content);
+            setTotalPages(data.totalPages);
         } catch (error) {
             console.log('Lỗi khi tải tin tức!');
         }
@@ -56,7 +60,7 @@ const NewsListManagement = () => {
                 } else {
                     await newsService.deleteSoftNews(selectedNews.newsId);
                 }
-                loadNews();
+                loadNews(currentPage);
                 toast.success('Tin tức đã được xóa thành công!');
                 setShowDeleteModal(false);
                 setSelectedNews(null);
@@ -76,6 +80,10 @@ const NewsListManagement = () => {
         });
         setNewsEntries(sortedNews);
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
     };
 
     return (
@@ -156,6 +164,38 @@ const NewsListManagement = () => {
                                 ))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="pagination">
+                            <ul className="pagination justify-content-end">
+                                <li className="page-item">
+                                    <button
+                                        className="page-link"
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 0}
+                                    >
+                                        <i className="fas fa-chevron-left"></i>
+                                    </button>
+                                </li>
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+                                        <button
+                                            className="page-link"
+                                            onClick={() => handlePageChange(i)}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                                <li className="page-item">
+                                    <button
+                                        className="page-link"
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage >= totalPages - 1}
+                                    >
+                                        <i className="fas fa-chevron-right"></i>
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

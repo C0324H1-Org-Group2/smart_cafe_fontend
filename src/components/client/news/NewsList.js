@@ -1,35 +1,48 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import NewsEntry from "./NewsEntry";
 import * as newsService from "../services/NewsService";
 import useScrollToHash from "../common/UseScrollToHash";
 const NewsList = () => {
     const [newsEntries, setNewsEntries] = useState([]);
     const [visibleEntries, setVisibleEntries] = useState(6);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const pageSize = 6;
+
     useScrollToHash([newsEntries]);
 
     useEffect(() => {
-        findAllNews();
+        findAllNews(currentPage);
         window.addEventListener("scroll", handleScroll);
 
         return () => {
-            window.removeEventListener("scroll", handleScroll)
+            window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [currentPage]);
 
-    const findAllNews = async () => {
-        const data = await newsService.getAllActiveNews();
-        data.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
-        setNewsEntries(data);
+    const findAllNews = async (page) => {
+        try {
+            const { content, last } = await newsService.getAllActiveNews(page, pageSize);
+            if (content.length > 0) {
+                setNewsEntries((prevEntries) => [...prevEntries, ...content]);
+            }
+            setHasMore(!last);
+        } catch (error) {
+            console.error("Failed to fetch news:", error);
+        }
     };
 
     const handleScroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-            loadMoreEntries();
+            if (hasMore) {
+                loadMoreEntries();
+            }
         }
     };
 
     const loadMoreEntries = () => {
-        setVisibleEntries((prevVisibleEntries) => prevVisibleEntries + 3);
+        setCurrentPage((prevPage) => prevPage + 1);
+        setVisibleEntries((prevVisibleEntries) => prevVisibleEntries + pageSize);
     };
 
     return (
