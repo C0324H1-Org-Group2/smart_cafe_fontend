@@ -4,6 +4,7 @@ import { Container, Row } from 'react-bootstrap';
 import ListBillDetails from './ListBillDetails';
 import ServiceTypes from './ServiceTypes';
 import ListServiceByType from './ListServiceByType';
+import TypesService from './TypesService';
 import './Menu.css';
 
 const Menu = () => {
@@ -125,6 +126,10 @@ const Menu = () => {
         <section className="ftco-section">
             <Container>
                 <Row className="mt-4">
+                    <TypesService
+                        menuItems={menuItems}
+                        selectedType={selectedType}
+                    />
                     <ServiceTypes
                         menuItems={menuItems}
                         selectedType={selectedType}

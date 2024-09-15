@@ -66,6 +66,46 @@
     margin-top: 10px;
 }
 
+.description {
+    /* Chỉ hiển thị 2 dòng mô tả */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3.2em; /* Điều chỉnh tùy thuộc vào kích thước dòng */
+    position: relative;
+}
+
+/* Hiện toàn bộ mô tả khi hover chuột */
+.description:hover {
+    -webkit-line-clamp: unset;
+    max-height: unset;
+}
+
+.menu-entry .desc {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+}
+
+.menu-entry:hover .desc {
+    display: block;
+}
+
+.menu-entry .img {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: 200px; /* Adjust as needed */
+}
+
 
 
 

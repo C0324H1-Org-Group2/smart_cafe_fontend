@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import { Col, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import QuantityModal from './QuantityModal'; // Import modal
 
 const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage }) => {
@@ -56,6 +56,12 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
         handleCloseModal(); // Đóng modal và reset số lượng
     };
 
+    const renderTooltip = (description) => (
+        <Tooltip id="button-tooltip">
+            {description}
+        </Tooltip>
+    );
+
     return (
         <Col md={10}>
             <Row className={`row ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
@@ -65,7 +71,12 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                     currentServices.map((service) => (
                         <Col key={service.serviceId} md={3} className="mb-4">
                             <div className="menu-entry">
-                                <a href="#" className="img" style={{ backgroundImage: `url(/images/${service.imageUrl})` }}></a>
+                                <OverlayTrigger
+                                    placement="bottom-start"
+                                    overlay={renderTooltip(service.description)}
+                                >
+                                    <a href="#" className="img" style={{ backgroundImage: `url(/images/${service.imageUrl})` }}></a>
+                                </OverlayTrigger>
                                 <div className="text text-center pt-4">
                                     <h3 title={service.serviceName}><a href="#">{service.serviceName}</a></h3>
                                     <p className="price"><span>{service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span></p>
