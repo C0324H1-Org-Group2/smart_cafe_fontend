@@ -106,6 +106,18 @@
     height: 200px; /* Adjust as needed */
 }
 
+.custom-icon {
+    font-size: 1.7rem; /* Điều chỉnh kích thước của biểu tượng */
+    line-height: 1; /* Căn chỉnh chiều cao dòng cho biểu tượng */
+    vertical-align: top; /* Căn giữa biểu tượng với văn bản */
+}
+
+.custom-h4 {
+    line-height: 1.5; /* Căn chỉnh chiều cao dòng cho h4 */
+    margin-bottom: 0; /* Loại bỏ khoảng cách dưới h4 nếu cần */
+}
+
+
 
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, setRangeValue }) => {
     const handleRangeChange = (e) => {
@@ -10,22 +10,27 @@ const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, 
     return (
         <Col md={2}>
             <div className="list-group mb-4">
-                <h4 className="mb-2">Categories</h4>
+                <h2 className="mb-2">Categories</h2>
                 {menuItems.map((item) => (
-                    <Button
+                    <div
                         key={item.typeId}
-                        variant={item.typeId === selectedType ? 'primary' : 'light'}
-                        className="list-group-item w-100 text-start"
+                        className="mb-1 pb-1"
                         onClick={() => handleButtonClick(item.typeId)}
+                        style={{ cursor: 'pointer' }}
                     >
-                        {item.typeName}
-                    </Button>
+                        <div className="d-flex align-items-center">
+                            <i className="bi bi-cup-hot-fill custom-icon me-2"></i>
+                            <h4 className={`custom-h4 ${item.typeId === selectedType ? 'text-primary' : 'text-dark'}`}>
+                                {item.typeName}
+                            </h4>
+                        </div>
+                    </div>
                 ))}
             </div>
 
             <div className="list-group mb-4">
                 <div className="mb-3">
-                    <h4 className="mb-2">Price</h4>
+                    <h2 className="mb-2">Price</h2>
                     <input
                         type="range"
                         className="form-range w-100"
