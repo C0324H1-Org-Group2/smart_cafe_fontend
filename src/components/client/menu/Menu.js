@@ -16,6 +16,7 @@ const Menu = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [allTables, setAllTables] = useState([]);
     const [tableInfo, setTableInfo] = useState(null);
+    const [rangeValue, setRangeValue] = useState(500000); // Giá trị phạm vi mặc định
     const itemsPerPage = 8;
 
     useEffect(() => {
@@ -134,6 +135,8 @@ const Menu = () => {
                         menuItems={menuItems}
                         selectedType={selectedType}
                         handleButtonClick={handleButtonClick}
+                        rangeValue={rangeValue}
+                        setRangeValue={setRangeValue} // Truyền hàm setRangeValue
                     />
                     <ListServiceByType
                         services={services}
@@ -143,8 +146,7 @@ const Menu = () => {
                         isTransitioning={isTransitioning}
                         setIsTransitioning={setIsTransitioning}
                         itemsPerPage={itemsPerPage}
-                        cartItems={cartItems}
-                        handleStatusChange={handleStatusChange}
+                        rangeValue={rangeValue} // Truyền rangeValue vào component
                     />
                 </Row>
                 <ListBillDetails

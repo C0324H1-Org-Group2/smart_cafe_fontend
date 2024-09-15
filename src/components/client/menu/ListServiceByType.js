@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import QuantityModal from './QuantityModal'; // Import modal
 
-const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage }) => {
+const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage, rangeValue }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
     const [quantity, setQuantity] = useState(1); // Thêm state để lưu số lượng
 
+    // Lọc dịch vụ theo giá
+    const filteredServices = services.filter(service => service.price <= rangeValue);
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentServices = services.slice(indexOfFirstItem, indexOfLastItem);
+    const currentServices = filteredServices.slice(indexOfFirstItem, indexOfLastItem);
 
-    const totalPages = Math.ceil(services.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
 
     const handlePrevPage = () => {
         if (currentPage > 1) {
