@@ -83,7 +83,7 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                                 <div className="text text-center pt-4">
                                     <h3 title={service.serviceName}><a href="#">{service.serviceName}</a></h3>
                                     <p className="price"><span>{service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span></p>
-                                    <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary">Add to Cart</Button></p>
+                                    <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary"><i class="bi bi-cart-plus"></i> Add to Cart</Button></p>
                                 </div>
                             </div>
                         </Col>

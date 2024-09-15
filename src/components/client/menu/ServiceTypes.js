@@ -19,9 +19,8 @@ const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, 
                         style={{ cursor: 'pointer' }}
                     >
                         <div className="d-flex align-items-center">
-                            <i className="bi bi-cup-hot-fill custom-icon me-2"></i>
                             <h4 className={`custom-h4 ${item.typeId === selectedType ? 'text-primary' : 'text-dark'}`}>
-                                {item.typeName}
+                                <i className="bi bi-cup-hot-fill custom-icon me-2 "></i>{item.typeName}
                             </h4>
                         </div>
                     </div>
