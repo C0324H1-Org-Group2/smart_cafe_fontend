@@ -14,6 +14,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     const [currentBill, setCurrentBill] = useState(null);
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [isTableLocked, setIsTableLocked] = useState(false);
+    const [selectAll, setSelectAll] = useState(false);
 
     useEffect(() => {
         setItems(cartItems);
@@ -25,9 +26,14 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         const saveItem = sessionStorage.getItem('item');
         const saveCurrentBill = sessionStorage.getItem('currentBill');
         const saveIsTableLocked = sessionStorage.getItem('isTableLocked');
+        const saveSelectAll = sessionStorage.getItem('selectAll');
 
         if (savedTable) {
             setSelectedTable(JSON.parse(savedTable));
+        }
+
+        if (saveSelectAll) {
+            setSelectAll(JSON.parse(saveSelectAll));
         }
 
         if (saveCurrentBill) {
@@ -46,6 +52,10 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
     // Lưu bàn đã chọn vào sessionStorage khi selectedTable thay đổi
     useEffect(() => {
+        if (selectAll) {
+            sessionStorage.setItem('selectAll', JSON.stringify(selectAll));
+        }
+
         if (items) {
             sessionStorage.setItem('item', JSON.stringify(items));
         }
@@ -172,6 +182,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
             setIsTableLocked(false);
             setSelectedTable(null);
+            setSelectAll(false);
             sessionStorage.setItem('isTableLocked', JSON.stringify(false));
             sessionStorage.setItem('selectedTable', JSON.stringify(null));
 
@@ -220,6 +231,16 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         toast.success("Phản hồi đã được gửi!");
     };
 
+    const handleSelectAll = (event) => {
+        const isChecked = event.target.checked;
+        setSelectAll(isChecked);
+        const updatedItems = items.map(item => ({
+            ...item,
+            status: isChecked
+        }));
+        setItems(updatedItems);
+    };
+
     return (
         <>
             <Row className="mt-4">
@@ -241,7 +262,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                     <Table bordered className="text-center table-custom">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th>
+                                <input
+                                    type="checkbox"
+                                    checked={selectAll}
+                                    onChange={handleSelectAll}
+                                />
+                            </th>
                             <th>STT</th>
                             <th>Tên món</th>
                             <th>Số lượng</th>
@@ -251,7 +278,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                             <th>Trạng thái</th>
                         </tr>
                         </thead>
-                        {cartItems.map((item, index) => (
+                        {items.map((item, index) => (
                             <BillDetail
                                 key={index || item.serviceId}
                                 index={index}
