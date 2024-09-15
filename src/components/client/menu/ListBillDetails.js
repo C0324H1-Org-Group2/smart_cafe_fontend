@@ -6,7 +6,6 @@ import * as serviceService from "../services/ServiceService";
 import { toast } from "react-toastify";
 import FeedbackModal from "./FeedbackModal";
 import {NavLink} from "react-router-dom";
-import {callEmplouyee} from "../services/ServiceService";
 
 const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
     const [items, setItems] = useState(cartItems);
@@ -93,6 +92,12 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             return;
         }
 
+        // Kiểm tra nếu thông tin bàn thiếu
+        if (!selectedTable) {
+            toast.error("Hay chọn bàn !!!!");
+            return;
+        }
+
         try {
             let bill = currentBill;
 
@@ -166,7 +171,9 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             onUpdateTableInfo(updatedTables.find(table => table.tableId === selectedTable.tableId));
 
             setIsTableLocked(false);
+            setSelectedTable(null);
             sessionStorage.setItem('isTableLocked', JSON.stringify(false));
+            sessionStorage.setItem('selectedTable', JSON.stringify(null));
 
             toast.success("Payment processed successfully.");
         } catch (error) {
@@ -175,10 +182,10 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     }
 
     const handleCall = async () => {
-        // Kiểm tra nếu selectedTable.tableId là null hoặc không tồn tại
+
         if (!selectedTable) {
             toast.error("Vui lòng chọn bàn trước khi gọi phục vụ.");
-            return; // Dừng thực thi hàm nếu không có tableId
+            return;
         }
 
         try {

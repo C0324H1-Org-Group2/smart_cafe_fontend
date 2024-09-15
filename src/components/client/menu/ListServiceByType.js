@@ -98,7 +98,7 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                 service={selectedService}
                 handleConfirm={handleConfirmModal}
                 quantity={quantity}
-                setQuantity={setQuantity} // Thêm hàm này để cập nhật số lượng
+                setQuantity={setQuantity}
             />
         </Col>
     );

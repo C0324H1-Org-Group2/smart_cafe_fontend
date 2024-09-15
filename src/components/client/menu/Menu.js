@@ -67,6 +67,26 @@ const Menu = () => {
     };
 
     const handleAddToCart = (service, quantity) => {
+        const itemInCart = cartItems.find(item => item.service.serviceId === service.serviceId && item.isOrder === false);
+
+        if (itemInCart) {
+            setCartItems(cartItems.map(item =>
+                item.service.serviceId === service.serviceId && item.isOrder === false
+                    ? { ...item, quantity: item.quantity + quantity }
+                    : item
+            ));
+            return;
+        } else {
+            const newItem = {
+                service: { ...service },
+                isOrder: false,
+                quantity: quantity,
+                tableId: tableInfo?.tableId ?? null
+            };
+            setCartItems([...cartItems, newItem]);
+            return;
+        }
+
         const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId && item.isOrder === true);
 
         if (existingItem) {
@@ -77,24 +97,6 @@ const Menu = () => {
                 tableId: tableInfo?.tableId ?? null
             };
             setCartItems([...cartItems, newItem]);
-        } else {
-            const itemInCart = cartItems.find(item => item.service.serviceId === service.serviceId);
-
-            if (itemInCart) {
-                setCartItems(cartItems.map(item =>
-                    item.service.serviceId === service.serviceId
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                ));
-            } else {
-                const newItem = {
-                    service: { ...service },
-                    isOrder: false,
-                    quantity: quantity,
-                    tableId: tableInfo?.tableId ?? null
-                };
-                setCartItems([...cartItems, newItem]);
-            }
         }
     };
 
