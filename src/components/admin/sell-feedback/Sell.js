@@ -3,6 +3,8 @@ import * as sellService from "../service/SellService";
 import {useReactToPrint} from "react-to-print";
 import {toast} from "react-toastify";
 import SellNotification from "./SellNotification";
+import SockJS from "sockjs-client";
+import {Client} from "@stomp/stompjs";
 
 function Sell() {
     const [tables, setTables] = useState([])
@@ -16,10 +18,50 @@ function Sell() {
 
     useEffect(() => {
         getAllTables();
-        const interval = setInterval(() => {
-            getAllTables();
-        }, 1000);
-        return () => clearInterval(interval);
+    }, [tables]);
+
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = new Client({
+            webSocketFactory: () => socket,
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+            onStompError: (error) => {
+                console.error('STOMP error', error);
+            },
+            onWebSocketClose: () => {
+                console.error('WebSocket connection closed');
+            }
+        });
+
+        stompClient.onConnect = () => {
+            console.log('Connected to WebSocket');
+            stompClient.subscribe('/topic/admin/sell/order', (message) => {
+                const updatedTables = JSON.parse(message.body);
+                setTables(updatedTables);
+            });
+        };
+        stompClient.onConnect = () => {
+            console.log('Connected to WebSocket');
+            stompClient.subscribe('/topic/admin/sell/pay', (message) => {
+                const updatedTables = JSON.parse(message.body);
+                setTables(updatedTables);
+            });
+        };
+        stompClient.onConnect = () => {
+            console.log('Connected to WebSocket');
+            stompClient.subscribe('/topic/admin/sell/callEmployee', (message) => {
+                const updatedTables = JSON.parse(message.body);
+                setTables(updatedTables);
+            });
+        };
+
+        stompClient.activate();
+
+        return () => {
+            stompClient.deactivate();
+        };
     }, []);
 
     const getAllTables = async () => {
