@@ -49,10 +49,10 @@ const NewsDetail = () => {
                         )}
                         <div className="tag-widget post-tag-container mb-5 mt-5">
                             <div className="tagcloud">
-                                <a href="#" className="tag-cloud-link">Life</a>
-                                <a href="#" className="tag-cloud-link">Sport</a>
-                                <a href="#" className="tag-cloud-link">Tech</a>
-                                <a href="#" className="tag-cloud-link">Travel</a>
+                                <a href="#" className="tag-cloud-link">Coffe</a>
+                                <a href="#" className="tag-cloud-link">Tea</a>
+                                <a href="#" className="tag-cloud-link">Freeze</a>
+                                <a href="#" className="tag-cloud-link">Other</a>
                             </div>
                         </div>
                     </div>

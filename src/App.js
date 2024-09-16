@@ -43,6 +43,9 @@ import Order from "./components/client/menu/Order";
 import Menus from "./components/client/menu/Menus";
 import LogoutButton from "./components/admin/Login/LogoutButton";
 import ChangePassword from "./components/admin/Login/ChangePassword";
+import AboutSection from "./components/client/about/AboutSection";
+import TestimonySection from "./components/client/about/TestimonySection";
+import MenuSection from "./components/client/about/MenuSection";
 
 
 
@@ -125,6 +128,20 @@ function App() {
                         <ClientLayout>
                         <Slider/>
                             <NewsDetail/>
+                        </ClientLayout>
+                    </>
+                }/>
+                <Route path="/about" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
+                            <link rel="stylesheet" href="/css/style.css"/>
+                        </Helmet>
+                        <ClientLayout>
+                            <Slider/>
+                            <AboutSection />
+                            <TestimonySection />
+                            <MenuSection />
                         </ClientLayout>
                     </>
                 }/>
