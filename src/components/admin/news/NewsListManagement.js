@@ -6,8 +6,6 @@ import { Button, Modal } from "react-bootstrap";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import SearchNews from "./SearchNews";
-import { jwtDecode } from 'jwt-decode';
-
 
 const NewsListManagement = () => {
     const [newsEntries, setNewsEntries] = useState([]);
@@ -19,16 +17,6 @@ const NewsListManagement = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const pageSize = 6;
-
-    useEffect(() => {
-        const authorities = JSON.parse(localStorage.getItem('authorities'));
-        if (authorities) {
-            const userRole = authorities[0].authority;
-            console.log('userRole', userRole);
-            setUserRole(userRole);
-        }
-        loadNews(currentPage);
-    }, [currentPage]);
 
     const loadNews = async (page) => {
         try {
@@ -45,6 +33,22 @@ const NewsListManagement = () => {
         }
     };
 
+    useEffect(() => {
+        const fetchUserRole = () => {
+            const authorities = JSON.parse(localStorage.getItem('authorities'));
+            if (authorities) {
+                const role = authorities[0].authority;
+                setUserRole(role);
+            }
+        };
+
+        fetchUserRole();
+    }, []); // This will only run once to fetch the user role on component mount
+
+    useEffect(() => {
+        loadNews(currentPage); // Call loadNews whenever currentPage or userRole changes
+    }, [currentPage, userRole]);
+
     const handleSearch = async (searchTerm) => {
         try {
             const data = await newsService.searchNewsByTitle(searchTerm);
@@ -52,7 +56,7 @@ const NewsListManagement = () => {
         } catch (e) {
             console.log("Lỗi tìm kiếm tin tức");
         }
-    }
+    };
 
     const handleDeleteClick = (news, isHard = false) => {
         setSelectedNews(news);
@@ -68,15 +72,13 @@ const NewsListManagement = () => {
                 } else {
                     await newsService.deleteSoftNews(selectedNews.newsId);
                 }
-                loadNews(currentPage);
+                loadNews(currentPage);  // Call loadNews after deletion to reload the news
                 toast.success('Tin tức đã được xóa thành công!');
                 setShowDeleteModal(false);
                 setSelectedNews(null);
             } catch (error) {
-                console.log('Xóa tin tức thất bại!');
+                toast.error('Xóa tin tức thất bại!');
             }
-        } else {
-            toast.error('Xóa tin tức thất bại!');
         }
     };
 
@@ -106,7 +108,7 @@ const NewsListManagement = () => {
                                 <i className="fas fa-plus"></i> Add News
                             </Link>
                         )}
-                        <SearchNews onSearch={handleSearch}/>
+                        <SearchNews onSearch={handleSearch} />
                     </div>
                     <div className="card-body p-0">
                         <div className="table-responsive">
@@ -115,7 +117,7 @@ const NewsListManagement = () => {
                                 <tr>
                                     <th>STT</th>
                                     <th>Title</th>
-                                    <th onClick={handleSortByDate} style={{cursor: 'pointer'}}>
+                                    <th onClick={handleSortByDate} style={{ cursor: 'pointer' }}>
                                         Publish Date{" "}
                                         {sortOrder === 'asc' ? (
                                             <i className="fas fa-arrow-up"></i>
@@ -139,31 +141,26 @@ const NewsListManagement = () => {
                                         <td>{news.viewCount}</td>
                                         <td>{news.status}</td>
                                         <td>
-                                            <Link to={`/news/${news.newsId}`} className="btn btn-secondary"
-                                                  title="Detail">
+                                            <Link to={`/news/${news.newsId}`} className="btn btn-secondary" title="Detail">
                                                 <i className="fas fa-info-circle"></i>
                                             </Link>
                                             {userRole === 'ROLE_ADMIN' && (
                                                 <>
-                                                    <Link to={`/admin/news/update/${news.newsId}`}
-                                                          className="btn btn-primary ml-2" title="Edit">
+                                                    <Link to={`/admin/news/update/${news.newsId}`} className="btn btn-primary ml-2" title="Edit">
                                                         <i className="fas fa-edit"></i>
                                                     </Link>
-                                                    <button className="btn btn-danger ml-2"
-                                                            onClick={() => handleDeleteClick(news, true)}>
+                                                    <button className="btn btn-danger ml-2" onClick={() => handleDeleteClick(news, true)}>
                                                         <i className="fas fa-trash"></i>
                                                     </button>
                                                     {news.status === 'Active' && (
-                                                        <button className="btn btn-warning ml-2"
-                                                                onClick={() => handleDeleteClick(news, false)}>
+                                                        <button className="btn btn-warning ml-2" onClick={() => handleDeleteClick(news, false)}>
                                                             <i className="fas fa-eraser"></i>
                                                         </button>
                                                     )}
                                                 </>
                                             )}
                                             {userRole === 'ROLE_EMPLOYEE' && news.status === 'Active' && (
-                                                <button className="btn btn-warning ml-2"
-                                                        onClick={() => handleDeleteClick(news, false)}>
+                                                <button className="btn btn-warning ml-2" onClick={() => handleDeleteClick(news, false)}>
                                                     <i className="fas fa-eraser"></i> Xóa mềm
                                                 </button>
                                             )}
@@ -186,10 +183,7 @@ const NewsListManagement = () => {
                                 </li>
                                 {Array.from({ length: totalPages }, (_, i) => (
                                     <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
-                                        <button
-                                            className="page-link"
-                                            onClick={() => handlePageChange(i)}
-                                        >
+                                        <button className="page-link" onClick={() => handlePageChange(i)}>
                                             {i + 1}
                                         </button>
                                     </li>
@@ -214,8 +208,7 @@ const NewsListManagement = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {isHardDelete ? (
-                        <>Are you sure you want to <strong>hard delete</strong> the news titled
-                            "<strong>{selectedNews?.title}</strong>"?</>
+                        <>Are you sure you want to <strong>hard delete</strong> the news titled "<strong>{selectedNews?.title}</strong>"?</>
                     ) : (
                         <>Are you sure you want to <strong>soft delete</strong> the news titled "<strong>{selectedNews?.title}</strong>"?</>
                     )}
@@ -229,7 +222,7 @@ const NewsListManagement = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <ToastContainer/>
+            <ToastContainer />
         </>
     );
 };
