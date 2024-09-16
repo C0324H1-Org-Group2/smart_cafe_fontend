@@ -1,6 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
+import SellNotification from "../sell-feedback/SellNotification";
+import NewsNotification from "../../client/news/NewsNotification";
 
 const Header = () => {
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const handleSellNotifications = (count) => {
+        setNotificationCount(count);
+    };
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!isDropdownOpen);
+    };
     return (
             <div className="navbar-bg">
             <nav className="navbar navbar-expand-lg main-navbar">
@@ -40,11 +52,17 @@ const Header = () => {
                         {/* Nội dung dropdown */}
                     </li>
                     {/* Mục thông báo */}
-                    <li className="dropdown dropdown-list-toggle">
-                        <a href="#" data-toggle="dropdown" className="nav-link notification-toggle nav-link-lg beep">
+                    <li className="nav-item cart">
+
+                        <a onClick={toggleDropdown} data-toggle="dropdown"
+                           className="nav-link notification-toggle nav-link-lg ">
                             <i className="far fa-bell"></i>
+                            <span className="bag d-flex justify-content-center align-items-center">
+                                    <small>{notificationCount}</small>
+                                </span>
                         </a>
-                        {/* Nội dung dropdown */}
+                        {/*<SellNotification onSellNotifications={handleSellNotifications}*/}
+                        {/*                  isDropdownOpen={isDropdownOpen}/>*/}
                     </li>
                     {/* Mục người dùng */}
                     <li className="dropdown">
@@ -72,7 +90,7 @@ const Header = () => {
                     </li>
                 </ul>
             </nav>
-         </div>
+            </div>
     );
 };
 

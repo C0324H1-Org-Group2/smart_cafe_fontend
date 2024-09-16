@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from "react";
-import {Link} from "react-router-dom";
 import * as sellService from "../service/SellService";
 import {useReactToPrint} from "react-to-print";
 import {toast} from "react-toastify";
+import SellNotification from "./SellNotification";
 
 function Sell() {
     const [tables, setTables] = useState([])
@@ -137,6 +137,7 @@ function Sell() {
         <div className="container my-4">
             <div className="mb-5">
                 <h2 className="section-title">Bán hàng</h2>
+                <SellNotification/>
             </div>
 
             <div className="row">
@@ -147,13 +148,14 @@ function Sell() {
                             <div className="col-4" key={table.tableId}>
                                 {/* Thêm hiệu ứng hover */}
                                 <div
-                                    className={`card bg-light p-3 ${selectedTableId === table.tableId ? "border border-primary" : ""}`}
+                                    className={`card p-3 ${selectedTableId === table.tableId ? "border border-primary" : ""} ${table.on === true ? "bg-secondary" : "bg-light"}`}
                                     onClick={() => getBillByTableId(table.tableId, table.pay)}
-                                    style={{ cursor: 'pointer', transition: 'background-color 0.3s' }}
+                                    style={{cursor: 'pointer', transition: 'background-color 0.3s'}}
                                 >
+
                                     <div
                                         className={`card-body text-center ${table.on === false ? "" : "bg-secondary"}`}
-                                        style={{ transition: 'background-color 0.3s' }}
+                                        style={{transition: 'background-color 0.3s'}}
                                     >
                                         {table.code}
                                     </div>
@@ -164,11 +166,13 @@ function Sell() {
                                             <i className="fas fa-money-bill-wave"></i> Pay
                                         </button>
 
-                                        <button className={`btn ${table.bill ? "btn-warning" : "btn-primary"}`} onClick={() => setStatusOrder(table.tableId)}>
+                                        <button className={`btn ${table.bill ? "btn-warning" : "btn-primary"}`}
+                                                onClick={() => setStatusOrder(table.tableId)}>
                                             <i className="fas fa-utensils"></i> Order
                                         </button>
 
-                                        <button className={`btn ${table.callEmployee ? "btn-success" : "btn-primary"}`} onClick={() => setStatusEmployee(table.tableId)}>
+                                        <button className={`btn ${table.callEmployee ? "btn-success" : "btn-primary"}`}
+                                                onClick={() => setStatusEmployee(table.tableId)}>
                                             <i className="fas fa-bell"></i> Employee
                                         </button>
                                     </div>
@@ -179,8 +183,8 @@ function Sell() {
                 </div>
 
                 {/* Bảng thông tin hóa đơn */}
-                <div ref={componentPDF} style={{ width: '100%' }} className="col-md-6">
-                    <table className="table table-striped">
+                <div className="col-md-6">
+                    <table className="table table-striped" ref={componentPDF} style={{width: '100%'}}>
                         <thead className="table-active">
                         <tr>
                             <th>STT</th>
@@ -225,16 +229,20 @@ function Sell() {
                             <td colSpan="5" className="text-end">Tổng tiền</td>
                             <td>{formatCurrency(calculateTotal())}</td>
                         </tr>
+                        <tr>
+                            {/*<td>{bill.}</td>*/}
+                        </tr>
                         </tbody>
                     </table>
+                    {/* Nút tính tiền và làm mới */}
+                    <div className="d-flex justify-content-end mt-3">
+                        <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
+                        <button className="btn btn-secondary" onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng</button>
+                    </div>
+                </div>
                 </div>
 
-                {/* Nút tính tiền và làm mới */}
-                <div className="d-flex justify-content-end mt-3">
-                    <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
-                    <button className="btn btn-secondary" onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng</button>
-                </div>
-            </div>
+
 
             {/* Phân trang */}
             <div className="text-end mt-4">
