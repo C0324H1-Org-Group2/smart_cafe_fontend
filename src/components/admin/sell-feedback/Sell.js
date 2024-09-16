@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from "react";
-import {Link} from "react-router-dom";
 import * as sellService from "../service/SellService";
 import {useReactToPrint} from "react-to-print";
 import {toast} from "react-toastify";
+import SellNotification from "./SellNotification";
 
 function Sell() {
     const [tables, setTables] = useState([])
@@ -41,7 +41,7 @@ function Sell() {
             const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
             // Bắt đầu tải dữ liệu hóa đơn và chờ ít nhất 500ms
-            const billsPromise = sellService.getBillByTableId(tableId);
+            const billsPromise = await sellService.getBillByTableId(tableId);
             const bills = await billsPromise;
 
             // Chờ thêm 500ms để đảm bảo spinner hiển thị
@@ -132,9 +132,12 @@ function Sell() {
     }
 
     return (
-        <div className="main-content my-4">
-            <div className="section-body mb-5">
+        <div className="main-content">
+            <div className="section-body">
+        <div className="container my-4">
+            <div className="mb-5">
                 <h2 className="section-title">Bán hàng</h2>
+                <SellNotification/>
             </div>
 
             <div className="row">
@@ -142,36 +145,46 @@ function Sell() {
                 <div className="col-md-6">
                     <div className="row g-4">
                         {currentTables.map((table) => (
+                            <div className="col-4" key={table.tableId}>
+                                {/* Thêm hiệu ứng hover */}
+                                <div
+                                    className={`card p-3 ${selectedTableId === table.tableId ? "border border-primary" : ""} ${table.on === true ? "bg-secondary" : "bg-light"}`}
+                                    onClick={() => getBillByTableId(table.tableId, table.pay)}
+                                    style={{cursor: 'pointer', transition: 'background-color 0.3s'}}
+                                >
 
-                            <div className={`col-4 ${selectedTableId === table.tableId ? "selected-table" : ""}`}
-                                 key={table.tableId}>
-                                <div className={ table.on === false ? "table-card" : "table-card-grey"} style={{marginBottom: '20px'}}
-                                     onClick={() => getBillByTableId(table.tableId, table.bill)}>
-                                    {table.code}
+                                    <div
+                                        className={`card-body text-center ${table.on === false ? "" : "bg-secondary"}`}
+                                        style={{transition: 'background-color 0.3s'}}
+                                    >
+                                        {table.code}
+                                    </div>
+
+                                    {/* Pay, Order, Employee buttons */}
+                                    <div className="d-grid gap-2 mt-2">
+                                        <button className={`btn ${table.pay ? "btn-danger" : "btn-primary"}`}>
+                                            <i className="fas fa-money-bill-wave"></i> Pay
+                                        </button>
+
+                                        <button className={`btn ${table.bill ? "btn-warning" : "btn-primary"}`}
+                                                onClick={() => setStatusOrder(table.tableId)}>
+                                            <i className="fas fa-utensils"></i> Order
+                                        </button>
+
+                                        <button className={`btn ${table.callEmployee ? "btn-success" : "btn-primary"}`}
+                                                onClick={() => setStatusEmployee(table.tableId)}>
+                                            <i className="fas fa-bell"></i> Employee
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <button className={ table.pay === true ? " button-def btn-red" :"button-def"}
-                                        onClick={() => getBillByTableId(table.tableId, table.pay)}>Pay</button>
-
-                                <button className={ table.bill === true ? " button-def btn-yellow" :"button-def"}
-                                        onClick={() => {
-                                            getBillByTableId(table.tableId, table.pay);
-                                            setStatusOrder(table.tableId);
-                                        }}>Order</button>
-
-                                <button className={ table.callEmployee === true ? " button-def btn-green" :"button-def"}
-                                        onClick={()=> setStatusEmployee(table.tableId)}>Employee</button>
                             </div>
-
-
                         ))}
                     </div>
                 </div>
 
-
                 {/* Bảng thông tin hóa đơn */}
-                <div ref={componentPDF} style={{width: '100%'}} className="col-md-6">
-                    <table className="table table-striped">
+                <div className="col-md-6">
+                    <table className="table table-striped" ref={componentPDF} style={{width: '100%'}}>
                         <thead className="table-active">
                         <tr>
                             <th>STT</th>
@@ -187,7 +200,7 @@ function Sell() {
                             <tr>
                                 <td colSpan="6" className="text-center">
                                     <div className="spinner-border" role="status">
-                                        <span className="sr-only">Đang tải hóa đơn...</span>
+                                        <span className="visually-hidden">Đang tải hóa đơn...</span>
                                     </div>
                                 </td>
                             </tr>
@@ -213,62 +226,53 @@ function Sell() {
                         )}
 
                         <tr>
-                            <td colSpan="5" className="text-right">Tổng tiền</td>
+                            <td colSpan="5" className="text-end">Tổng tiền</td>
                             <td>{formatCurrency(calculateTotal())}</td>
+                        </tr>
+                        <tr>
+                            {/*<td>{bill.}</td>*/}
                         </tr>
                         </tbody>
                     </table>
+                    {/* Nút tính tiền và làm mới */}
+                    <div className="d-flex justify-content-end mt-3">
+                        <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
+                        <button className="btn btn-secondary" onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng</button>
+                    </div>
                 </div>
-                {/* Nút tính tiền và làm mới */}
-                <div className="d-flex justify-content-end me-3 mb-5 ">
-                    <button className="btn btn-primary" onClick={checkBillBeforPay}>Tính tiền</button>
-                    <button className="btn btn-secondary"
-                            onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng
-                    </button>
                 </div>
-            </div>
+
+
 
             {/* Phân trang */}
-            <div className="card-footer text-right">
-                <nav className="d-inline-block">
+            <div className="text-end mt-4">
+                <nav>
                     <ul className="pagination mb-0">
                         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                            <Link
-                                className="page-link"
-                                to="#"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                            >
+                            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
                                 <i className="fas fa-chevron-left"></i>
-                            </Link>
+                            </button>
                         </li>
                         {[...Array(totalPages)].map((_, pageIndex) => (
-                            <li
-                                key={pageIndex + 1}
-                                className={`page-item ${currentPage === pageIndex + 1 ? 'active' : ''}`}
-                            >
-                                <Link
-                                    className="page-link"
-                                    to="#"
-                                    onClick={() => handlePageChange(pageIndex + 1)}
-                                >
+                            <li key={pageIndex + 1} className={`page-item ${currentPage === pageIndex + 1 ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => handlePageChange(pageIndex + 1)}>
                                     {pageIndex + 1}
-                                </Link>
+                                </button>
                             </li>
                         ))}
                         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                            <Link
-                                className="page-link"
-                                to="#"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                            >
+                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
                                 <i className="fas fa-chevron-right"></i>
-                            </Link>
+                            </button>
                         </li>
                     </ul>
                 </nav>
             </div>
         </div>
+            </div>
+        </div>
     );
+
 }
 
 export default Sell;
