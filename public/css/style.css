@@ -8087,7 +8087,7 @@ h1, h2, h3, h4, h5,
 .table tbody tr td {
   text-align: center !important;
   vertical-align: middle;
-  padding: 15px 10px;
+  padding: 10px 10px;
   border: 1px solid transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
 .table tbody tr td.product-remove a {
@@ -8411,13 +8411,13 @@ h1, h2, h3, h4, h5,
 .form-control {
   height: 58px !important;
   background: transparent !important;
-  color: black !important;
+  color: #c49b63 !important;
   font-size: 18px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   border: transparent !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  /*border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;*/
   padding-right: 0;
   padding-left: 0; }
   .form-control:focus, .form-control:active {
