@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Col, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import QuantityModal from './QuantityModal'; // Import modal
 
-const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage }) => {
+const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentPage, isTransitioning, setIsTransitioning, itemsPerPage, rangeValue }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
     const [quantity, setQuantity] = useState(1); // Thêm state để lưu số lượng
 
+    // Lọc dịch vụ theo giá
+    const filteredServices = services.filter(service => service.price <= rangeValue);
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentServices = services.slice(indexOfFirstItem, indexOfLastItem);
+    const currentServices = filteredServices.slice(indexOfFirstItem, indexOfLastItem);
 
-    const totalPages = Math.ceil(services.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
 
     const handlePrevPage = () => {
         if (currentPage > 1) {
@@ -56,6 +59,12 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
         handleCloseModal(); // Đóng modal và reset số lượng
     };
 
+    const renderTooltip = (description) => (
+        <Tooltip id="button-tooltip">
+            {description}
+        </Tooltip>
+    );
+
     return (
         <Col md={10}>
             <Row className={`row ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
@@ -65,11 +74,16 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                     currentServices.map((service) => (
                         <Col key={service.serviceId} md={3} className="mb-4">
                             <div className="menu-entry">
-                                <a href="#" className="img" style={{ backgroundImage: `url(/images/${service.imageUrl})` }}></a>
+                                <OverlayTrigger
+                                    placement="bottom-start"
+                                    overlay={renderTooltip(service.description)}
+                                >
+                                    <a href="#" className="img" style={{ backgroundImage: `url(/images/${service.imageUrl})` }}></a>
+                                </OverlayTrigger>
                                 <div className="text text-center pt-4">
-                                    <h3><a href="#">{service.serviceName}</a></h3>
+                                    <h3 title={service.serviceName}><a href="#">{service.serviceName}</a></h3>
                                     <p className="price"><span>{service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span></p>
-                                    <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary">Add to Cart</Button></p>
+                                    <p><Button onClick={() => handleShowModal(service)} className="btn btn-primary btn-outline-primary"><i class="bi bi-cart-plus"></i> Add to Cart</Button></p>
                                 </div>
                             </div>
                         </Col>
@@ -98,7 +112,7 @@ const ListServiceByType = ({ services, handleAddToCart, currentPage, setCurrentP
                 service={selectedService}
                 handleConfirm={handleConfirmModal}
                 quantity={quantity}
-                setQuantity={setQuantity} // Thêm hàm này để cập nhật số lượng
+                setQuantity={setQuantity}
             />
         </Col>
     );
