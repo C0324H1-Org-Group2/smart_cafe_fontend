@@ -43,10 +43,10 @@ const NewsListManagement = () => {
         };
 
         fetchUserRole();
-    }, []); // This will only run once to fetch the user role on component mount
+    }, []);
 
     useEffect(() => {
-        loadNews(currentPage); // Call loadNews whenever currentPage or userRole changes
+        loadNews(currentPage);
     }, [currentPage, userRole]);
 
     const handleSearch = async (searchTerm) => {
@@ -72,7 +72,7 @@ const NewsListManagement = () => {
                 } else {
                     await newsService.deleteSoftNews(selectedNews.newsId);
                 }
-                loadNews(currentPage);  // Call loadNews after deletion to reload the news
+                loadNews(currentPage);
                 toast.success('Tin tức đã được xóa thành công!');
                 setShowDeleteModal(false);
                 setSelectedNews(null);
