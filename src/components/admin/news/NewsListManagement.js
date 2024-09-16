@@ -6,6 +6,8 @@ import { Button, Modal } from "react-bootstrap";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import SearchNews from "./SearchNews";
+import { jwtDecode } from 'jwt-decode';
+
 
 const NewsListManagement = () => {
     const [newsEntries, setNewsEntries] = useState([]);
@@ -13,12 +15,18 @@ const NewsListManagement = () => {
     const [selectedNews, setSelectedNews] = useState(null);
     const [isHardDelete, setIsHardDelete] = useState(false);
     const [sortOrder, setSortOrder] = useState('asc');
-    const [userRole, setUserRole] = useState('ROLE_ADMIN');
+    const [userRole, setUserRole] = useState('ROLE_EMPLOYEE');
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const pageSize = 6;
 
     useEffect(() => {
+        const authorities = JSON.parse(localStorage.getItem('authorities'));
+        if (authorities) {
+            const userRole = authorities[0].authority;
+            console.log('userRole', userRole);
+            setUserRole(userRole);
+        }
         loadNews(currentPage);
     }, [currentPage]);
 

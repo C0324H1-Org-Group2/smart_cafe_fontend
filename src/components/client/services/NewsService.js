@@ -1,8 +1,14 @@
 import axios from "axios";
 
+const token = localStorage.getItem('token');
+
 export const getAllActiveNews = async (page = 0, size = 6) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/news/active?page=${page}&size=${size}`);
+        const response = await axios.get(`http://localhost:8080/api/news/active?page=${page}&size=${size}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (e) {
         console.error("Lỗi lấy tin tức: " + e);
@@ -12,13 +18,17 @@ export const getAllActiveNews = async (page = 0, size = 6) => {
 
 export const getAllNews = async (page = 0, size = 6) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/news?page=${page}&size=${size}`);
+        const response = await axios.get(`http://localhost:8080/api/news?page=${page}&size=${size}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (e) {
         console.error("Lỗi lấy ra tất cả tin tức: " + e);
-        return [];
+        return { content: [], totalPages: 0 };
     }
-}
+};
 
 export const getNewsById = async (newsId) => {
     try {
