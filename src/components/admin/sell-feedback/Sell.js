@@ -15,10 +15,12 @@ function Sell() {
     const [selectedTableId, setSelectedTableId] = useState(null);
     const [selectedIsPay, setSelectedIsPay] = useState(false)
     const [loading, setLoading] = useState(false);
+    const [table,setTable]=useState([])
 
     useEffect(() => {
         getAllTables();
-    }, [tables]);
+    }, [table]);
+
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
@@ -37,23 +39,20 @@ function Sell() {
 
         stompClient.onConnect = () => {
             console.log('Connected to WebSocket');
+
             stompClient.subscribe('/topic/admin/sell/order', (message) => {
                 const updatedTables = JSON.parse(message.body);
-                setTables(updatedTables);
+                setTable(updatedTables);
             });
-        };
-        stompClient.onConnect = () => {
-            console.log('Connected to WebSocket');
+
             stompClient.subscribe('/topic/admin/sell/pay', (message) => {
                 const updatedTables = JSON.parse(message.body);
-                setTables(updatedTables);
+                setTable(updatedTables);
             });
-        };
-        stompClient.onConnect = () => {
-            console.log('Connected to WebSocket');
+
             stompClient.subscribe('/topic/admin/sell/callEmployee', (message) => {
                 const updatedTables = JSON.parse(message.body);
-                setTables(updatedTables);
+                setTable(updatedTables);
             });
         };
 
@@ -63,6 +62,7 @@ function Sell() {
             stompClient.deactivate();
         };
     }, []);
+
 
     const getAllTables = async () => {
         try {
