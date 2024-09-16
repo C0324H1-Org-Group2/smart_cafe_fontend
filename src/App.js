@@ -87,7 +87,6 @@ function App() {
                         <ClientLayout>
                             <Slider/>
                             <Menu/>
-                            <Feedback/>
                         </ClientLayout>
                     </>
                 }/>
