@@ -67,13 +67,13 @@
 }
 
 .description {
-    /* Chỉ hiển thị 2 dòng mô tả */
+    /* Chỉ hiển thị 1 dòng mô tả */
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3.2em; /* Điều chỉnh tùy thuộc vào kích thước dòng */
+    max-height: 1.6em; /* Điều chỉnh tùy thuộc vào kích thước dòng */
     position: relative;
 }
 
@@ -116,6 +116,17 @@
     line-height: 1.5; /* Căn chỉnh chiều cao dòng cho h4 */
     margin-bottom: 0; /* Loại bỏ khoảng cách dưới h4 nếu cần */
 }
+
+.table>:not(caption)>*>* {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+.text-center td {
+    color: white;
+}
+
+
 
 
 

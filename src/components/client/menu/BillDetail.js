@@ -36,7 +36,7 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
     }, [item.isOrder, item.service.waitTime, index]);
 
     return (
-        <tr key={index}>
+        <tr key={index} className="text-center">
             <td>
                 <input
                     type="checkbox"
@@ -44,11 +44,29 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
                     onChange={() => handleStatusChange(index)}
                 />
             </td>
-            <td>{index + 1}</td>
+            <td>
+                <div
+                    style={{
+                        width: '75px',
+                        height: '75px',
+                        backgroundImage: `url(/images/${item.service.imageUrl})`,  // Sử dụng background image
+                        backgroundSize: 'cover',  // Đảm bảo hình ảnh bao phủ hết khung
+                        backgroundPosition: 'center',  // Căn giữa hình ảnh
+                        backgroundRepeat: 'no-repeat',  // Không lặp lại hình ảnh
+                    }}
+                    alt={item.service.serviceName}
+                />
+            </td>
             <td>{item.service.serviceName}</td>
             <td>{item.quantity}</td>
-            <td>{item.service.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-            <td>{(item.quantity * item.service.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+            <td className="price">{item.service.price.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            })}</td>
+            <td className="total">{(item.quantity * item.service.price).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            })}</td>
             <td>{remainTime}</td>
             <td>{item.isOrder ? "Ordering" : "Wait"}</td>
         </tr>

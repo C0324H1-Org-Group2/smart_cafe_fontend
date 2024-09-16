@@ -259,9 +259,9 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                             <span><strong>Bàn của bạn :</strong> {selectedTable ? selectedTable.code : 'N/A'}</span>
                         </div>
                     </div>
-                    <Table bordered className="text-center table-custom">
-                        <thead>
-                        <tr>
+                    <Table className="table">
+                        <thead className="thead-primary">
+                        <tr className="text-center">
                             <th>
                                 <input
                                     type="checkbox"
@@ -278,13 +278,15 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                             <th>Trạng thái</th>
                         </tr>
                         </thead>
-                        {items.map((item, index) => (
-                            <BillDetail
-                                key={index || item.serviceId}
-                                index={index}
-                                item={item}
-                                handleStatusChange={handleStatusChange} />
-                        ))}
+                        <tbody>
+                            {items.map((item, index) => (
+                                <BillDetail
+                                    key={index || item.serviceId}
+                                    index={index}
+                                    item={item}
+                                    handleStatusChange={handleStatusChange} />
+                            ))}
+                        </tbody>
                     </Table>
 
                     <div className="d-flex justify-content-center mb-3">
