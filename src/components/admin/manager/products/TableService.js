@@ -3,6 +3,9 @@ import { Link,useNavigate } from 'react-router-dom';
 import '../ManagerOrder.css';
 import ServiceDetailModal from "./ServiceDetailModal";
 import {deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted} from "../../service/ServiceService";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {Button, Modal} from "react-bootstrap";
 
 const TableService = () => {
 
@@ -18,6 +21,9 @@ const TableService = () => {
     const totalPages = Math.ceil(allServices.length / itemsPerPage);
     const isLastPage = page >= totalPages - 1;
     const [showDeleted, setShowDeleted] = useState(true);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [serviceToDelete, setServiceToDelete] = useState(null);
+
 
 
 
@@ -64,113 +70,156 @@ const TableService = () => {
         navigate('/admin/service/add'); // Điều hướng đến trang tạo bàn
     };
 
+    const handleShowDeleteModal = (service) => {
+        setServiceToDelete(service);
+        setShowDeleteModal(true);
+    };
+
+
+    const handleConfirmDelete = async () => {
+        if (serviceToDelete) {
+            await deleteService(serviceToDelete.serviceId);
+            setShowDeleteModal(false);
+            setServiceToDelete(null);
+            // Refresh danh sách dịch vụ sau khi xóa
+            const data = await getAllServicesIdDesc(page);
+            setAllServices(data);
+        }
+    };
+
 
     return (
-    <>
-        <div className="main-content">
-            <div className="section-body">
-                <h2 className="section-title">Service List</h2>
-                <div className="card-body">
-                    <div className="mb-3">
-                        <button className="btn btn-primary" onClick={handleCreateClick}>+ Create Product</button>
-                        <button className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} float-right`}
-                                onClick={() => {
-                                    setShowDeleted(!showDeleted);
-                                }}>
-                            {showDeleted ? 'Hide' : 'Show'}
-                        </button>
-                    </div>
-                    <div>
-
-                    </div>
-
-                    <div className="row">
-                        <div className="col-md-2">
-                        <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by service name"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+        <>
+            <div className="main-content">
+                <div className="section-body">
+                    <h2 className="section-title">Service List</h2>
+                    <div className="card-body">
+                        <div className="d-flex justify-content-between mb-3">
+                            <div className="d-flex align-items-center">
+                                <button className="btn btn-success" onClick={handleCreateClick}>
+                                    <i className="fas fa-plus"></i>Create Product
+                                </button>
+                                <button
+                                    className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} ml-2`}
+                                    onClick={() => {
+                                        setShowDeleted(!showDeleted);
+                                    }}>
+                                    {showDeleted ? 'Hide' : 'Show'}
+                                </button>
+                            </div>
+                            <div className="d-flex">
+                                <input
+                                    type="text"
+                                    className="form-control mr-2"
+                                    placeholder="Search by service name"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <button className="btn btn-primary" onClick={handleSearch}>
+                                    Search
+                                </button>
+                            </div>
                         </div>
-                        <div className="col-md-4">
-                            <button className="btn btn-primary" onClick={handleSearch}>Search</button>
-                        </div>
 
-                    </div>
-                </div>
-                <div className="card-body p-0">
-                    <div className="table-responsive">
-                        <table className="table table-striped table-md">
-                            <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {services.map((service, index) => (
-                                <tr key={service.serviceId}>
-                                    <td>{page * itemsPerPage + index + 1}</td>
-                                    <td>{service.serviceName}</td>
-                                    <td>{service.price.toLocaleString('vi-VN', {
-                                        style: 'currency',
-                                        currency: 'VND'
-                                    })}</td>
-                                    <td>
-                                        <div
-                                            className={`badge ${service.is_delete === 'true' ? 'badge-secondary' : 'badge-success'}`}>
-                                            {service.is_delete === 'true' ? 'Hide' : 'Showed'}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button className="btn btn-secondary"
-                                                onClick={() => handleShowModal(service)}>Detail
-                                        </button>
-                                        <Link to={`/admin/service/update/${service.serviceId}`}
-                                              className="btn btn-primary">
-                                            Update
+                        <div className="card-body p-0">
+                            <div className="table-responsive">
+                                <table className="table table-striped table-md">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {services.map((service, index) => (
+                                        <tr key={service.serviceId}>
+                                            <td>{page * itemsPerPage + index + 1}</td>
+                                            <td>{service.serviceName}</td>
+                                            <td>{service.price.toLocaleString('vi-VN', {
+                                                style: 'currency',
+                                                currency: 'VND'
+                                            })}</td>
+                                            <td>
+                                                <div className={`${service.isDelete}`}>
+                                                    {service.isDelete === 'ACTIVE' ? 'Active' : 'Deleted'}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-secondary"
+                                                    onClick={() => handleShowModal(service)}>
+                                                    <i className="fas fa-info-circle"></i>
+                                                </button>
+                                                <Link to={`/admin/service/update/${service.serviceId}`} className="btn btn-primary ml-2">
+                                                    <i className="fas fa-edit"></i>
+                                                </Link>
+                                                {service.isDelete === 'ACTIVE' && (
+                                                    <button
+                                                        className="btn btn-danger"
+                                                        onClick={() => handleShowDeleteModal(service)}>
+                                                        <i className="fas fa-trash"></i>
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="card-footer text-right">
+                            <nav className="d-inline-block">
+                                <ul className="pagination mb-0">
+                                    <li className={`page-item ${page === 0 ? 'disabled' : ''}`}>
+                                        <Link className="page-link" to="#" onClick={() => setPage(page - 1)} tabIndex="-1">
+                                            <i className="fas fa-chevron-left"></i>
                                         </Link>
-                                        <button className="btn btn-danger"
-                                                onClick={() => deleteService(service.serviceId)}>
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                                    </li>
+                                    <li className="page-item active">
+                                        <Link className="page-link" to="#">
+                                            {page + 1} <span className="sr-only">(current)</span>
+                                        </Link>
+                                    </li>
+                                    <li className={`page-item ${isLastPage ? 'disabled' : ''}`}>
+                                        <Link
+                                            className="page-link"
+                                            to="#"
+                                            onClick={() => !isLastPage && setPage(page + 1)}>
+                                            <i className="fas fa-chevron-right"></i>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
-                </div>
-                <div className="card-footer text-right">
-                    <nav className="d-inline-block">
-                        <ul className="pagination mb-0">
-                            <li className={`page-item ${page === 0 ? 'disabled' : ''}`}>
-                                <Link className="page-link" to="#" onClick={() => setPage(page - 1)}
-                                      tabIndex="-1"><i className="fas fa-chevron-left"></i></Link>
-                            </li>
-                            <li className="page-item active"><Link className="page-link" to="#">{page + 1} <span
-                                className="sr-only">(current)</span></Link></li>
-                            <li className={`page-item ${isLastPage ? 'disabled' : ''}`}>
-                                <Link className="page-link" to="#" onClick={() => !isLastPage && setPage(page + 1)}><i
-                                    className="fas fa-chevron-right"></i></Link>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
-        </div>
 
-        <ServiceDetailModal
-            show={showModal}
-            handleClose={handleCloseModal}
-            serviceDetails={selectedService}
-        />
-    </>
+            <ServiceDetailModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                serviceDetails={selectedService}
+            />
+            {showDeleteModal && (
+                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Xác nhận xóa</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có chắc chắn muốn xóa sản phẩm: {serviceToDelete?.serviceName} ?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                            Hủy
+                        </Button>
+                        <Button variant="danger" onClick={handleConfirmDelete}>
+                            Xóa
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
+        </>
     );
 };
 
