@@ -3,7 +3,7 @@
     import * as feedbackService from "../service/FeedbackService";
 
     function FeedbackList() {
-        const { date } = useParams(); // Lấy giá trị `date` từ URL
+        let { date } = useParams(); // Lấy giá trị `date` từ URL
         const [feedbacks, setFeedbacks] = useState([]);
         const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
         const [itemsPerPage] = useState(10); // Số lượng phản hồi trên mỗi trang
@@ -60,22 +60,38 @@
             setCurrentPage(pageNumber);
         };
 
+        const clearDate = () => {
+            // Điều hướng trở lại danh sách phản hồi mà không có tham số `date`
+            navigate("/admin/feedback");
+        };
+
         return (
             <>
                 <div className="main-content">
                     <div className="section-body">
                         <h2 className="section-title">Phản hồi</h2>
-                        <div className="card-header">
-                            <label htmlFor="date">Ngày phản hồi:</label>
+                        <div className="card-header d-flex align-items-center">
+                            <label htmlFor="date" className="me-2">Ngày phản hồi:</label>
                             <input
                                 type="date"
                                 value={date || ''} // Gán giá trị ngày từ URL hoặc rỗng
                                 onChange={handleDateChange}
+                                className="form-control me-2"
+                                style={{ width: '200px' }}
                             />
+
+
+                            {/* Nút hiển thị tất cả */}
+                            <button className="btn btn-primary me-2"
+                                    onClick={clearDate}
+                                >
+                                Hiển thị tất cả
+                            </button>
                         </div>
+
                         <div className="card-body p-0">
                             <div className="table-responsive">
-                                <table className="table table-hover">
+                                <table className="table table-striped">
                                     <thead>
                                     <tr>
                                         <th>STT</th>
@@ -87,22 +103,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {feedbacks.length === 0 ?
+                                    {feedbacks.length === 0 ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center">Không có feedback nào trong thời
-                                                gian này
-                                            </td>
+                                            <td colSpan="6" className="text-center">Không có feedback nào trong thời gian này</td>
                                         </tr>
-                                        : currentFeedbacks.map((item, index) => (
+                                    ) : (
+                                        currentFeedbacks.map((item, index) => (
                                             <tr key={item.feedbackId}>
                                                 <td>{indexOfFirstItem + index + 1}</td>
-                                                <td>{item.feedbackId}</td>
+                                                <td>{item.code}</td>
                                                 <td>{formatDate(item.feedbackDate)}</td>
                                                 <td>{item.creator.employee.fullName}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.content}</td>
                                             </tr>
-                                        ))}
+                                        ))
+                                    )}
                                     </tbody>
                                 </table>
                             </div>
@@ -150,6 +166,7 @@
                     </div>
                 </div>
             </>
+
         );
     }
 
