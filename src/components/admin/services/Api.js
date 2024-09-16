@@ -5,6 +5,7 @@ export const login = async (credentials) => {
         const response = await axios.post("http://localhost:8080/api/login", credentials);
         const token = response.data.token;
         localStorage.setItem("token", token);
+        localStorage.setItem("authorities", JSON.stringify(response.data.authorities));
 
         const userId = response.data.id;
         localStorage.setItem("userId", userId);
