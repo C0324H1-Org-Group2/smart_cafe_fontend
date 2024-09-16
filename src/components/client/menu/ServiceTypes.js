@@ -10,7 +10,7 @@ const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, 
     return (
         <Col md={2}>
             <div className="list-group mb-4">
-                <h2 className="mb-2">Categories</h2>
+                <h4 className="mb-2">Categories</h4>
                 {menuItems.map((item) => (
                     <div
                         key={item.typeId}
@@ -19,9 +19,9 @@ const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, 
                         style={{ cursor: 'pointer' }}
                     >
                         <div className="d-flex align-items-center">
-                            <h4 className={`custom-h4 ${item.typeId === selectedType ? 'text-primary' : 'text-dark'}`}>
+                            <h5 className={`custom-h4 ${item.typeId === selectedType ? 'text-primary' : 'text-dark'}`}>
                                 <i className="bi bi-cup-hot-fill custom-icon me-2 "></i>{item.typeName}
-                            </h4>
+                            </h5>
                         </div>
                     </div>
                 ))}
@@ -29,7 +29,7 @@ const ServiceTypes = ({ menuItems, selectedType, handleButtonClick, rangeValue, 
 
             <div className="list-group mb-4">
                 <div className="mb-3">
-                    <h2 className="mb-2">Price</h2>
+                    <h4 className="mb-2">Price</h4>
                     <input
                         type="range"
                         className="form-range w-100"
