@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import UseScrollToHash from "../common/UseScrollToHash";
 import * as serviceService from "../services/ServiceService";
+import { toast } from "react-toastify";
 
 const ContactForm = () => {
     UseScrollToHash();
@@ -13,10 +14,10 @@ const ContactForm = () => {
 
         try {
             const response = await serviceService.sendFeedback({email, message});
-            console.log('Feedback sent:', response);
+            toast.success("Gửi thành công");
             // Xử lý phản hồi từ server (như hiển thị thông báo thành công)
         } catch (error) {
-            console.error('Error sending feedback:', error);
+            toast.error("Gửi thất bại");
             // Xử lý lỗi (như hiển thị thông báo lỗi)
         }
     };

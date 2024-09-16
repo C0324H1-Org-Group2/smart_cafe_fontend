@@ -130,9 +130,9 @@ function App() {
                         </Helmet>
                         <AdminLayout>
                             <RevenueByDate/>
+                            <ChartComponent/>
                             <ManagerRevenue/>
                             <ExpensesChart/>
-                            <ChartComponent/>
                             <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
