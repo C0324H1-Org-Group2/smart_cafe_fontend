@@ -303,7 +303,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                         <Button className="btn-lg rounded-pill" onClick={handleOrder} variant="primary">Gọi món</Button>
                         <Button className="btn-lg rounded-pill" onClick={handlePay} variant="success">Thanh toán</Button>
                         <NavLink
-                            to="/menu#feedback"
+                            to="/order#feedback"
                             onClick={() => console.log("Phản hồi")}
                             className="btn btn-info btn-lg rounded-pill ms-3"
                         >

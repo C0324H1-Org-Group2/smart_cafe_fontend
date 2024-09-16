@@ -39,6 +39,8 @@ import ResetPassword from "./components/admin/Login/ResetPassword";
 import ServiceFormAdd from "./components/admin/manager/products/ServiceFormAdd";
 import ServiceFormUpdate from "./components/admin/manager/products/ServiceFormUpdate";
 import CreateServiceForm from "./components/admin/manager/products/CreateServiceForm";
+import Order from "./components/client/menu/Order";
+import Menus from "./components/client/menu/Menus";
 
 
 
@@ -83,6 +85,19 @@ function App() {
                         <ClientLayout>
                             <Slider/>
                             <Menu/>
+                            <Feedback/>
+                        </ClientLayout>
+                    </>
+                }/>
+                <Route path="/order" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
+                            <link rel="stylesheet" href="/css/style.css"/>
+                        </Helmet>
+                        <ClientLayout>
+                            <Slider/>
+                            <Order/>
                             <Feedback/>
                         </ClientLayout>
                     </>
