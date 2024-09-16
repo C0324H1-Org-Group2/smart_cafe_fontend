@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import OrderNotification from "../sell-feedback/SellNotification";
 import SellNotification from "../sell-feedback/SellNotification";
 
 const Header = () => {
@@ -11,10 +10,15 @@ const Header = () => {
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
-    const handleSellNotifications = (count) => {
-        setNotificationCount(count);
+
+    // Hàm để đóng dropdown
+    const closeDropdown = () => {
+        setDropdownOpen(false);
     };
 
+    const handleSellNotifications = (change) => {
+        setNotificationCount((prevCount) => Math.max(0, prevCount + change)); // Giảm số lượng thông báo
+    };
     return (
         <div className="main-wrapper main-wrapper-1">
             <div className="navbar-bg"></div>
@@ -59,6 +63,8 @@ const Header = () => {
                         <SellNotification
                             onSellNotifications={handleSellNotifications}
                             isDropdownOpen={isDropdownOpen}
+                            closeDropdown={closeDropdown}
+
                         />
                     </li>
 
