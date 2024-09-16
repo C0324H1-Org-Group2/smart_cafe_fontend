@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import * as serviceService from "../services/ServiceService";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import ListBillDetails from './ListBillDetails';
 import ServiceTypes from './ServiceTypes';
 import ListServiceByType from './ListServiceByType';
+import TypesService from './TypesService';
 import './Menu.css';
 
 const Menu = () => {
@@ -15,12 +16,31 @@ const Menu = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [allTables, setAllTables] = useState([]);
     const [tableInfo, setTableInfo] = useState(null);
+    const [rangeValue, setRangeValue] = useState(500000); // Giá trị phạm vi mặc định
     const itemsPerPage = 8;
 
     useEffect(() => {
+        // Khôi phục dữ liệu từ sessionStorage khi component được khởi tạo
+        const savedCartItems = sessionStorage.getItem('cartItems');
+        const savedTableInfo = sessionStorage.getItem('tableInfo');
+
+        if (savedCartItems) {
+            setCartItems(JSON.parse(savedCartItems));
+        }
+
+        if (savedTableInfo) {
+            setTableInfo(JSON.parse(savedTableInfo));
+        }
+
         allMenuItems();
         getAllTables();
     }, []);
+
+    useEffect(() => {
+        // Lưu dữ liệu vào sessionStorage khi cartItems hoặc tableInfo thay đổi
+        sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+        sessionStorage.setItem('tableInfo', JSON.stringify(tableInfo));
+    }, [cartItems, tableInfo]);
 
     const getAllTables = async () => {
         try {
@@ -48,27 +68,27 @@ const Menu = () => {
         setCurrentPage(1);
     };
 
-    // const handleAddToCart = (service) => {
-    //     const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId);
-    //
-    //     if (existingItem) {
-    //         setCartItems(cartItems.map(item =>
-    //             item.service.serviceId === service.serviceId
-    //                 ? { ...item, quantity: item.quantity + 1 }
-    //                 : item
-    //         ));
-    //     } else {
-    //         const newItem = {
-    //             service: { ...service },
-    //             isOrder: false,
-    //             quantity: 1,
-    //             tableId: tableInfo?.tableId ?? null
-    //         };
-    //         setCartItems([...cartItems, newItem]);
-    //     }
-    // };
-
     const handleAddToCart = (service, quantity) => {
+        const itemInCart = cartItems.find(item => item.service.serviceId === service.serviceId && item.isOrder === false);
+
+        if (itemInCart) {
+            setCartItems(cartItems.map(item =>
+                item.service.serviceId === service.serviceId && item.isOrder === false
+                    ? { ...item, quantity: item.quantity + quantity }
+                    : item
+            ));
+            return;
+        } else {
+            const newItem = {
+                service: { ...service },
+                isOrder: false,
+                quantity: quantity,
+                tableId: tableInfo?.tableId ?? null
+            };
+            setCartItems([...cartItems, newItem]);
+            return;
+        }
+
         const existingItem = cartItems.find(item => item.service.serviceId === service.serviceId && item.isOrder === true);
 
         if (existingItem) {
@@ -79,27 +99,8 @@ const Menu = () => {
                 tableId: tableInfo?.tableId ?? null
             };
             setCartItems([...cartItems, newItem]);
-        } else {
-            const itemInCart = cartItems.find(item => item.service.serviceId === service.serviceId);
-
-            if (itemInCart) {
-                setCartItems(cartItems.map(item =>
-                    item.service.serviceId === service.serviceId
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                ));
-            } else {
-                const newItem = {
-                    service: { ...service },
-                    isOrder: false,
-                    quantity: quantity,
-                    tableId: tableInfo?.tableId ?? null
-                };
-                setCartItems([...cartItems, newItem]);
-            }
         }
     };
-
 
     const handleStatusChange = (index) => {
         const updatedItems = [...cartItems];
@@ -126,10 +127,16 @@ const Menu = () => {
         <section className="ftco-section">
             <Container>
                 <Row className="mt-4">
+                    <TypesService
+                        menuItems={menuItems}
+                        selectedType={selectedType}
+                    />
                     <ServiceTypes
                         menuItems={menuItems}
                         selectedType={selectedType}
                         handleButtonClick={handleButtonClick}
+                        rangeValue={rangeValue}
+                        setRangeValue={setRangeValue} // Truyền hàm setRangeValue
                     />
                     <ListServiceByType
                         services={services}
@@ -139,8 +146,7 @@ const Menu = () => {
                         isTransitioning={isTransitioning}
                         setIsTransitioning={setIsTransitioning}
                         itemsPerPage={itemsPerPage}
-                        cartItems={cartItems}
-                        handleStatusChange={handleStatusChange}
+                        rangeValue={rangeValue} // Truyền rangeValue vào component
                     />
                 </Row>
                 <ListBillDetails

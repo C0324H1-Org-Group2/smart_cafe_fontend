@@ -36,7 +36,7 @@ const TopServiceComponent = () => {
         <>
             <div className="main-content">
                 <div className="section-body">
-                    <h2 className="section-title">Top Selling Services</h2>
+                    <h3 className="section-title text-center">Top Selling Services</h3>
                     <p className="section-lead">List of top-selling services for the selected year.</p>
                     <div className="card-body">
                         <div className="col-12 col-md-2 mb-3 d-flex justify-content-end">
