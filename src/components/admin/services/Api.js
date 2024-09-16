@@ -9,6 +9,8 @@ export const login = async (credentials) => {
         const userId = response.data.id;
         localStorage.setItem("userId", userId);
 
+        const employeeId = response.data.id;
+        localStorage.setItem("employeeId", employeeId);
         console.log("Đăng nhập thành công, token đã được lưu.");
     } catch (e) {
         console.error("Lỗi đăng nhập: " + e);
