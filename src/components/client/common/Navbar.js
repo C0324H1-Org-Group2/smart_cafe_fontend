@@ -25,7 +25,7 @@ const Navbar = () => {
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
                         <li className="nav-item"><NavLink to="/menu" className="nav-link">Menu</NavLink></li>
-                        <li className="nav-item"><a href="services.html" className="nav-link">Services</a></li>
+                        <li className="nav-item"><NavLink to="/order" className="nav-link">Order</NavLink></li>
                         <li className="nav-item"><NavLink to="/news#news-list" className="nav-link">News</NavLink></li>
                         <li className="nav-item"><a href="about.html" className="nav-link">About</a></li>
                         <li className="nav-item dropdown">

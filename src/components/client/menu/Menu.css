@@ -67,13 +67,13 @@
 }
 
 .description {
-    /* Chỉ hiển thị 2 dòng mô tả */
+    /* Chỉ hiển thị 1 dòng mô tả */
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3.2em; /* Điều chỉnh tùy thuộc vào kích thước dòng */
+    max-height: 1.6em; /* Điều chỉnh tùy thuộc vào kích thước dòng */
     position: relative;
 }
 
@@ -107,7 +107,7 @@
 }
 
 .custom-icon {
-    font-size: 1.7rem; /* Điều chỉnh kích thước của biểu tượng */
+    font-size: 1.4rem; /* Điều chỉnh kích thước của biểu tượng */
     line-height: 1; /* Căn chỉnh chiều cao dòng cho biểu tượng */
     vertical-align: top; /* Căn giữa biểu tượng với văn bản */
 }
@@ -116,6 +116,32 @@
     line-height: 1.5; /* Căn chỉnh chiều cao dòng cho h4 */
     margin-bottom: 0; /* Loại bỏ khoảng cách dưới h4 nếu cần */
 }
+
+.table>:not(caption)>*>* {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+.text-center td {
+    color: white;
+}
+
+.input-number {
+    background: transparent !important; /* Nền trong suốt */
+    border: 1px solid rgba(204, 204, 204, 0.5); /* Đường viền xung quanh với độ trong suốt */
+    border-radius: 3px; /* Bo tròn góc (tùy chọn) */
+    padding: 3px; /* Khoảng cách giữa nội dung và đường viền */
+    box-shadow: none; /* Loại bỏ bóng (nếu có) */
+    -webkit-appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt */
+    -moz-appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt Firefox */
+    appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt */
+    color: white;
+}
+
+
+
+
+
 
 
 

@@ -241,6 +241,14 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         setItems(updatedItems);
     };
 
+    const handleQuantityChange = (index, newQuantity) => {
+        const updatedItems = items.map((item, i) =>
+            i === index ? { ...item, quantity: newQuantity } : item
+        );
+        setItems(updatedItems);
+    };
+
+
     return (
         <>
             <Row className="mt-4">
@@ -259,9 +267,9 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                             <span><strong>Bàn của bạn :</strong> {selectedTable ? selectedTable.code : 'N/A'}</span>
                         </div>
                     </div>
-                    <Table bordered className="text-center table-custom">
-                        <thead>
-                        <tr>
+                    <Table className="table">
+                        <thead className="thead-primary">
+                        <tr className="text-center">
                             <th>
                                 <input
                                     type="checkbox"
@@ -278,13 +286,16 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                             <th>Trạng thái</th>
                         </tr>
                         </thead>
-                        {items.map((item, index) => (
-                            <BillDetail
-                                key={index || item.serviceId}
-                                index={index}
-                                item={item}
-                                handleStatusChange={handleStatusChange} />
-                        ))}
+                        <tbody>
+                            {items.map((item, index) => (
+                                <BillDetail
+                                    key={index || item.serviceId}
+                                    index={index}
+                                    item={item}
+                                    handleStatusChange={handleStatusChange}
+                                    handleQuantityChange={handleQuantityChange} />
+                            ))}
+                        </tbody>
                     </Table>
 
                     <div className="d-flex justify-content-center mb-3">
@@ -292,7 +303,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                         <Button className="btn-lg rounded-pill" onClick={handleOrder} variant="primary">Gọi món</Button>
                         <Button className="btn-lg rounded-pill" onClick={handlePay} variant="success">Thanh toán</Button>
                         <NavLink
-                            to="/menu#feedback"
+                            to="/order#feedback"
                             onClick={() => console.log("Phản hồi")}
                             className="btn btn-info btn-lg rounded-pill ms-3"
                         >
