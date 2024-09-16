@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const BillDetail = ({ item, index, handleStatusChange }) => {
+const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) => {
     const [remainTime, setRemainTime] = useState(item.service.waitTime);
+    const [quantity, setQuantity] = useState(item.quantity); // Thêm state cho số lượng
 
     useEffect(() => {
         if (item.isOrder) {
@@ -35,6 +36,14 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
         }
     }, [item.isOrder, item.service.waitTime, index]);
 
+    const handleChange = (e) => {
+        const newQuantity = parseInt(e.target.value, 10);
+        if (newQuantity > 0) { // Đảm bảo số lượng không âm
+            setQuantity(newQuantity);
+            handleQuantityChange(index, newQuantity); // Gọi hàm từ component cha để cập nhật số lượng
+        }
+    };
+
     return (
         <tr key={index} className="text-center">
             <td>
@@ -58,12 +67,22 @@ const BillDetail = ({ item, index, handleStatusChange }) => {
                 />
             </td>
             <td>{item.service.serviceName}</td>
-            <td>{item.quantity}</td>
+            <td>
+                <input
+                    className="input-number"
+                    type="number"
+                    value={quantity}
+                    min="1" // Đảm bảo số lượng tối thiểu là 1
+                    max="100"
+                    onChange={handleChange} // Cập nhật số lượng khi thay đổi
+                    style={{width: '80px', textAlign: 'center'}} // Tùy chỉnh giao diện
+                />
+            </td>
             <td className="price">{item.service.price.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             })}</td>
-            <td className="total">{(item.quantity * item.service.price).toLocaleString('vi-VN', {
+            <td className="total">{(quantity * item.service.price).toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             })}</td>

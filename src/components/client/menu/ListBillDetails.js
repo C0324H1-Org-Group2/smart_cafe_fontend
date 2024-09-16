@@ -241,6 +241,14 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         setItems(updatedItems);
     };
 
+    const handleQuantityChange = (index, newQuantity) => {
+        const updatedItems = items.map((item, i) =>
+            i === index ? { ...item, quantity: newQuantity } : item
+        );
+        setItems(updatedItems);
+    };
+
+
     return (
         <>
             <Row className="mt-4">
@@ -284,7 +292,8 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                                     key={index || item.serviceId}
                                     index={index}
                                     item={item}
-                                    handleStatusChange={handleStatusChange} />
+                                    handleStatusChange={handleStatusChange}
+                                    handleQuantityChange={handleQuantityChange} />
                             ))}
                         </tbody>
                     </Table>

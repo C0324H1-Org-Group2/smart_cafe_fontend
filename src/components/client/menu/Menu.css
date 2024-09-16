@@ -126,6 +126,21 @@
     color: white;
 }
 
+.input-number {
+    background: transparent !important; /* Nền trong suốt */
+    border: 1px solid rgba(204, 204, 204, 0.5); /* Đường viền xung quanh với độ trong suốt */
+    border-radius: 3px; /* Bo tròn góc (tùy chọn) */
+    padding: 3px; /* Khoảng cách giữa nội dung và đường viền */
+    box-shadow: none; /* Loại bỏ bóng (nếu có) */
+    -webkit-appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt */
+    -moz-appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt Firefox */
+    appearance: none; /* Loại bỏ kiểu mặc định của trình duyệt */
+    color: white;
+}
+
+
+
+
 
 
 
