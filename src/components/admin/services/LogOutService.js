@@ -1,5 +1,14 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8080/api';
-export const logout = () => {
-    return axios.post(`${API_URL}/logout`);
+
+export const logout = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/logout', {}, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Lỗi khi đăng xuất:', error);
+        throw error;
+    }
 };
+
