@@ -244,6 +244,7 @@ function App() {
                         </>
                     }/>
                 <Route path="/admin/service/add" element={
+                    hasRole('ROLE_ADMIN') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -264,6 +265,7 @@ function App() {
                             <Sidebar />
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 } />
                 <Route path="/admin/service/update/:serviceId" element={
                     <>
