@@ -128,7 +128,7 @@ const SellNotification = ({onSellNotifications, isDropdownOpen, closeDropdown}) 
                     onClick={() => handleNotificationClick(msg.tableId, 'order')}
                     style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
-                    <strong>Bàn {msg.code} gọi món</strong>
+                    <strong>Table {msg.code} calling the dish</strong>
                 </Link>
             ))}
             {messagesEmployee.length > 0 && messagesEmployee.map((msg) => (
@@ -139,7 +139,7 @@ const SellNotification = ({onSellNotifications, isDropdownOpen, closeDropdown}) 
                     onClick={() => handleNotificationClick(msg.tableId, 'employee')}
                     style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
-                    <strong>Bàn {msg.code} gọi nhân viên</strong>
+                    <strong>Table {msg.code} calling the employee</strong>
                 </Link>
             ))}
             {messagesPay.length > 0 && messagesPay.map((msg) => (
@@ -150,7 +150,7 @@ const SellNotification = ({onSellNotifications, isDropdownOpen, closeDropdown}) 
                     onClick={() => handleNotificationClick(msg.tableId, 'pay')}
                     style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
-                    <strong>Bàn {msg.code} gọi thanh toán</strong>
+                    <strong>Table {msg.code} calling for payment</strong>
                 </Link>
             ))}
             {messagesFeedback.length > 0 && messagesFeedback.map((msg) => (
@@ -161,11 +161,11 @@ const SellNotification = ({onSellNotifications, isDropdownOpen, closeDropdown}) 
                     onClick={() => handleNotificationClick(msg.tableId, 'feedback')}
                     style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 >
-                    <strong>Có 1 phản hồi {msg.code} mới</strong>
+                    <strong>There is 1 new comment {msg.code}  </strong>
                 </Link>
             ))}
             {messagesOrder.length === 0 && messagesEmployee.length === 0 && messagesPay.length === 0 && messagesFeedback.length === 0 && (
-                <div className="dropdown-item">Không có thông báo mới</div>
+                <div className="dropdown-item">There are no new notifications</div>
             )}
         </div>
     );

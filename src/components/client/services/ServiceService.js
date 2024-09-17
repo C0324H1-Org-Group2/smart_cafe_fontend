@@ -107,12 +107,25 @@ export const getAllTables = async() => {
 
 export const sendFeedback = async (feedback) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/feedback_client`, feedback);
+        // Tạo đối tượng FormData
+        const formData = new FormData();
+        formData.append('email', feedback.email);
+        formData.append('message', feedback.message);
+        formData.append('imageFile', feedback.imageFile); // Đảm bảo imageFile là một đối tượng File
+
+        // Gửi yêu cầu POST với axios
+        const response = await axios.post(`${API_BASE_URL}/feedback_client`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
         return response.data;
     } catch (e) {
         throw new Error('Error sending feedback: ' + e.message);
     }
 };
+
 
 export const checkIsBillTable = async (id) => {
     try {
