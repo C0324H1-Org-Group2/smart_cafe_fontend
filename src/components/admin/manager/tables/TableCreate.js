@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createTable } from '../../service/tableService'; // Đảm bảo đường dẫn đúng
+import { createTable } from '../../service/tableService'; // Ensure the path is correct
 import { toast } from 'react-toastify';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+// Define validation schema with Yup
+const validationSchema = Yup.object({
+    code: Yup.string()
+        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Regular expression to check format
+        .required('Code is required'),
+    state: Yup.string()
+        .required('State is required'),
+    on: Yup.boolean(),
+    delete: Yup.boolean() // Add validation for delete field
+});
 
 const TableCreate = () => {
     const navigate = useNavigate();
-    const [code, setCode] = useState('');
-    const [state, setState] = useState('');
-    const [isOn, setIsOn] = useState(true);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            await createTable({ code, state, isOn });
+            // Send data with the correct field names
+            await createTable(values);
             toast.success('Table created successfully!');
-            navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
+            navigate('/admin/tables/list'); // Navigate to the table list page
         } catch (error) {
             console.error('Error creating table:', error);
             toast.error('Failed to create table.');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -26,40 +38,55 @@ const TableCreate = () => {
             <div className="section-body">
                 <h2 className="section-title">Create Table</h2>
                 <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Code</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>State</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={state}
-                                onChange={(e) => setState(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>Status</label>
-                            <select
-                                className="form-control"
-                                value={isOn}
-                                onChange={(e) => setIsOn(e.target.value === 'true')}
-                            >
-                                <option value={true}>On</option>
-                                <option value={false}>Off</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Create</button>
-                    </form>
+                    <Formik
+                        initialValues={{ code: '', state: '', on: true, delete: false }} // Set default values for delete
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form>
+                                <div className="form-group">
+                                    <label htmlFor="code">Code</label>
+                                    <Field
+                                        type="text"
+                                        className="form-control"
+                                        id="code"
+                                        name="code"
+                                    />
+                                    <ErrorMessage name="code" component="div" className="text-danger" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="state">State</label>
+                                    <Field
+                                        type="text"
+                                        className="form-control"
+                                        id="state"
+                                        name="state"
+                                    />
+                                    <ErrorMessage name="state" component="div" className="text-danger" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="on">Status</label>
+                                    <Field as="select" className="form-control" id="on" name="on">
+                                        <option value={true}>On</option>
+                                        <option value={false}>Off</option>
+                                    </Field>
+                                    <ErrorMessage name="on" component="div" className="text-danger" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="delete">Is Deleted</label>
+                                    <Field as="select" className="form-control" id="delete" name="delete">
+                                        <option value={false}>No</option>
+                                        <option value={true}>Yes</option>
+                                    </Field>
+                                    <ErrorMessage name="delete" component="div" className="text-danger" />
+                                </div>
+                                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Creating...' : 'Create'}
+                                </button>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
             </div>
         </div>

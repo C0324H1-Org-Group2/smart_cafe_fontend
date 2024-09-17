@@ -181,9 +181,19 @@ function App() {
                         )
                     }/>
                     <Route path="/admin/tables/list" element={
+                        hasRole('ROLE_EMPLOYEE') ? (
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
                                 <link rel="stylesheet" href="/assets/css/style.css"/>
                             </Helmet>
                             <AdminLayout>
@@ -191,11 +201,24 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
                     <Route path="/admin/tables/create" element={
+                        hasRole('ROLE_ADMIN') ? (
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
                                 <link rel="stylesheet" href="/assets/css/style.css"/>
                             </Helmet>
                             <AdminLayout>
@@ -203,24 +226,41 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
 
-                <Route path="/admin/tables/edit/:tableId" element={
-                    <>
-                        <Helmet>
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            <TableEdit />
-                            <Sidebar />
-                        </AdminLayout>
-                    </>
-                } />
+                    <Route path="/admin/tables/edit/:tableId" element={
+                        hasRole('ROLE_ADMIN') ? (
+                        <>
+                            <Helmet>
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                <TableEdit/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
+                    }/>
 
 
 
                 <Route path="/admin/service" element={
+                    hasRole('ROLE_EMPLOYEE') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -242,6 +282,9 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                    ) : (
+                        <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                    )
                     }/>
                 <Route path="/admin/service/add" element={
                     hasRole('ROLE_ADMIN') ? (
@@ -268,6 +311,7 @@ function App() {
                     ) : (<Navigate to="/403" replace/> )
                 } />
                 <Route path="/admin/service/update/:serviceId" element={
+                    hasRole('ROLE_ADMIN') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -287,10 +331,11 @@ function App() {
                             <Sidebar />
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 } />
 
-
                 <Route path="/admin/feedback/:date" element={
+                    hasRole('ROLE_EMPLOYEE') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -311,8 +356,12 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                    ) : (
+                        <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                    )
                     }/>
                     <Route path="/admin/feedback" element={
+                        hasRole('ROLE_EMPLOYEE') ? (
                         <>
                             <Helmet>
                                 {/* Import CSS của admin */}
@@ -333,8 +382,12 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
                     <Route path="/admin/sell" element={
+                        hasRole('ROLE_EMPLOYEE') ? (
                         <>
                             <Helmet>
                                 {/* Import CSS của admin */}
@@ -358,6 +411,9 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
                     <Route path="/admin/order" element={
                         hasRole('ROLE_ADMIN') ? (   // Kiểm tra vai trò trước khi cho phép truy cập
@@ -414,6 +470,7 @@ function App() {
                     ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news/update/:newsId" element={
+                    hasRole('ROLE_ADMIN') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -434,8 +491,10 @@ function App() {
                             <Sidebar/>
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news" element={
+                    hasRole('ROLE_EMPLOYEE') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -456,6 +515,7 @@ function App() {
                             <Sidebar/>
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
 
                 {/* Thêm route cho Admin Login */}
