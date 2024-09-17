@@ -318,7 +318,8 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                                 index={index}
                                 item={item}
                                 handleStatusChange={handleStatusChange}
-                                handleQuantityChange={handleQuantityChange}/>
+                                handleQuantityChange={handleQuantityChange}
+                            />
                         ))}
                         {/* Hiển thị dòng tổng tiền khi showTotal là true */}
                         {showTotal && (

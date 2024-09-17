@@ -71,7 +71,7 @@ const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) =
                 <input
                     className="input-number"
                     type="number"
-                    value={quantity}
+                    value={item.quantity}
                     min="1" // Đảm bảo số lượng tối thiểu là 1
                     max="100"
                     onChange={handleChange} // Cập nhật số lượng khi thay đổi
