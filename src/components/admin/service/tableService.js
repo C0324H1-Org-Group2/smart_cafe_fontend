@@ -2,20 +2,24 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/api/tables';
 
-export const getAllTables = async (codeSearch, page = 0, size = 10) => {
+export const getAllTables = async (code, page = 0, size = 10,includeDeleted = false) => {
     try {
         const response = await axios.get('http://localhost:8080/api/tables', {
             params: {
-                code: codeSearch || '', // Nếu không tìm kiếm, codeSearch là chuỗi rỗng
+                code: code || '',
                 page: page,
-                size: size
+                size: size,
+                includeDeleted: includeDeleted
             }
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching tables:', error);
+        console.error("Không tìm thấy bàn:", error);
         return null;
     }
+};
+export const getAllIncludingDeleted = (code, page = 0, size = 10) => {
+    return axios.get(`${BASE_URL}/all-including-deleted`, { params: { code, page, size } }).then(response => response.data);
 };
 
 export const getTableByCode = async (code) => {
@@ -71,6 +75,16 @@ export const createTable = async (table) => {
         return response.data;
     } catch (error) {
         console.error('Lỗi khi tạo bàn:', error);
+        throw error;
+    }
+};
+
+export const deleteTable = async (id, type = 'soft') => {
+    try {
+        const url = type === 'hard' ? `${BASE_URL}/hard/${id}` : `${BASE_URL}/soft/${id}`;
+        await axios.delete(url);
+    } catch (error) {
+        console.error('Lỗi khi xóa bảng:', error);
         throw error;
     }
 };
