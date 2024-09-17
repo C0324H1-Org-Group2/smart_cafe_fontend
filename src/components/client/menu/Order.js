@@ -5,6 +5,9 @@ import ServiceTypes from './ServiceTypes';
 import ListServiceByType from './ListServiceByType';
 import ListBillDetails from './ListBillDetails';
 import './Menu.css';
+import SockJS from "sockjs-client";
+import {Client} from '@stomp/stompjs';
+
 
 const Order = () => {
     const [menuItems, setMenuItems] = useState([]);
@@ -17,6 +20,46 @@ const Order = () => {
     const [rangeValue, setRangeValue] = useState(500000); // Giá trị phạm vi mặc định
     const [selectedType, setSelectedType] = useState(null);
     const itemsPerPage = 8;
+
+
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = new Client({
+            webSocketFactory: () => socket,
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+            onStompError: (error) => {
+                console.error('STOMP error', error);
+            },
+            onWebSocketClose: () => {
+                console.error('WebSocket connection closed');
+            }
+        });
+
+        stompClient.onConnect = () => {
+            console.log('Connected to WebSocket');
+
+            stompClient.subscribe('/topic/client/order', (message) => {
+                const updatedTables = JSON.parse(message.body);
+                setAllTables(updatedTables);
+            });
+
+            stompClient.subscribe('/topic/client/callEmployee', (message) => {
+                const updatedTables = JSON.parse(message.body);
+                setAllTables(updatedTables);
+            });
+        };
+
+        stompClient.activate();
+
+        return () => {
+            stompClient.deactivate();
+        };
+    }, []);
+
+
+
 
     useEffect(() => {
         // Khôi phục dữ liệu từ sessionStorage khi component được khởi tạo
