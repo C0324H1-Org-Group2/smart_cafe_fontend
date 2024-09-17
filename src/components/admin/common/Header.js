@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Đảm bảo đã bao gồm Bootstrap JS
 import SellNotification from "../sell-feedback/SellNotification";
 
 const Header = () => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isUserDropdownOpen, setUserDropdownOpen] = useState(false); // Thêm state cho dropdown người dùng
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
     };
 
-    // Hàm để đóng dropdown
+    const toggleUserDropdown = () => {
+        setUserDropdownOpen(!isUserDropdownOpen);
+    };
+
     const closeDropdown = () => {
         setDropdownOpen(false);
     };
 
     const handleSellNotifications = (change) => {
-        setNotificationCount((prevCount) => Math.max(0, prevCount + change)); // Giảm số lượng thông báo
+        setNotificationCount((prevCount) => Math.max(0, prevCount + change));
     };
+
     return (
         <div className="main-wrapper main-wrapper-1">
             <div className="navbar-bg"></div>
@@ -56,7 +61,8 @@ const Header = () => {
                         <a
                             href="#"
                             onClick={toggleDropdown}
-                            className="nav-link notification-toggle nav-link-lg">
+                            className="nav-link notification-toggle nav-link-lg"
+                        >
                             <i className="far fa-bell"></i>
                             <span className="badge badge-warning navbar-badge">{notificationCount}</span>
                         </a>
@@ -64,17 +70,20 @@ const Header = () => {
                             onSellNotifications={handleSellNotifications}
                             isDropdownOpen={isDropdownOpen}
                             closeDropdown={closeDropdown}
-
                         />
                     </li>
 
                     {/* Người dùng */}
                     <li className="dropdown">
-                        <a href="#" data-toggle="dropdown" className="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="User" src="assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
+                        <a
+                            href="#"
+                            onClick={toggleUserDropdown}
+                            className="nav-link dropdown-toggle nav-link-lg nav-link-user"
+                        >
+                            <img alt="image" src="/assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
                             <div className="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
                         </a>
-                        <div className="dropdown-menu dropdown-menu-right">
+                        <div className={`dropdown-menu dropdown-menu-right ${isUserDropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-title">Logged in 5 min ago</div>
                             <a href="features-profile.html" className="dropdown-item has-icon">
                                 <i className="far fa-user"></i> Profile

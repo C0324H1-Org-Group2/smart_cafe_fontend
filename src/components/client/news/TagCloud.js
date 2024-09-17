@@ -1,6 +1,6 @@
 import React from 'react';
 
-const tags = ['dish', 'menu', 'food', 'sweet', 'tasty', 'delicious', 'desserts', 'drinks'];
+const tags = ['tea', 'menu', 'freeze', 'vibes', 'other', 'delicious', 'classic', 'drinks'];
 
 const TagCloud = () => (
     <div className="sidebar-box">
