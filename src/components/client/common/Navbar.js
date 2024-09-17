@@ -27,17 +27,17 @@ const Navbar = () => {
                         <li className="nav-item"><NavLink to="/menu" className="nav-link">Menu</NavLink></li>
                         <li className="nav-item"><NavLink to="/order" className="nav-link">Order</NavLink></li>
                         <li className="nav-item"><NavLink to="/news#news-list" className="nav-link">News</NavLink></li>
-                        <li className="nav-item"><a href="about.html" className="nav-link">About</a></li>
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="room.html" id="dropdown04"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-                            <div className="dropdown-menu" aria-labelledby="dropdown04">
-                                <a className="dropdown-item" href="shop.html">Shop</a>
-                                <a className="dropdown-item" href="product-single.html">Single Product</a>
-                                <a className="dropdown-item" href="room.html">Cart</a>
-                                <a className="dropdown-item" href="checkout.html">Checkout</a>
-                            </div>
-                        </li>
+                        <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
+                        {/*<li className="nav-item dropdown">*/}
+                        {/*    <a className="nav-link dropdown-toggle" href="room.html" id="dropdown04"*/}
+                        {/*       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>*/}
+                        {/*    <div className="dropdown-menu" aria-labelledby="dropdown04">*/}
+                        {/*        <a className="dropdown-item" href="shop.html">Shop</a>*/}
+                        {/*        <a className="dropdown-item" href="product-single.html">Single Product</a>*/}
+                        {/*        <a className="dropdown-item" href="room.html">Cart</a>*/}
+                        {/*        <a className="dropdown-item" href="checkout.html">Checkout</a>*/}
+                        {/*    </div>*/}
+                        {/*</li>*/}
                         <li className="nav-item cart">
                             <a onClick={toggleDropdown} className="nav-link">
                                 <span className="icon icon-bell"></span>
@@ -47,14 +47,14 @@ const Navbar = () => {
                             </a>
                             <NewsNotification onNewNotifications={handleNewNotifications} isDropdownOpen={isDropdownOpen} />
                         </li>
-                        <li className="nav-item cart">
-                            <a href="cart.html" className="nav-link">
-                                <span className="icon icon-shopping_cart"></span>
-                                <span className="bag d-flex justify-content-center align-items-center">
-                                    <small>0</small> {/* Placeholder for cart count */}
-                                </span>
-                            </a>
-                        </li>
+                        {/*<li className="nav-item cart">*/}
+                        {/*    <a href="cart.html" className="nav-link">*/}
+                        {/*        <span className="icon icon-shopping_cart"></span>*/}
+                        {/*        <span className="bag d-flex justify-content-center align-items-center">*/}
+                        {/*            <small>0</small> /!* Placeholder for cart count *!/*/}
+                        {/*        </span>*/}
+                        {/*    </a>*/}
+                        {/*</li>*/}
                     </ul>
                 </div>
             </div>
