@@ -1,5 +1,5 @@
 export const AdminRoute = (requiredRole) => {
-    const rolesString = localStorage.getItem('roles');
+    const rolesString = localStorage.getItem('authorities');
     if (!rolesString) return false; // Không có dữ liệu trong localStorage
 
     try {

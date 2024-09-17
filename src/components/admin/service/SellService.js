@@ -11,7 +11,7 @@ export async function setStatusOrder(tableId) {
 
 export async function setStatusEmployee(tableId) {
     try {
-        await axios.patch(`http://localhost:8080/api/table/employee/${tableId}`)
+       await axios.patch(`http://localhost:8080/api/table/employee/${tableId}`)
     }catch (e){
         console.error(e)
     }
