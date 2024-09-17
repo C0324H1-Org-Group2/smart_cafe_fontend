@@ -16,6 +16,8 @@ function Sell() {
     const [selectedIsPay, setSelectedIsPay] = useState(false)
     const [loading, setLoading] = useState(false);
     const [table,setTable]=useState([])
+    const nameEmployee = localStorage.getItem("employeeName");
+
 
     useEffect(() => {
         getAllTables();
@@ -271,10 +273,11 @@ function Sell() {
                             <td colSpan="5" className="text-end">Tổng tiền</td>
                             <td>{formatCurrency(calculateTotal())}</td>
                         </tr>
-                        <tr>
-                            {/*<td>{bill.}</td>*/}
-                        </tr>
                         </tbody>
+                        <div className="w-100 text-end mt-2" style={{fontSize: '0.875rem'}}>
+                            Thu ngân: {nameEmployee}
+                        </div>
+
                     </table>
                     {/* Nút tính tiền và làm mới */}
                     <div className="d-flex justify-content-end mt-3">
