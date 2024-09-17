@@ -181,6 +181,7 @@ function App() {
                         )
                     }/>
                     <Route path="/admin/tables/list" element={
+                        hasRole('ROLE_ADMIN' || 'ROLE_EMPLOYEE') ? (
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
@@ -200,6 +201,9 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
                     <Route path="/admin/tables/create" element={
                         hasRole('ROLE_ADMIN') ? (
@@ -228,6 +232,7 @@ function App() {
                     }/>
 
                     <Route path="/admin/tables/edit/:tableId" element={
+                        hasRole('ROLE_ADMIN') ? (
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
@@ -247,6 +252,9 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
                     }/>
 
 
@@ -445,6 +453,7 @@ function App() {
                     ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news/update/:newsId" element={
+                    hasRole('ROLE_ADMIN') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -465,8 +474,10 @@ function App() {
                             <Sidebar/>
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news" element={
+                    hasRole('ROLE_ADMIN' || 'ROLE_EMPLOYEE') ? (
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -487,6 +498,7 @@ function App() {
                             <Sidebar/>
                         </AdminLayout>
                     </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
 
                 {/* Thêm route cho Admin Login */}
