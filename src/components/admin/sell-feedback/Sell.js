@@ -178,144 +178,149 @@ function Sell() {
     return (
         <div className="main-content">
             <div className="section-body">
-        <div className="container my-4">
-            <div className="mb-5">
-                <h2 className="section-title">Bán hàng</h2>
-                <SellNotification/>
-            </div>
-
-            <div className="row">
-                {/* Khu vực bàn */}
-                <div className="col-md-6">
-                    <div className="row g-4">
-                        {currentTables.map((table) => (
-                            <div className="col-4" key={table.tableId}>
-                                {/* Thêm hiệu ứng hover */}
-                                <div
-                                    className={`card p-3 ${selectedTableId === table.tableId ? "border border-primary" : ""} ${table.on === true ? "bg-secondary" : "bg-light"}`}
-                                    onClick={() => getBillByTableId(table.tableId, table.pay)}
-                                    style={{cursor: 'pointer', transition: 'background-color 0.3s'}}
-                                >
-
-                                    <div
-                                        className={`card-body text-center ${table.on === false ? "" : "bg-secondary"}`}
-                                        style={{transition: 'background-color 0.3s'}}
-                                    >
-                                        {table.code}
-                                    </div>
-
-                                    {/* Pay, Order, Employee buttons */}
-                                    <div className="d-grid gap-2 mt-2">
-                                        <button className={`btn ${table.pay ? "btn-danger" : "btn-primary"}`}>
-                                            <i className="fas fa-money-bill-wave"></i> Pay
-                                        </button>
-
-                                        <button className={`btn ${table.bill ? "btn-warning" : "btn-primary"}`}
-                                                onClick={() => setStatusOrder(table.tableId)}>
-                                            <i className="fas fa-utensils"></i> Order
-                                        </button>
-
-                                        <button className={`btn ${table.callEmployee ? "btn-success" : "btn-primary"}`}
-                                                onClick={() => setStatusEmployee(table.tableId)}>
-                                            <i className="fas fa-bell"></i> Employee
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                <div className="container my-4">
+                    <div className="mb-5">
+                        <h2 className="section-title">Bán hàng</h2>
+                        <SellNotification/>
                     </div>
-                </div>
 
-                {/* Bảng thông tin hóa đơn */}
-                <div className="col-md-6">
-                    <table className="table table-striped" ref={componentPDF} style={{width: '100%'}}>
-                        <thead className="table-active">
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên món</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
-                            <th>Số bàn</th>
-                            <th>Tổng tiền</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {loading ? (
-                            <tr>
-                                <td colSpan="6" className="text-center">
-                                    <div className="spinner-border" role="status">
-                                        <span className="visually-hidden">Đang tải hóa đơn...</span>
+                    <div className="row">
+                        {/* Khu vực bàn */}
+                        <div className="col-md-6">
+                            <div className="row g-4">
+                                {currentTables.map((table) => (
+                                    <div className="col-4" key={table.tableId}>
+                                        {/* Thêm hiệu ứng hover */}
+                                        <div
+                                            className={`card p-3 ${selectedTableId === table.tableId ? "border border-primary" : ""} ${table.on === true ? "bg-secondary" : "bg-light"}`}
+                                            onClick={() => getBillByTableId(table.tableId, table.pay)}
+                                            style={{cursor: 'pointer', transition: 'background-color 0.3s'}}
+                                        >
+
+                                            <div
+                                                className={`card-body text-center ${table.on === false ? "" : "bg-secondary"}`}
+                                                style={{transition: 'background-color 0.3s'}}
+                                            >
+                                                {table.code}
+                                            </div>
+
+                                            {/* Pay, Order, Employee buttons */}
+                                            <div className="d-grid gap-2 mt-2">
+                                                <button className={`btn ${table.pay ? "btn-danger" : "btn-primary"}`}>
+                                                    <i className="fas fa-money-bill-wave"></i> Pay
+                                                </button>
+
+                                                <button className={`btn ${table.bill ? "btn-warning" : "btn-primary"}`}
+                                                        onClick={() => setStatusOrder(table.tableId)}>
+                                                    <i className="fas fa-utensils"></i> Order
+                                                </button>
+
+                                                <button
+                                                    className={`btn ${table.callEmployee ? "btn-success" : "btn-primary"}`}
+                                                    onClick={() => setStatusEmployee(table.tableId)}>
+                                                    <i className="fas fa-bell"></i> Employee
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        ) : (
-                            <>
-                                {bills.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="6" className="text-center">Bàn này chưa có bill</td>
-                                    </tr>
-                                ) : (
-                                    bills.map((bill, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{bill.name}</td>
-                                            <td>{bill.quantity}</td>
-                                            <td>{formatCurrency(bill.price)}</td>
-                                            <td>{bill.tableCode}</td>
-                                            <td>{formatCurrency(bill.price * bill.quantity)}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </>
-                        )}
-
-                        <tr>
-                            <td colSpan="5" className="text-end">Tổng tiền</td>
-                            <td>{formatCurrency(calculateTotal())}</td>
-                        </tr>
-                        </tbody>
-                        <div className="w-100 text-end mt-2" style={{fontSize: '0.875rem'}}>
-                            Thu ngân: {nameEmployee}
+                                ))}
+                            </div>
                         </div>
 
-                    </table>
-                    {/* Nút tính tiền và làm mới */}
-                    <div className="d-flex justify-content-end mt-3">
-                        <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
-                        <button className="btn btn-secondary" onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng</button>
+                        {/* Bảng thông tin hóa đơn */}
+                        <div className="col-md-6" ref={componentPDF}>
+                            <table className="table table-striped"  style={{width: '100%'}}>
+                                <thead className="table-active">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên món</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                    <th>Số bàn</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="6" className="text-center">
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Đang tải hóa đơn...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    <>
+                                        {bills.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="6" className="text-center">Bàn này chưa có bill</td>
+                                            </tr>
+                                        ) : (
+                                            bills.map((bill, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{bill.name}</td>
+                                                    <td>{bill.quantity}</td>
+                                                    <td>{formatCurrency(bill.price)}</td>
+                                                    <td>{bill.tableCode}</td>
+                                                    <td>{formatCurrency(bill.price * bill.quantity)}</td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </>
+                                )}
+
+                                <tr>
+                                    <td colSpan="5" className="text-end">Tổng tiền</td>
+                                    <td>{formatCurrency(calculateTotal())}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            {/* Chữ "Thu ngân" căn phải */}
+                            <div className="w-100 text-end mt-2" style={{fontSize: '0.875rem'}}>
+                                Thu ngân: {nameEmployee}
+                            </div>
+
+                            {/* Nút tính tiền và làm mới */}
+                            <div className="d-flex justify-content-end mt-3">
+                                <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
+                                <button className="btn btn-secondary"
+                                        onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Phân trang */}
+                    <div className="text-end mt-4">
+                        <nav>
+                            <ul className="pagination mb-0">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                                        <i className="fas fa-chevron-left"></i>
+                                    </button>
+                                </li>
+                                {[...Array(totalPages)].map((_, pageIndex) => (
+                                    <li key={pageIndex + 1}
+                                        className={`page-item ${currentPage === pageIndex + 1 ? 'active' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(pageIndex + 1)}>
+                                            {pageIndex + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                        <i className="fas fa-chevron-right"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-                </div>
-
-
-
-            {/* Phân trang */}
-            <div className="text-end mt-4">
-                <nav>
-                    <ul className="pagination mb-0">
-                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                <i className="fas fa-chevron-left"></i>
-                            </button>
-                        </li>
-                        {[...Array(totalPages)].map((_, pageIndex) => (
-                            <li key={pageIndex + 1} className={`page-item ${currentPage === pageIndex + 1 ? 'active' : ''}`}>
-                                <button className="page-link" onClick={() => handlePageChange(pageIndex + 1)}>
-                                    {pageIndex + 1}
-                                </button>
-                            </li>
-                        ))}
-                        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                <i className="fas fa-chevron-right"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
-            </div>
-        </div>
+
     );
 
 }
