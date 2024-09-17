@@ -85,7 +85,8 @@ const Header = () => {
                             className="nav-link dropdown-toggle nav-link-lg nav-link-user"
                         >
                             <img alt="image" src="/assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
-                            <div className="d-sm-none d-lg-inline-block">Hi,{employeeName}</div>
+                            <div className="d-sm-none d-lg-inline-block"
+                                 style={{fontSize: '0.8rem'}}>Hi, {employeeName}</div>
                         </a>
                         <div className={`dropdown-menu dropdown-menu-right ${isUserDropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-title">Logged in 5 min ago</div>
