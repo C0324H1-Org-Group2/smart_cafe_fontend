@@ -1,13 +1,18 @@
     import React, { useEffect, useState } from 'react';
     import { useParams, useNavigate, Link } from 'react-router-dom';
     import * as feedbackService from "../service/FeedbackService";
+    import FeedbackDetailModal from "./FeedbackDetailModal";
 
-    function FeedbackList() {
+    const FeedbackList = ({ show, handleClose, feedbackDetails }) => {
         let { date } = useParams(); // Lấy giá trị `date` từ URL
         const [feedbacks, setFeedbacks] = useState([]);
-        const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-        const [itemsPerPage] = useState(10); // Số lượng phản hồi trên mỗi trang
+        const [currentPage, setCurrentPage] = useState(1);
+        const [itemsPerPage] = useState(10);
         const navigate = useNavigate();
+        const [showModal, setShowModal] = useState(false);
+        const [selectedFeedback, setSelectedFeedback] = useState(null);
+
+
 
         useEffect(() => {
             if (date) {
@@ -22,7 +27,7 @@
                 const feedbackList = await feedbackService.getAllFeedback();
                 setFeedbacks(feedbackList);
             } catch (e) {
-                console.error("Lỗi danh sách phản hồi", e);
+                console.error("Error feedback list", e);
             }
         };
 
@@ -31,7 +36,7 @@
                 const feedbackList = await feedbackService.getAllFeedbackByDate(date);
                 setFeedbacks(feedbackList);
             } catch (e) {
-                console.error("Lỗi danh sách phản hồi", e);
+                console.error("Error feedback list", e);
             }
         };
 
@@ -45,36 +50,43 @@
 
         const handleDateChange = (e) => {
             const selectedDate = e.target.value;
-            // Điều hướng tới URL mới với ngày được chọn
             navigate(`/admin/feedback/${selectedDate}`);
         };
 
         // Tính toán dữ liệu phân trang
         const indexOfLastItem = currentPage * itemsPerPage;
         const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentFeedbacks = feedbacks.slice(indexOfFirstItem, indexOfLastItem); // Lấy các phản hồi cho trang hiện tại
+        const currentFeedbacks = feedbacks.slice(indexOfFirstItem, indexOfLastItem);
 
-        const totalPages = Math.ceil(feedbacks.length / itemsPerPage); // Tổng số trang
+        const totalPages = Math.ceil(feedbacks.length / itemsPerPage);
 
         const handlePageChange = (pageNumber) => {
             setCurrentPage(pageNumber);
         };
 
         const clearDate = () => {
-            // Điều hướng trở lại danh sách phản hồi mà không có tham số `date`
             navigate("/admin/feedback");
+        };
+
+        const handleShowModal = (feedback) => {
+            setSelectedFeedback(feedback);
+            setShowModal(true);
+        };
+        const handleCloseModal = () => {
+            setSelectedFeedback(null);
+            setShowModal(false);
         };
 
         return (
             <>
                 <div className="main-content">
                     <div className="section-body">
-                        <h2 className="section-title">Phản hồi</h2>
+                        <h2 className="section-title">Feedback</h2>
                         <div className="card-header d-flex align-items-center">
-                            <label htmlFor="date" className="me-2">Ngày phản hồi:</label>
+                            <label htmlFor="date" className="me-2">Date</label>
                             <input
                                 type="date"
-                                value={date || ''} // Gán giá trị ngày từ URL hoặc rỗng
+                                value={date || ''}
                                 onChange={handleDateChange}
                                 className="form-control me-2"
                                 style={{ width: '200px' }}
@@ -85,7 +97,7 @@
                             <button className="btn btn-primary me-2"
                                     onClick={clearDate}
                                 >
-                                Hiển thị tất cả
+                                Show all
                             </button>
                         </div>
 
@@ -94,18 +106,19 @@
                                 <table className="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Mã phản hồi</th>
-                                        <th>Ngày phản hồi</th>
-                                        <th>Người tạo</th>
+                                        <th>Serial</th>
+                                        <th>Code</th>
+                                        <th>Date</th>
+                                        <th>Creator</th>
                                         <th>Email</th>
-                                        <th>Nội dung</th>
+                                        <th>Content</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {feedbacks.length === 0 ? (
                                         <tr>
-                                            <td colSpan="6" className="text-center">Không có feedback nào trong thời gian này</td>
+                                            <td colSpan="6" className="text-center">There is no feedback at this time</td>
                                         </tr>
                                     ) : (
                                         currentFeedbacks.map((item, index) => (
@@ -116,6 +129,15 @@
                                                 <td>{item.creator.employee.fullName}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.content}</td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={() => handleShowModal(item)}
+                                                        >
+                                                        <i className="fas fa-info-circle"></i>
+                                                    </button>
+
+                                                </td>
                                             </tr>
                                         ))
                                     )}
@@ -165,6 +187,11 @@
                         </div>
                     </div>
                 </div>
+                <FeedbackDetailModal
+                    show={showModal}
+                    handleClose={handleCloseModal}
+                    feedbackDetails={selectedFeedback}
+                />
             </>
 
         );
