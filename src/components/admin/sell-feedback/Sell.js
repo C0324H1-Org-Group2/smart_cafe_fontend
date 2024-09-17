@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import SellNotification from "./SellNotification";
 import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
+import BillInfor from "./BillInfor";
 
 function Sell() {
     const [tables, setTables] = useState([])
@@ -15,8 +16,9 @@ function Sell() {
     const [selectedTableId, setSelectedTableId] = useState(null);
     const [selectedIsPay, setSelectedIsPay] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [table,setTable]=useState([])
+    const [table, setTable] = useState([])
     const nameEmployee = localStorage.getItem("employeeName");
+    const [showBillInfo, setShowBillInfo] = useState(false); // Quản lý hiển thị thẻ BillInfor
 
 
     useEffect(() => {
@@ -71,7 +73,7 @@ function Sell() {
             let tables = await sellService.getAllTables();
             setTables(tables);
         } catch (e) {
-            console.error("Lỗi danh sách bàn", e);
+            console.error("Error display table list", e);
         }
     };
 
@@ -94,7 +96,7 @@ function Sell() {
             // Sau khi cả dữ liệu và delay hoàn tất
             setBills(bills);
         } catch (e) {
-            console.error("Lỗi danh sách hóa đơn", e);
+            console.error("Error display bills list", e);
         } finally {
             setLoading(false); // Ẩn loading khi hoàn tất
         }
@@ -115,8 +117,8 @@ function Sell() {
     // Tính toán dữ liệu phân trang
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentTables = tables.slice(indexOfFirstItem, indexOfLastItem); // Lấy các bàn cho trang hiện tại
-    const totalPages = Math.ceil(tables.length / itemsPerPage); // Tổng số trang
+    const currentTables = tables.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(tables.length / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -125,44 +127,49 @@ function Sell() {
 
     const checkBillBeforPay = () => {
         if (selectedIsPay === true && bills.length > 0) {
-            generatePDF();
+            setShowBillInfo(true);
+            setTimeout(() => {
+                generatePDF();
+            }, 100);
         } else {
-            toast.warning("Không tìm thấy bill hoặc chưa có yêu cầu tính tiền ");
+            toast.warning("No bill found or no payment request");
         }
-    }
+    };
+
 
     const generatePDF = useReactToPrint({
         content: () => componentPDF.current,
-        documentTitle: "Chi tiết hóa đơn",
+        documentTitle: "Bill detail",
         onAfterPrint: async () => {
             await changeStatusBillByTableId(selectedTableId);
             await getBillByTableId(selectedTableId, false);
             await getAllTables();
+            await setShowBillInfo(false);
         }
-
     });
+
 
 
     const changeStatusBillByTableId = async (tableId) => {
         try {
             let isSuccess = await sellService.changeStatusBillByTableId(tableId);
             if (isSuccess) {
-                toast.success("Tính tiền thành công");
+                toast.success("Payment successful");
             } else {
-                toast.error("Tính tiền thất bại");
+                toast.error("Payment failed");
             }
         } catch (e) {
-            console.error("Lỗi khi cập nhật trạng thái hóa đơn", e);
+            console.error("Error updating bill status", e);
         }
     };
 
-    const setStatusEmployee = async (tableId)=> {
-       try {
-           await sellService.setStatusEmployee(tableId);
-           await getAllTables();
-       } catch (e){
-           console.log("loi set status employee")
-       }
+    const setStatusEmployee = async (tableId) => {
+        try {
+            await sellService.setStatusEmployee(tableId);
+            await getAllTables();
+        } catch (e) {
+            console.log("Error update status employee")
+        }
     }
 
     const setStatusOrder = async (tableId) => {
@@ -170,8 +177,8 @@ function Sell() {
             await sellService.setStatusOrder(tableId);
             await getAllTables();
 
-        }catch (e){
-            console.log("loi set status isBill")
+        } catch (e) {
+            console.log("Error update status bill")
         }
     }
 
@@ -180,7 +187,7 @@ function Sell() {
             <div className="section-body">
                 <div className="container my-4">
                     <div className="mb-5">
-                        <h2 className="section-title">Bán hàng</h2>
+                        <h2 className="section-title">Sell</h2>
                         <SellNotification/>
                     </div>
 
@@ -228,16 +235,16 @@ function Sell() {
                         </div>
 
                         {/* Bảng thông tin hóa đơn */}
-                        <div className="col-md-6" ref={componentPDF}>
-                            <table className="table table-striped"  style={{width: '100%'}}>
+                        <div className="col-md-6">
+                            <table className="table table-striped" style={{width: '100%'}}>
                                 <thead className="table-active">
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Tên món</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá</th>
-                                    <th>Số bàn</th>
-                                    <th>Tổng tiền</th>
+                                    <th>Serial</th>
+                                    <th>Dish name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Table number</th>
+                                    <th>Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -245,7 +252,7 @@ function Sell() {
                                     <tr>
                                         <td colSpan="6" className="text-center">
                                             <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Đang tải hóa đơn...</span>
+                                                <span className="visually-hidden">Loading...</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -253,7 +260,7 @@ function Sell() {
                                     <>
                                         {bills.length === 0 ? (
                                             <tr>
-                                                <td colSpan="6" className="text-center">Bàn này chưa có bill</td>
+                                                <td colSpan="6" className="text-center">This table does not have a receipt</td>
                                             </tr>
                                         ) : (
                                             bills.map((bill, index) => (
@@ -271,22 +278,17 @@ function Sell() {
                                 )}
 
                                 <tr>
-                                    <td colSpan="5" className="text-end">Tổng tiền</td>
+                                    <td colSpan="5" className="text-end">Total</td>
                                     <td>{formatCurrency(calculateTotal())}</td>
                                 </tr>
                                 </tbody>
                             </table>
 
-                            {/* Chữ "Thu ngân" căn phải */}
-                            <div className="w-100 text-end mt-2" style={{fontSize: '0.875rem'}}>
-                                Thu ngân: {nameEmployee}
-                            </div>
-
                             {/* Nút tính tiền và làm mới */}
                             <div className="d-flex justify-content-end mt-3">
-                                <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Tính tiền</button>
+                                <button className="btn btn-primary me-2" onClick={checkBillBeforPay}>Pay</button>
                                 <button className="btn btn-secondary"
-                                        onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Làm mới bảng
+                                        onClick={() => getBillByTableId(selectedTableId, selectedIsPay)}>Refresh
                                 </button>
                             </div>
                         </div>
@@ -319,7 +321,13 @@ function Sell() {
                     </div>
                 </div>
             </div>
+            {/* Thẻ hiển thị thông tin hóa đơn và in ra PDF */}
+            <div ref={componentPDF} style={{width: '100%', display: showBillInfo ? 'block' : 'none'}}>
+                <BillInfor bills={bills} nameEmployee={nameEmployee}/>
+            </div>
+
         </div>
+
 
     );
 
