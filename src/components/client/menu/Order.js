@@ -39,20 +39,17 @@ const Order = () => {
 
         stompClient.onConnect = () => {
             console.log('Connected to WebSocket');
+
             stompClient.subscribe('/topic/client/order', (message) => {
-                // Nhận dữ liệu và cập nhật danh sách bàn
+                const updatedTables = JSON.parse(message.body);
+                setAllTables(updatedTables);
+            });
+
+            stompClient.subscribe('/topic/client/callEmployee', (message) => {
                 const updatedTables = JSON.parse(message.body);
                 setAllTables(updatedTables);
             });
         };
-        // stompClient.onConnect = () => {
-        //     console.log('Connected to WebSocket');
-        //     stompClient.subscribe('/topic/client/callEmployee', (message) => {
-        //         // Nhận dữ liệu và cập nhật danh sách bàn
-        //         const updatedTables = JSON.parse(message.body);
-        //         setAllTables(updatedTables);
-        //     });
-        // };
 
         stompClient.activate();
 
@@ -60,6 +57,7 @@ const Order = () => {
             stompClient.deactivate();
         };
     }, []);
+
 
 
 
