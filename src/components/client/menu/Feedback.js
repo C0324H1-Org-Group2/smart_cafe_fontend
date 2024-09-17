@@ -10,6 +10,8 @@ const ContactForm = () => {
     const [message, setMessage] = useState('');
     const [previewImage, setPreviewImage] = useState(null);
     const [imageFile, setImageFile] = useState(null);
+    const [name, setName] = useState(''); // State for Name
+    const [phone, setPhone] = useState(''); // State for Phone
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -25,6 +27,14 @@ const ContactForm = () => {
         try {
             await serviceService.sendFeedback({email, message, imageFile});
             toast.success("Gửi thành công");
+
+            // Reset all fields after submission
+            setName(''); // Reset Name
+            setPhone(''); // Reset Phone
+            setEmail(''); // Reset Email
+            setMessage(''); // Reset Message
+            setPreviewImage(null); // Reset Image Preview
+            setImageFile(null); // Reset Image File
         } catch (error) {
             toast.error("Gửi thất bại");
         }
@@ -63,6 +73,8 @@ const ContactForm = () => {
                                             type="text"
                                             className="form-control"
                                             placeholder="Your Name"
+                                            value={name} // Bind name state
+                                            onChange={(e) => setName(e.target.value)} // Handle name input
                                         />
                                     </div>
                                 </div>
@@ -75,6 +87,8 @@ const ContactForm = () => {
                                             placeholder="Your Phone Number"
                                             pattern="[0-9]{10}"
                                             required
+                                            value={phone} // Bind phone state
+                                            onChange={(e) => setPhone(e.target.value)} // Handle phone input
                                         />
                                     </div>
                                 </div>
@@ -117,8 +131,7 @@ const ContactForm = () => {
                             </div>
                             <div className="form-group">
                                 <button
-                                    type="button"
-                                    onClick={handleSubmit}
+                                    type="submit"
                                     className="btn btn-primary py-3 px-5"
                                 >
                                     Send Message
