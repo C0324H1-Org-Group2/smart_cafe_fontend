@@ -1,19 +1,19 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const login = async (credentials) => {
     try {
-        const response = await axios.post("http://localhost:8080/api/login", credentials);
-        const token = response.data.token;
-        localStorage.setItem("token", token);
+        const response = await axios.post('http://localhost:8080/api/login', credentials);
+        const { token, authorities } = response.data;
 
-        const userId = response.data.id;
-        localStorage.setItem("userId", userId);
+        // Lưu token vào localStorage
+        localStorage.setItem('token', token);
 
-        const employeeId = response.data.id;
-        localStorage.setItem("employeeId", employeeId);
-        console.log("Đăng nhập thành công, token đã được lưu.");
+        // Lưu quyền hạn vào localStorage dưới dạng JSON
+        localStorage.setItem('roles', JSON.stringify(authorities.map(auth => auth.authority)));
+
+        console.log('Đăng nhập thành công, token và quyền đã được lưu.');
     } catch (e) {
-        console.error("Lỗi đăng nhập: " + e);
+        console.error('Lỗi đăng nhập:', e);
         throw e;
     }
-}
+};

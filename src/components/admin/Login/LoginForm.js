@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import {toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import {login} from "../services/Api";
+import {hasRole} from "../manager/HasRole";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -15,9 +16,17 @@ const LoginForm = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            await login(values);
+            await login(values); // Đăng nhập người dùng
+
+            if (hasRole('ROLE_ADMIN')) {
+                navigate('/admin/home'); // Đường dẫn cho admin
+            } else if (hasRole('ROLE_EMPLOYEE')) {
+                navigate('/admin/sell'); // Đường dẫn cho employee
+            } else {
+                toast.error('Vai trò không hợp lệ.');
+            }
+
             toast.success('Đăng nhập thành công!');
-            navigate('/admin/home');
         } catch (error) {
             toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }
