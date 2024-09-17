@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import SellNotification from "../sell-feedback/SellNotification";
 import LogoutButton from "../Login/LogoutButton";
 
-
 const Header = () => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
+    const notificationRef = useRef(null);
+    const userDropdownRef = useRef(null);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
@@ -18,13 +19,30 @@ const Header = () => {
         setUserDropdownOpen(!isUserDropdownOpen);
     };
 
-    const closeDropdown = () => {
+    const closeDropdowns = () => {
         setDropdownOpen(false);
+        setUserDropdownOpen(false);
     };
 
     const handleSellNotifications = (change) => {
         setNotificationCount((prevCount) => Math.max(0, prevCount + change));
     };
+
+    const handleClickOutside = (event) => {
+        if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+            setDropdownOpen(false);
+        }
+        if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+            setUserDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const employeeName = localStorage.getItem("employeeName");
 
@@ -32,36 +50,9 @@ const Header = () => {
         <div className="main-wrapper main-wrapper-1">
             <div className="navbar-bg"></div>
             <nav className="navbar navbar-expand-lg main-navbar">
-                <form className="form-inline mr-auto">
-                    <ul className="navbar-nav mr-3">
-                        <li>
-                            <a href="#" data-toggle="sidebar" className="nav-link nav-link-lg">
-                                <i className="fas fa-bars"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="search" className="nav-link nav-link-lg d-sm-none">
-                                <i className="fas fa-search"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <div className="search-element">
-                        <input
-                            className="form-control"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                            data-width="250"
-                        />
-                        <button className="btn" type="submit">
-                            <i className="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-
-                <ul className="navbar-nav navbar-right">
+                <ul className="navbar-nav ml-auto">
                     {/* Notifications */}
-                    <li className="dropdown dropdown-list-toggle">
+                    <li className="dropdown dropdown-list-toggle" ref={notificationRef}>
                         <a
                             href="#"
                             onClick={toggleDropdown}
@@ -73,12 +64,12 @@ const Header = () => {
                         <SellNotification
                             onSellNotifications={handleSellNotifications}
                             isDropdownOpen={isDropdownOpen}
-                            closeDropdown={closeDropdown}
+                            closeDropdown={closeDropdowns}
                         />
                     </li>
 
                     {/* User Dropdown */}
-                    <li className="dropdown">
+                    <li className="dropdown" ref={userDropdownRef}>
                         <a
                             href="#"
                             onClick={toggleUserDropdown}
@@ -86,7 +77,7 @@ const Header = () => {
                         >
                             <img alt="image" src="/assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
                             <div className="d-sm-none d-lg-inline-block"
-                                 style={{fontSize: '0.8rem'}}>Hi, {employeeName}</div>
+                                 style={{ fontSize: '0.8rem' }}>{employeeName}</div>
                         </a>
                         <div className={`dropdown-menu dropdown-menu-right ${isUserDropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-title">Logged in 5 min ago</div>
