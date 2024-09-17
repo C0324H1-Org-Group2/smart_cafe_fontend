@@ -19,10 +19,19 @@ function OrderList() {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [orderDetails, setOrderDetails] = useState([]);
     const [isAscending, setIsAscending] = useState(true); // Trạng thái sắp xếp
+    const [userRole, setUserRole] = useState('ROLE_EMPLOYEE');
 
     // Cập nhật searchParams khi codeSearch hoặc dateSearch thay đổi
     useEffect(() => {
+        const fetchUserRole = () => {
+            const authorities = JSON.parse(localStorage.getItem('roles'));
+            if (authorities) {
+                const role = authorities[0].authority;
+                setUserRole(role);
+            }
+        };
         setSearchParams({ codeSearch, dateSearch });
+        fetchUserRole()
     }, [codeSearch, dateSearch]);
 
     // Fetch dữ liệu khi searchParams hoặc page thay đổi
