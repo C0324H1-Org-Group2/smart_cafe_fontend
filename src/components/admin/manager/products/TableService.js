@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../ManagerOrder.css';
-import ServiceDetailModal from "./ServiceDetailModal";
-import {deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted} from "../../service/ServiceService";
+import ServiceDetailModal from './ServiceDetailModal';
+import { deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted } from '../../service/ServiceService';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {Button, Modal} from "react-bootstrap";
+import { Button, Modal } from 'react-bootstrap';
 
 const TableService = () => {
-
-
     const [allServices, setAllServices] = useState([]);
     const [services, setServices] = useState([]);
     const [page, setPage] = useState(0);
@@ -17,22 +15,30 @@ const TableService = () => {
     const [selectedService, setSelectedService] = useState(null);
     const itemsPerPage = 10;
     const [searchTerm, setSearchTerm] = useState('');
+    const [showDeleted, setShowDeleted] = useState(false);
     const navigate = useNavigate();
     const totalPages = Math.ceil(allServices.length / itemsPerPage);
     const isLastPage = page >= totalPages - 1;
-    const [showDeleted, setShowDeleted] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
+    const [userRole, setUserRole] = useState('ROLE_EMPLOYEE');
 
+    useEffect(() => {
+        const fetchUserRole = () => {
+            const authorities = JSON.parse(localStorage.getItem('authorities'));
+            if (authorities) {
+                const role = authorities[0].authority;
+                setUserRole(role);
+            }
+        };
 
-
-
-
+        fetchUserRole();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             let data;
-            if (showDeleted) {
+            if (userRole === 'ROLE_ADMIN') {
                 data = await getAllServicesIdDesc(page);
             } else {
                 data = await getAllServicesIdDescNotDeleted(page);
@@ -41,7 +47,7 @@ const TableService = () => {
         };
 
         fetchData();
-    }, [page,showDeleted]);
+    }, [page, userRole]);
 
     useEffect(() => {
         const startIndex = page * itemsPerPage;
@@ -61,13 +67,14 @@ const TableService = () => {
     };
 
     const handleSearch = () => {
-        const filteredServices = allServices.filter(service =>
+        const filteredServices = allServices.filter((service) =>
             service.serviceName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setServices(filteredServices);
     };
+
     const handleCreateClick = () => {
-        navigate('/admin/service/add'); // Điều hướng đến trang tạo bàn
+        navigate('/admin/service/add');
     };
 
     const handleShowDeleteModal = (service) => {
@@ -75,37 +82,41 @@ const TableService = () => {
         setShowDeleteModal(true);
     };
 
-
     const handleConfirmDelete = async () => {
         if (serviceToDelete) {
             await deleteService(serviceToDelete.serviceId);
             setShowDeleteModal(false);
             setServiceToDelete(null);
             // Refresh danh sách dịch vụ sau khi xóa
-            const data = await getAllServicesIdDesc(page);
+            const data = userRole === 'ROLE_ADMIN'
+                ? await getAllServicesIdDesc(page)
+                : await getAllServicesIdDescNotDeleted(page);
             setAllServices(data);
+            setPage(0); // Reset về trang đầu tiên sau khi xóa
         }
     };
-
 
     return (
         <>
             <div className="main-content">
                 <div className="section-body">
-                    <h2 className="section-title">Service List</h2>
+                    <h2 className="section-title">Products List</h2>
                     <div className="card-body">
                         <div className="d-flex justify-content-between mb-3">
                             <div className="d-flex align-items-center">
-                                <button className="btn btn-success" onClick={handleCreateClick}>
-                                    <i className="fas fa-plus"></i>Create Product
-                                </button>
-                                <button
-                                    className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} ml-2`}
-                                    onClick={() => {
-                                        setShowDeleted(!showDeleted);
-                                    }}>
-                                    {showDeleted ? 'Hide' : 'Show'}
-                                </button>
+                                {userRole === 'ROLE_ADMIN' && (
+                                    <>
+                                        <button className="btn btn-success" onClick={handleCreateClick}>
+                                            <i className="fas fa-plus"></i> Create
+                                        </button>
+                                        {/*<button*/}
+                                        {/*    className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} ml-2`}*/}
+                                        {/*    onClick={() => setShowDeleted(!showDeleted)}*/}
+                                        {/*>*/}
+                                        {/*    {showDeleted ? 'Hide Deleted' : 'Show Deleted'}*/}
+                                        {/*</button>*/}
+                                    </>
+                                )}
                             </div>
                             <div className="d-flex">
                                 <input
@@ -150,7 +161,8 @@ const TableService = () => {
                                             <td>
                                                 <button
                                                     className="btn btn-secondary"
-                                                    onClick={() => handleShowModal(service)}>
+                                                    onClick={() => handleShowModal(service)}
+                                                >
                                                     <i className="fas fa-info-circle"></i>
                                                 </button>
                                                 <Link to={`/admin/service/update/${service.serviceId}`} className="btn btn-primary ml-2">
@@ -159,7 +171,8 @@ const TableService = () => {
                                                 {service.isDelete === 'ACTIVE' && (
                                                     <button
                                                         className="btn btn-danger"
-                                                        onClick={() => handleShowDeleteModal(service)}>
+                                                        onClick={() => handleShowDeleteModal(service)}
+                                                    >
                                                         <i className="fas fa-trash"></i>
                                                     </button>
                                                 )}
@@ -187,7 +200,8 @@ const TableService = () => {
                                         <Link
                                             className="page-link"
                                             to="#"
-                                            onClick={() => !isLastPage && setPage(page + 1)}>
+                                            onClick={() => !isLastPage && setPage(page + 1)}
+                                        >
                                             <i className="fas fa-chevron-right"></i>
                                         </Link>
                                     </li>
@@ -208,7 +222,7 @@ const TableService = () => {
                     <Modal.Header closeButton>
                         <Modal.Title>Xác nhận xóa</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Bạn có chắc chắn muốn xóa sản phẩm: {serviceToDelete?.serviceName} ?</Modal.Body>
+                    <Modal.Body>Bạn có chắc chắn muốn xóa dịch vụ: {serviceToDelete?.serviceName} ?</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
                             Hủy
