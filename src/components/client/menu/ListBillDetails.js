@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import FeedbackModal from "./FeedbackModal";
 import {NavLink} from "react-router-dom";
 
-const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
+const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
     const [items, setItems] = useState(cartItems);
     const [showTableModal, setShowTableModal] = useState(false); // State để điều khiển modal
     const [selectedTable, setSelectedTable] = useState(tableInfo);
@@ -24,7 +24,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     // Khôi phục bàn đã chọn từ sessionStorage
     useEffect(() => {
         const savedTable = sessionStorage.getItem('selectedTable');
-        const saveItem = sessionStorage.getItem('item');
+        const saveItems = sessionStorage.getItem('items');
         const saveCurrentBill = sessionStorage.getItem('currentBill');
         const saveIsTableLocked = sessionStorage.getItem('isTableLocked');
         const saveSelectAll = sessionStorage.getItem('selectAll');
@@ -46,8 +46,8 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             setCurrentBill(JSON.parse(saveCurrentBill));
         }
 
-        if (saveItem) {
-            setItems(JSON.parse(saveItem));
+        if (saveItems) {
+            setItems(JSON.parse(saveItems));
         }
 
         if (saveIsTableLocked) {
@@ -63,7 +63,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         }
 
         if (items) {
-            sessionStorage.setItem('item', JSON.stringify(items));
+            sessionStorage.setItem('items', JSON.stringify(items));
         }
 
         if (currentBill) {
@@ -81,7 +81,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         if (showTotal) {
             sessionStorage.setItem('showTotal', JSON.stringify(showTotal));
         }
-    }, [selectedTable, items, currentBill, isTableLocked, isTableLocked, showTotal]);
+    }, [selectAll, items, currentBill, selectedTable, isTableLocked, showTotal]);
 
 
     console.log(items);
@@ -266,13 +266,6 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         setItems(updatedItems);
     };
 
-    const handleQuantityChange = (index, newQuantity) => {
-        const updatedItems = items.map((item, i) =>
-            i === index ? { ...item, quantity: newQuantity } : item
-        );
-        setItems(updatedItems);
-    };
-
     return (
         <>
             <Row className="mt-4">
@@ -314,7 +307,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                         <tbody>
                         {items.map((item, index) => (
                             <BillDetail
-                                key={index || item.serviceId}
+                                key={item.serviceId}
                                 index={index}
                                 item={item}
                                 handleStatusChange={handleStatusChange}
