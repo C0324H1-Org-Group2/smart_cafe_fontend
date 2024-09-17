@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
@@ -43,7 +43,13 @@ import Order from "./components/client/menu/Order";
 import Menus from "./components/client/menu/Menus";
 import LogoutButton from "./components/admin/Login/LogoutButton";
 import ChangePassword from "./components/admin/Login/ChangePassword";
+import AboutSection from "./components/client/about/AboutSection";
+import TestimonySection from "./components/client/about/TestimonySection";
+import MenuSection from "./components/client/about/MenuSection";
+import {AdminRoute} from "./components/admin/common/AdminRoute";
 
+import {hasRole} from "./components/admin/manager/HasRole";
+import Forbidden403 from "./components/admin/manager/403";
 
 
 function App() {
@@ -127,59 +133,77 @@ function App() {
                         </ClientLayout>
                     </>
                 }/>
-
-                {/* Route cho Admin */}
-                <Route path="/admin/home" element={
+                <Route path="/about" element={
                     <>
                         <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
-
-                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
-
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
+                            <link rel="stylesheet" href="/css/style.css"/>
                         </Helmet>
-                        <AdminLayout>
-                            <RevenueByDate/>
-                            <ChartComponent/>
-                            <ManagerRevenue/>
-                            <ExpensesChart/>
-                            <TopServiceComponent/>
-                            {/* Thêm các component admin ở đây */}
-                            <Sidebar/>
-
-                        </AdminLayout>
+                        <ClientLayout>
+                            <Slider/>
+                            <AboutSection />
+                            <TestimonySection />
+                            <MenuSection />
+                        </ClientLayout>
                     </>
                 }/>
-                <Route path="/admin/tables/list" element={
-                    <>
-                        <Helmet>
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            <TableList />
-                            <Sidebar />
-                        </AdminLayout>
-                    </>
-                } />
-                <Route path="/admin/tables/create" element={
-                    <>
-                        <Helmet>
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            <TableCreate />
-                            <Sidebar />
-                        </AdminLayout>
-                    </>
-                } />
+
+                    {/* Route cho Admin */}
+                    <Route path="/admin/home" element={
+                        hasRole('ROLE_ADMIN') ? (   // Kiểm tra vai trò trước khi cho phép truy cập
+                            <>
+                                <Helmet>
+                                    {/* Import CSS của admin */}
+                                    <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                    <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                    <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                    <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                    <link rel="stylesheet"
+                                          href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                    <link rel="stylesheet"
+                                          href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                    <link rel="stylesheet" href="/assets/css/components.css"/>
+                                    <link rel="stylesheet" href="/assets/css/style.css"/>
+                                </Helmet>
+                                <AdminLayout>
+                                    <RevenueByDate/>
+                                    <ChartComponent/>
+                                    <ManagerRevenue/>
+                                    <ExpensesChart/>
+                                    <TopServiceComponent/>
+                                    {/* Thêm các component admin ở đây */}
+                                    <Sidebar/>
+                                </AdminLayout>
+                            </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
+                    }/>
+                    <Route path="/admin/tables/list" element={
+                        <>
+                            <Helmet>
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                <TableList/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
+                    <Route path="/admin/tables/create" element={
+                        <>
+                            <Helmet>
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                <TableCreate/>
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    }/>
 
                 <Route path="/admin/tables/edit/:tableId" element={
                     <>
@@ -334,6 +358,37 @@ function App() {
                         </>
                     }/>
                     <Route path="/admin/order" element={
+                        hasRole('ROLE_ADMIN') ? (   // Kiểm tra vai trò trước khi cho phép truy cập
+                            <>
+                                <Helmet>
+                                    {/* Import CSS của admin */}
+                                    <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                    <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+
+                                    <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                    <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                    <link rel="stylesheet"
+                                          href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                    <link rel="stylesheet"
+                                          href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                    <link rel="stylesheet" href="/assets/css/components.css"/>
+                                    <link rel="stylesheet" href="/assets/css/style.css"/>
+                                    <link rel="stylesheet" href="/assets/css/admin.css"/>
+                                </Helmet>
+                                <AdminLayout>
+                                    {/* Thêm các component admin ở đây */}
+                                    <OrderList/>
+                                    <Sidebar/>
+                                </AdminLayout>
+                            </>
+                        ) : (
+                            <Navigate to="/403" replace/> // Chuyển hướng nếu không có quyền truy cập
+                        )
+                    }/>
+
+                <Route path="/admin/news/create" element={
+                    hasRole('ROLE_ADMIN') ? (
                         <>
                             <Helmet>
                                 {/* Import CSS của admin */}
@@ -342,43 +397,19 @@ function App() {
 
                                 <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                                 <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                                <link rel="stylesheet"
-                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                                <link rel="stylesheet"
-                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                            <link rel="stylesheet" href="/assets/css/admin.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <OrderList/>
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
-                }/>
-                <Route path="/admin/news/create" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
-
-                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
-
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <NewsForm />
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                {/* Thêm các component admin ở đây */}
+                                <NewsForm />
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news/update/:newsId" element={
                     <>
@@ -520,6 +551,7 @@ function App() {
                         {<ChangePassword/>}
                     </>
                 }/>
+                <Route path="/403" element={<Forbidden403/>}/>
             </Routes>
         </BrowserRouter>
         <ToastContainer/>

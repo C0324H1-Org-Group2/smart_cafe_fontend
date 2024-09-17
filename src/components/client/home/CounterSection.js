@@ -1,6 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CounterSection = () => {
+    // State cho từng số liệu
+    const [coffeeBranches, setCoffeeBranches] = useState(0);
+    const [awards, setAwards] = useState(0);
+    const [happyCustomers, setHappyCustomers] = useState(0);
+    const [staff, setStaff] = useState(0);
+
+    // Hàm để thực hiện đếm số
+    const countUp = (start, end, setter, duration) => {
+        let current = start;
+        const increment = Math.ceil((end - start) / (duration / 100)); // Tính toán mức tăng
+        const interval = setInterval(() => {
+            current += increment;
+            if (current >= end) {
+                clearInterval(interval);
+                setter(end); // Đặt giá trị cuối cùng khi đạt tới mục tiêu
+            } else {
+                setter(current);
+            }
+        }, 200); // Cập nhật mỗi 100ms
+    };
+
+    // Sử dụng useEffect để chạy hiệu ứng khi component được render
+    useEffect(() => {
+        countUp(0, 100, setCoffeeBranches, 2000); // Coffee Branches
+        countUp(0, 85, setAwards, 2000);          // Awards
+        countUp(0, 10567, setHappyCustomers, 2000); // Happy Customers
+        countUp(0, 900, setStaff, 2000);          // Staff
+    }, []);
+
     return (
         <section
             className="ftco-counter ftco-bg-dark img"
@@ -17,7 +46,7 @@ const CounterSection = () => {
                                 <div className="block-18 text-center">
                                     <div className="text">
                                         <div className="icon"><span className="flaticon-coffee-cup"></span></div>
-                                        <strong className="number" data-number="100">0</strong>
+                                        <strong className="number">{coffeeBranches}</strong>
                                         <span>Coffee Branches</span>
                                     </div>
                                 </div>
@@ -26,7 +55,7 @@ const CounterSection = () => {
                                 <div className="block-18 text-center">
                                     <div className="text">
                                         <div className="icon"><span className="flaticon-coffee-cup"></span></div>
-                                        <strong className="number" data-number="85">0</strong>
+                                        <strong className="number">{awards}</strong>
                                         <span>Number of Awards</span>
                                     </div>
                                 </div>
@@ -35,8 +64,8 @@ const CounterSection = () => {
                                 <div className="block-18 text-center">
                                     <div className="text">
                                         <div className="icon"><span className="flaticon-coffee-cup"></span></div>
-                                        <strong className="number" data-number="10567">0</strong>
-                                        <span>Happy Customer</span>
+                                        <strong className="number">{happyCustomers}</strong>
+                                        <span>Happy Customers</span>
                                     </div>
                                 </div>
                             </div>
@@ -44,7 +73,7 @@ const CounterSection = () => {
                                 <div className="block-18 text-center">
                                     <div className="text">
                                         <div className="icon"><span className="flaticon-coffee-cup"></span></div>
-                                        <strong className="number" data-number="900">0</strong>
+                                        <strong className="number">{staff}</strong>
                                         <span>Staff</span>
                                     </div>
                                 </div>
