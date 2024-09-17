@@ -76,6 +76,7 @@ const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) =
                     max="100"
                     onChange={handleChange} // Cập nhật số lượng khi thay đổi
                     style={{width: '80px', textAlign: 'center'}} // Tùy chỉnh giao diện
+                    disabled={item.isOrder}
                 />
             </td>
             <td className="price">{item.service.price.toLocaleString('vi-VN', {

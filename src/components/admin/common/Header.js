@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Đảm bảo đã bao gồm Bootstrap JS
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import SellNotification from "../sell-feedback/SellNotification";
+import LogoutButton from "../Login/LogoutButton";
+
 
 const Header = () => {
     const [notificationCount, setNotificationCount] = useState(0);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
-    const [isUserDropdownOpen, setUserDropdownOpen] = useState(false); // Thêm state cho dropdown người dùng
+    const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
@@ -23,6 +25,8 @@ const Header = () => {
     const handleSellNotifications = (change) => {
         setNotificationCount((prevCount) => Math.max(0, prevCount + change));
     };
+
+    const employeeName = localStorage.getItem("employeeName");
 
     return (
         <div className="main-wrapper main-wrapper-1">
@@ -56,7 +60,7 @@ const Header = () => {
                 </form>
 
                 <ul className="navbar-nav navbar-right">
-                    {/* Thông báo */}
+                    {/* Notifications */}
                     <li className="dropdown dropdown-list-toggle">
                         <a
                             href="#"
@@ -73,7 +77,7 @@ const Header = () => {
                         />
                     </li>
 
-                    {/* Người dùng */}
+                    {/* User Dropdown */}
                     <li className="dropdown">
                         <a
                             href="#"
@@ -81,7 +85,7 @@ const Header = () => {
                             className="nav-link dropdown-toggle nav-link-lg nav-link-user"
                         >
                             <img alt="image" src="/assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
-                            <div className="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                            <div className="d-sm-none d-lg-inline-block">Hi,{employeeName}</div>
                         </a>
                         <div className={`dropdown-menu dropdown-menu-right ${isUserDropdownOpen ? 'show' : ''}`}>
                             <div className="dropdown-title">Logged in 5 min ago</div>
@@ -95,9 +99,7 @@ const Header = () => {
                                 <i className="fas fa-cog"></i> Settings
                             </a>
                             <div className="dropdown-divider"></div>
-                            <a href="#" className="dropdown-item has-icon text-danger">
-                                <i className="fas fa-sign-out-alt"></i> Logout
-                            </a>
+                            <LogoutButton />
                         </div>
                     </li>
                 </ul>
