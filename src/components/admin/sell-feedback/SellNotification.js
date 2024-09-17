@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
-import { Link } from 'react-router-dom';
+import {Client} from '@stomp/stompjs';
+import {Link} from 'react-router-dom';
 
-const SellNotification = ({ onSellNotifications, isDropdownOpen, closeDropdown }) => {
+const SellNotification = ({onSellNotifications, isDropdownOpen, closeDropdown}) => {
     const [messagesOrder, setMessagesOrder] = useState([]);
     const [messagesEmployee, setMessagesEmployee] = useState([]);
     const [messagesPay, setMessagesPay] = useState([]);
+    const [messagesFeedback, setMessagesFeedback] = useState([]);
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
@@ -26,36 +27,64 @@ const SellNotification = ({ onSellNotifications, isDropdownOpen, closeDropdown }
         stompClient.onConnect = () => {
             console.log('Connected to WebSocket');
 
-            stompClient.subscribe('/topic/admin/sell/order', (messagesOrder) => {
-                const newMessage = JSON.parse(messagesOrder.body);
+            stompClient.subscribe('/topic/admin/sell/order', (message) => {
+                const newMessage = JSON.parse(message.body);
+
                 setMessagesOrder((prevMessages) => {
-                    const updatedMessages = [...prevMessages, newMessage];
-                    if (typeof onSellNotifications === 'function') {
-                        onSellNotifications(updatedMessages.length);
+                    // Kiểm tra nếu thông báo đã tồn tại trong danh sách
+                    if (!prevMessages.some(msg => msg.tableId === newMessage.tableId)) {
+                        const updatedMessages = [...prevMessages, newMessage];
+                        if (typeof onSellNotifications === 'function') {
+                            onSellNotifications(updatedMessages.length);
+                        }
+                        return updatedMessages;
                     }
-                    return updatedMessages;
+                    return prevMessages;  // Nếu thông báo đã tồn tại, không làm gì
                 });
             });
 
-            stompClient.subscribe('/topic/admin/sell/callEmployee', (messagesEmployee) => {
-                const newMessage = JSON.parse(messagesEmployee.body);
+            stompClient.subscribe('/topic/admin/sell/callEmployee', (message) => {
+                const newMessage = JSON.parse(message.body);
+
                 setMessagesEmployee((prevMessages) => {
-                    const updatedMessages = [...prevMessages, newMessage];
-                    if (typeof onSellNotifications === 'function') {
-                        onSellNotifications(updatedMessages.length);
+                    if (!prevMessages.some(msg => msg.tableId === newMessage.tableId)) {
+                        const updatedMessages = [...prevMessages, newMessage];
+                        if (typeof onSellNotifications === 'function') {
+                            onSellNotifications(updatedMessages.length);
+                        }
+                        return updatedMessages;
                     }
-                    return updatedMessages;
+                    return prevMessages;
                 });
             });
 
-            stompClient.subscribe('/topic/admin/sell/pay', (messagesPay) => {
-                const newMessage = JSON.parse(messagesPay.body);
+            stompClient.subscribe('/topic/admin/sell/pay', (message) => {
+                const newMessage = JSON.parse(message.body);
+
                 setMessagesPay((prevMessages) => {
-                    const updatedMessages = [...prevMessages, newMessage];
-                    if (typeof onSellNotifications === 'function') {
-                        onSellNotifications(updatedMessages.length);
+                    if (!prevMessages.some(msg => msg.tableId === newMessage.tableId)) {
+                        const updatedMessages = [...prevMessages, newMessage];
+                        if (typeof onSellNotifications === 'function') {
+                            onSellNotifications(updatedMessages.length);
+                        }
+                        return updatedMessages;
                     }
-                    return updatedMessages;
+                    return prevMessages;
+                });
+            });
+
+            stompClient.subscribe('/topic/admin/feedback', (message) => {
+                const newMessage = JSON.parse(message.body);
+
+                setMessagesFeedback((prevMessages) => {
+                    if (!prevMessages.some(msg => msg.tableId === newMessage.tableId)) {
+                        const updatedMessages = [...prevMessages, newMessage];
+                        if (typeof onSellNotifications === 'function') {
+                            onSellNotifications(updatedMessages.length);
+                        }
+                        return updatedMessages;
+                    }
+                    return prevMessages;
                 });
             });
         };
@@ -67,7 +96,7 @@ const SellNotification = ({ onSellNotifications, isDropdownOpen, closeDropdown }
         };
     }, [onSellNotifications]);
 
-    // Hàm xử lý khi click vào thông báo (xóa thông báo, trừ count và ẩn dropdown)
+    // Function to handle notification clicks (remove notification, decrement count, close dropdown)
     const handleNotificationClick = (id, type) => {
         if (type === 'order') {
             setMessagesOrder((prevMessages) => prevMessages.filter((msg) => msg.tableId !== id));
@@ -75,64 +104,67 @@ const SellNotification = ({ onSellNotifications, isDropdownOpen, closeDropdown }
             setMessagesEmployee((prevMessages) => prevMessages.filter((msg) => msg.tableId !== id));
         } else if (type === 'pay') {
             setMessagesPay((prevMessages) => prevMessages.filter((msg) => msg.tableId !== id));
+        } else if (type === 'feedback') {
+            setMessagesFeedback((prevMessages) => prevMessages.filter((msg) => msg.tableId !== id));
         }
 
-        // Trừ count đi 1
-        onSellNotifications(-1);
+        // Decrement notification count
+        if (typeof onSellNotifications === 'function') {
+            onSellNotifications(-1);
+        }
 
-        // Ẩn dropdown
+        // Close dropdown
         closeDropdown();
     };
 
     return (
-        <div className={`dropdown-menu dropdown-menu-right ${isDropdownOpen ? 'show' : ''}`} style={{ width: '300px' }}>
-            {messagesOrder.length > 0 && (
-                <>
-                    {messagesOrder.map((msg) => (
-                        <Link
-                            className="dropdown-item"
-                            key={msg.tableId}
-                            to={`/admin/sell`}
-                            onClick={() => handleNotificationClick(msg.tableId, 'order')}
-                            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        >
-                            <strong>Bàn {msg.code} gọi món</strong>
-                        </Link>
-                    ))}
-                </>
-            )}
-            {messagesEmployee.length > 0 && (
-                <>
-                    {messagesEmployee.map((msg) => (
-                        <Link
-                            className="dropdown-item"
-                            key={msg.tableId}
-                            to={`/admin/sell`}
-                            onClick={() => handleNotificationClick(msg.tableId, 'employee')}
-                            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        >
-                            <strong>Bàn {msg.code} gọi nhân viên</strong>
-                        </Link>
-                    ))}
-                </>
-            )}
-            {messagesPay.length > 0 && (
-                <>
-                    {messagesPay.map((msg) => (
-                        <Link
-                            className="dropdown-item"
-                            key={msg.tableId}
-                            to={`/admin/sell`}
-                            onClick={() => handleNotificationClick(msg.tableId, 'pay')}
-                            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        >
-                            <strong>Bàn {msg.code} gọi thanh toán</strong>
-                        </Link>
-                    ))}
-                </>
-            )}
-
-            {messagesOrder.length === 0 && messagesEmployee.length === 0 && messagesPay.length === 0 && (
+        <div className={`dropdown-menu dropdown-menu-right ${isDropdownOpen ? 'show' : ''}`}
+             style={{width: '300px'}}>
+            {messagesOrder.length > 0 && messagesOrder.map((msg) => (
+                <Link
+                    className="dropdown-item"
+                    key={msg.tableId}
+                    to={`/admin/sell`}
+                    onClick={() => handleNotificationClick(msg.tableId, 'order')}
+                    style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                >
+                    <strong>Bàn {msg.code} gọi món</strong>
+                </Link>
+            ))}
+            {messagesEmployee.length > 0 && messagesEmployee.map((msg) => (
+                <Link
+                    className="dropdown-item"
+                    key={msg.tableId}
+                    to={`/admin/sell`}
+                    onClick={() => handleNotificationClick(msg.tableId, 'employee')}
+                    style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                >
+                    <strong>Bàn {msg.code} gọi nhân viên</strong>
+                </Link>
+            ))}
+            {messagesPay.length > 0 && messagesPay.map((msg) => (
+                <Link
+                    className="dropdown-item"
+                    key={msg.tableId}
+                    to={`/admin/sell`}
+                    onClick={() => handleNotificationClick(msg.tableId, 'pay')}
+                    style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                >
+                    <strong>Bàn {msg.code} gọi thanh toán</strong>
+                </Link>
+            ))}
+            {messagesFeedback.length > 0 && messagesFeedback.map((msg) => (
+                <Link
+                    className="dropdown-item"
+                    key={msg.tableId}
+                    to={`/admin/feedback`}
+                    onClick={() => handleNotificationClick(msg.tableId, 'feedback')}
+                    style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                >
+                    <strong>Có 1 phản hồi {msg.code} mới</strong>
+                </Link>
+            ))}
+            {messagesOrder.length === 0 && messagesEmployee.length === 0 && messagesPay.length === 0 && messagesFeedback.length === 0 && (
                 <div className="dropdown-item">Không có thông báo mới</div>
             )}
         </div>
