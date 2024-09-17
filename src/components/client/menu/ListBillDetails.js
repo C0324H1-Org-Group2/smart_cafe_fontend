@@ -15,6 +15,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [isTableLocked, setIsTableLocked] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
+    const [showTotal, setShowTotal] = useState(false);
 
     useEffect(() => {
         setItems(cartItems);
@@ -27,6 +28,11 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         const saveCurrentBill = sessionStorage.getItem('currentBill');
         const saveIsTableLocked = sessionStorage.getItem('isTableLocked');
         const saveSelectAll = sessionStorage.getItem('selectAll');
+        const saveShowTotal = sessionStorage.getItem('showTotal');
+
+        if (saveShowTotal) {
+            setShowTotal(JSON.parse(saveShowTotal));
+        }
 
         if (savedTable) {
             setSelectedTable(JSON.parse(savedTable));
@@ -71,7 +77,11 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         if (isTableLocked) {
             sessionStorage.setItem('isTableLocked', JSON.stringify(isTableLocked));
         }
-    }, [selectedTable, items, currentBill, isTableLocked]);
+
+        if (showTotal) {
+            sessionStorage.setItem('showTotal', JSON.stringify(showTotal));
+        }
+    }, [selectedTable, items, currentBill, isTableLocked, isTableLocked, showTotal]);
 
 
     console.log(items);
@@ -152,6 +162,20 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         }
     };
 
+    // Tính tổng tiền và định dạng theo kiểu VND
+    const calculateTotalAmount = () => {
+        const totalAmount = items.reduce((total, item) => total + item.quantity * item.service.price, 0);
+        return totalAmount.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        });
+    };
+
+
+    const handleCheckTotalMoney = () => {
+        // Hiển thị dòng tổng tiền khi bấm nút Thanh toán
+        setShowTotal(true);
+    };
 
     const handlePay = async () => {
 
@@ -183,6 +207,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             setIsTableLocked(false);
             setSelectedTable(null);
             setSelectAll(false);
+            setShowTotal(false);
             sessionStorage.setItem('isTableLocked', JSON.stringify(false));
             sessionStorage.setItem('selectedTable', JSON.stringify(null));
 
@@ -199,13 +224,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             return;
         }
 
-        try {
-            // Gọi API để phục vụ nhân viên
+        const checkIsCall = await serviceService.checkIsCallTable(selectedTable.tableId)
+
+        if (!checkIsCall){
             await serviceService.callEmployee(selectedTable.tableId);
             toast.success("Đã gọi phục vụ thành công.");
-        } catch (error) {
-            // Xử lý lỗi nếu có
-            toast.error("Đã xảy ra lỗi khi gọi phục vụ.");
+        } else {
+            toast.error("Bàn đã được gọi phục vụ trước đó.");
         }
     };
 
@@ -248,13 +273,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         setItems(updatedItems);
     };
 
-
     return (
         <>
             <Row className="mt-4">
                 <Col md={2}></Col>
                 <Col md={10} className="text-center mb-4">
-                    <div className="d-flex flex-column align-items-start mb-3" style={{ width: '400px', margin: '0 auto' }}>
+                    <div className="d-flex flex-column align-items-start mb-3"
+                         style={{width: '400px', margin: '0 auto'}}>
                         <div className="d-flex justify-content-start align-items-center mb-3" style={{width: '100%'}}>
                             <Button
                                 onClick={() => setShowTableModal(true)}
@@ -287,30 +312,45 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                         </tr>
                         </thead>
                         <tbody>
-                            {items.map((item, index) => (
-                                <BillDetail
-                                    key={index || item.serviceId}
-                                    index={index}
-                                    item={item}
-                                    handleStatusChange={handleStatusChange}
-                                    handleQuantityChange={handleQuantityChange} />
-                            ))}
+                        {items.map((item, index) => (
+                            <BillDetail
+                                key={index || item.serviceId}
+                                index={index}
+                                item={item}
+                                handleStatusChange={handleStatusChange}
+                                handleQuantityChange={handleQuantityChange}/>
+                        ))}
+                        {/* Hiển thị dòng tổng tiền khi showTotal là true */}
+                        {showTotal && (
+                            <tr>
+                                <td colSpan="4"></td>
+                                <td colSpan="1" className="text-right"><strong>Tổng tiền:</strong></td>
+                                <td>{calculateTotalAmount()}</td>
+                                <td colSpan="3" className="text-center">
+                                    <Button className="w-auto me-2 rounded-pill px-4" variant="warning" onClick={handlePay}><i className="bi bi-credit-card"></i> Confirm
+                                        Pay</Button>
+                                </td>
+                            </tr>
+                        )}
                         </tbody>
                     </Table>
 
                     <div className="d-flex justify-content-center mb-3">
-                        <Button className="btn-lg rounded-pill" onClick={handleDelete} variant="danger">Xóa</Button>
-                        <Button className="btn-lg rounded-pill" onClick={handleOrder} variant="primary">Gọi món</Button>
-                        <Button className="btn-lg rounded-pill" onClick={handlePay} variant="success">Thanh toán</Button>
+                        <Button className="w-auto me-2 rounded-pill px-4" onClick={handleDelete}
+                                variant="danger">Xóa</Button>
+                        <Button className="w-auto me-2 rounded-pill px-4" onClick={handleOrder} variant="primary">Gọi
+                            món</Button>
+                        <Button className="w-auto me-2 rounded-pill px-4" onClick={handleCheckTotalMoney}
+                                variant="success"> Thanh toán</Button>
                         <NavLink
                             to="/order#feedback"
                             onClick={() => console.log("Phản hồi")}
-                            className="btn btn-info btn-lg rounded-pill ms-3"
+                            className="btn btn-info btn-lg rounded-pill w-auto px-4"
                         >
                             Phản hồi
                         </NavLink>
-
                     </div>
+
                 </Col>
             </Row>
 
