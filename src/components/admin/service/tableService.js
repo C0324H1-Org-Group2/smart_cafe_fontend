@@ -1,12 +1,35 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/api/tables';
+// export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted = false) => {
+//     try {
+//         const response = await axios.get(BASE_URL, {
+//             params: {
+//                 code: code || '',
+//                 on: on !== undefined ? on : null,
+//                 page: page,
+//                 size: size,
+//                 includeDeleted: includeDeleted
+//             }
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error("Không tìm thấy bàn:", error);
+//         return null;
+//     }
+// };
 
-export const getAllTables = async (code, page = 0, size = 10,includeDeleted = false) => {
+const token = localStorage.getItem("token");
+
+export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted = false) => {
     try {
         const response = await axios.get('http://localhost:8080/api/tables', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
             params: {
                 code: code || '',
+                on: on !== undefined ? on : null,
                 page: page,
                 size: size,
                 includeDeleted: includeDeleted
@@ -18,6 +41,7 @@ export const getAllTables = async (code, page = 0, size = 10,includeDeleted = fa
         return null;
     }
 };
+
 export const getAllIncludingDeleted = (code, page = 0, size = 10) => {
     return axios.get(`${BASE_URL}/all-including-deleted`, { params: { code, page, size } }).then(response => response.data);
 };
