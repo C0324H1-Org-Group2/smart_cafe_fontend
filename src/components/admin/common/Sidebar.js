@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FaChartLine, FaUtensils, FaShoppingCart, FaListAlt, FaTable, FaCommentDots, FaNewspaper, FaUser, FaCog } from 'react-icons/fa';
 import './Sidebar.css';
 const Sidebar = () => {
-    const userId = localStorage.getItem('userId');
+    const employeeId = localStorage.getItem('employeeId');
     return (
         <div className="main-sidebar sidebar-style-2">
             <aside id="sidebar-wrapper">
@@ -50,7 +50,7 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li className="mb-3">
-                        <NavLink className="nav-link d-flex align-items-center" to={`/admin/employee/${userId}`}>
+                        <NavLink className="nav-link d-flex align-items-center" to={`/admin/employee/${employeeId}`}>
                             <FaUser className="me-2" /> <span>Tài khoản</span>
                         </NavLink>
                     </li>

@@ -39,6 +39,10 @@ import ResetPassword from "./components/admin/Login/ResetPassword";
 import ServiceFormAdd from "./components/admin/manager/products/ServiceFormAdd";
 import ServiceFormUpdate from "./components/admin/manager/products/ServiceFormUpdate";
 import CreateServiceForm from "./components/admin/manager/products/CreateServiceForm";
+import Order from "./components/client/menu/Order";
+import Menus from "./components/client/menu/Menus";
+import LogoutButton from "./components/admin/Login/LogoutButton";
+import ChangePassword from "./components/admin/Login/ChangePassword";
 
 
 
@@ -87,6 +91,19 @@ function App() {
                         </ClientLayout>
                     </>
                 }/>
+                <Route path="/order" element={
+                    <>
+                        <Helmet>
+                            <link rel="stylesheet" href="/css/icomoon.css"/>
+                            <link rel="stylesheet" href="/css/style.css"/>
+                        </Helmet>
+                        <ClientLayout>
+                            <Slider/>
+                            <Order/>
+                            <Feedback/>
+                        </ClientLayout>
+                    </>
+                }/>
                 <Route path="/news" element={
                     <>
                         <Helmet>
@@ -130,9 +147,9 @@ function App() {
                         </Helmet>
                         <AdminLayout>
                             <RevenueByDate/>
+                            <ChartComponent/>
                             <ManagerRevenue/>
                             <ExpensesChart/>
-                            <ChartComponent/>
                             <TopServiceComponent/>
                             {/* Thêm các component admin ở đây */}
                             <Sidebar/>
@@ -252,7 +269,7 @@ function App() {
                         </AdminLayout>
                     </>
                 } />
-                <Route path="/admin/service/update/:id" element={
+                <Route path="/admin/service/update/:serviceId" element={
                     <>
                         <Helmet>
                             {/* Import CSS của admin */}
@@ -497,6 +514,38 @@ function App() {
                             <link rel="stylesheet" href="/assets/css/style.css"/>
                         </Helmet>
                         {<ResetPassword/>}
+                    </>
+                }/>
+                <Route path="/admin/logout" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        {<LogoutButton/>}
+                    </>
+                }/>
+                <Route path="/admin/change-password" element={
+                    <>
+                        <Helmet>
+                            {/* Import admin CSS */}
+                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                            <link rel="stylesheet" href="/assets/css/components.css"/>
+                            <link rel="stylesheet" href="/assets/css/style.css"/>
+                        </Helmet>
+                        {<ChangePassword/>}
                     </>
                 }/>
             </Routes>

@@ -90,7 +90,7 @@ const EmployeeDetails = () => {
                                                 </button>
                                                 <button
                                                     className="btn btn-warning"
-                                                    onClick={() => navigate(`/change-password/${employeeId}`)}
+                                                    onClick={() =>  navigate(`/admin/change-password`)}
                                                 >
                                                     Change Password
                                                 </button>

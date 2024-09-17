@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import SellNotification from "../sell-feedback/SellNotification";
 
 const Header = () => {
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!isDropdownOpen);
+    };
+
+    // Hàm để đóng dropdown
+    const closeDropdown = () => {
+        setDropdownOpen(false);
+    };
+
+    const handleSellNotifications = (change) => {
+        setNotificationCount((prevCount) => Math.max(0, prevCount + change)); // Giảm số lượng thông báo
+    };
     return (
-            <div className="navbar-bg">
+        <div className="main-wrapper main-wrapper-1">
+            <div className="navbar-bg"></div>
             <nav className="navbar navbar-expand-lg main-navbar">
                 <form className="form-inline mr-auto">
                     <ul className="navbar-nav mr-3">
@@ -28,29 +47,31 @@ const Header = () => {
                         <button className="btn" type="submit">
                             <i className="fas fa-search"></i>
                         </button>
-                        {/* Các mục khác */}
                     </div>
                 </form>
+
                 <ul className="navbar-nav navbar-right">
-                    {/* Mục tin nhắn */}
+                    {/* Thông báo */}
                     <li className="dropdown dropdown-list-toggle">
-                        <a href="#" data-toggle="dropdown" className="nav-link nav-link-lg message-toggle beep">
-                            <i className="far fa-envelope"></i>
-                        </a>
-                        {/* Nội dung dropdown */}
-                    </li>
-                    {/* Mục thông báo */}
-                    <li className="dropdown dropdown-list-toggle">
-                        <a href="#" data-toggle="dropdown" className="nav-link notification-toggle nav-link-lg beep">
+                        <a
+                            href="#"
+                            onClick={toggleDropdown}
+                            className="nav-link notification-toggle nav-link-lg">
                             <i className="far fa-bell"></i>
+                            <span className="badge badge-warning navbar-badge">{notificationCount}</span>
                         </a>
-                        {/* Nội dung dropdown */}
+                        <SellNotification
+                            onSellNotifications={handleSellNotifications}
+                            isDropdownOpen={isDropdownOpen}
+                            closeDropdown={closeDropdown}
+
+                        />
                     </li>
-                    {/* Mục người dùng */}
+
+                    {/* Người dùng */}
                     <li className="dropdown">
-                        <a href="#" data-toggle="dropdown"
-                           className="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="User" src="assets/img/avatar/avatar-1.png" className="rounded-circle mr-1"/>
+                        <a href="#" data-toggle="dropdown" className="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                            <img alt="User" src="assets/img/avatar/avatar-1.png" className="rounded-circle mr-1" />
                             <div className="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
                         </a>
                         <div className="dropdown-menu dropdown-menu-right">
@@ -72,7 +93,7 @@ const Header = () => {
                     </li>
                 </ul>
             </nav>
-         </div>
+        </div>
     );
 };
 

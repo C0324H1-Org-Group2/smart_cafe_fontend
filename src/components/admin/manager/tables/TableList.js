@@ -12,6 +12,7 @@ function TableList() {
     const [isAscending, setIsAscending] = useState(true);
     const [includeDeleted, setIncludeDeleted] = useState(false);
 
+
     useEffect(() => {
         const fetchTables = async () => {
             try {
