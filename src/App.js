@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
@@ -46,6 +46,7 @@ import ChangePassword from "./components/admin/Login/ChangePassword";
 import AboutSection from "./components/client/about/AboutSection";
 import TestimonySection from "./components/client/about/TestimonySection";
 import MenuSection from "./components/client/about/MenuSection";
+import {AdminRoute} from "./components/admin/common/AdminRoute";
 
 
 
@@ -377,26 +378,28 @@ function App() {
                     </>
                 }/>
                 <Route path="/admin/news/create" element={
-                    <>
-                        <Helmet>
-                            {/* Import CSS của admin */}
-                            <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                    AdminRoute('ROLE_ADMIN') ? (
+                        <>
+                            <Helmet>
+                                {/* Import CSS của admin */}
+                                <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
-                            <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
-                            <link rel="stylesheet" href="/assets/css/components.css"/>
-                            <link rel="stylesheet" href="/assets/css/style.css"/>
-                        </Helmet>
-                        <AdminLayout>
-                            {/* Thêm các component admin ở đây */}
-                            <NewsForm />
-                            <Sidebar/>
-                        </AdminLayout>
-                    </>
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
+                                <link rel="stylesheet" href="/assets/css/style.css"/>
+                            </Helmet>
+                            <AdminLayout>
+                                {/* Thêm các component admin ở đây */}
+                                <NewsForm />
+                                <Sidebar/>
+                            </AdminLayout>
+                        </>
+                    ) : (<Navigate to="/403" replace/> )
                 }/>
                 <Route path="/admin/news/update/:newsId" element={
                     <>
