@@ -8,17 +8,25 @@ const ContactForm = () => {
 
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [previewImage, setPreviewImage] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file));
+            setImageFile(file);
+        }
+    };
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        event.preventDefault();
 
         try {
-            const response = await serviceService.sendFeedback({email, message});
+            await serviceService.sendFeedback({email, message, imageFile});
             toast.success("Gửi thành công");
-            // Xử lý phản hồi từ server (như hiển thị thông báo thành công)
         } catch (error) {
             toast.error("Gửi thất bại");
-            // Xử lý lỗi (như hiển thị thông báo lỗi)
         }
     };
 
@@ -67,7 +75,7 @@ const ContactForm = () => {
                                             placeholder="Your Phone Number"
                                             pattern="[0-9]{10}"
                                             required
-                                            />
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -79,6 +87,23 @@ const ContactForm = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    name="imageUrl"
+                                    type="file"
+                                    className="form-control"
+                                    onChange={handleImageChange}
+                                />
+                                {previewImage && (
+                                    <div>
+                                        <img
+                                            src={previewImage}
+                                            alt="Preview"
+                                            style={{maxWidth: '200px', maxHeight: '200px'}}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             <div className="form-group">
                                 <textarea
