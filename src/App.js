@@ -18,7 +18,7 @@ import Feedback from "./components/client/menu/Feedback";
 import AdminLayout from "./components/admin/AdminLayout";
 import Sidebar from "./components/admin/common/Sidebar";
 import TableService from "./components/admin/manager/products/TableService";
-import FeedbackList from "./components/admin/sell-feedback/feedbackList";
+import FeedbackList from "./components/admin/sell-feedback/FeedbackList";
 import Sell from "./components/admin/sell-feedback/Sell";
 import LoginForm from "./components/admin/Login/LoginForm";
 import OrderList from "./components/admin/manager/OrderList";
