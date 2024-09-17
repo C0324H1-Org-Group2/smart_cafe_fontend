@@ -5,14 +5,15 @@ import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-// Định nghĩa schema xác thực với Yup
+// Define validation schema with Yup
 const validationSchema = Yup.object({
     code: Yup.string()
-        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Biểu thức chính quy để kiểm tra định dạng
+        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Regular expression to check format
         .required('Code is required'),
     state: Yup.string()
         .required('State is required'),
-    on: Yup.boolean()
+    on: Yup.boolean(),
+    delete: Yup.boolean() // Add validation for delete field
 });
 
 const TableEdit = () => {
@@ -27,11 +28,12 @@ const TableEdit = () => {
                 setInitialValues({
                     code: data.code,
                     state: data.state,
-                    on: data.on
+                    on: data.on,
+                    delete: data.delete // Set delete value when loading data
                 });
             } catch (error) {
-                console.error('Lỗi khi lấy thông tin bàn:', error);
-                toast.error('Lỗi khi lấy thông tin bàn.');
+                console.error('Error fetching table information:', error);
+                toast.error('Error fetching table information.');
             }
         };
 
@@ -41,22 +43,22 @@ const TableEdit = () => {
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             await updateTable(tableId, values);
-            toast.success('Cập nhật bàn thành công!');
-            navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
+            toast.success('Table updated successfully!');
+            navigate('/admin/tables/list'); // Navigate to the table list page
         } catch (error) {
-            console.error('Lỗi khi cập nhật bàn:', error);
-            toast.error('Cập nhật bàn thất bại.');
+            console.error('Error updating table:', error);
+            toast.error('Failed to update table.');
         } finally {
             setSubmitting(false);
         }
     };
 
-    if (!initialValues) return <p>Đang tải...</p>;
+    if (!initialValues) return <p>Loading...</p>;
 
     return (
         <div className="main-content">
             <div className="section-body">
-                <h2 className="section-title">Sửa Bàn</h2>
+                <h2 className="section-title">Edit Table</h2>
                 <div className="card-body">
                     <Formik
                         initialValues={initialValues}
@@ -88,13 +90,21 @@ const TableEdit = () => {
                                 <div className="form-group">
                                     <label htmlFor="on">Status</label>
                                     <Field as="select" className="form-control" id="on" name="on">
-                                        <option value={true}>Bật</option>
-                                        <option value={false}>Tắt</option>
+                                        <option value={true}>ON</option>
+                                        <option value={false}>OFF</option>
                                     </Field>
                                     <ErrorMessage name="on" component="div" className="text-danger" />
                                 </div>
+                                <div className="form-group">
+                                    <label htmlFor="delete">Is Deleted</label>
+                                    <Field as="select" className="form-control" id="delete" name="delete">
+                                        <option value={false}>No</option>
+                                        <option value={true}>Yes</option>
+                                    </Field>
+                                    <ErrorMessage name="delete" component="div" className="text-danger" />
+                                </div>
                                 <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Updating...' : 'Cập Nhật'}
+                                    {isSubmitting ? 'Updating...' : 'Update'}
                                 </button>
                             </Form>
                         )}

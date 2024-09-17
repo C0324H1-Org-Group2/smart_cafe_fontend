@@ -1,24 +1,6 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/api/tables';
-// export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted = false) => {
-//     try {
-//         const response = await axios.get(BASE_URL, {
-//             params: {
-//                 code: code || '',
-//                 on: on !== undefined ? on : null,
-//                 page: page,
-//                 size: size,
-//                 includeDeleted: includeDeleted
-//             }
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error("Không tìm thấy bàn:", error);
-//         return null;
-//     }
-// };
-
 const token = localStorage.getItem("token");
 
 export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted = false) => {
@@ -48,7 +30,11 @@ export const getAllIncludingDeleted = (code, page = 0, size = 10) => {
 
 export const getTableByCode = async (code) => {
     try {
-        const response = await axios.get(`/api/tables/code/${code}`);
+        const response = await axios.get(`/api/tables/code/${code}`,{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     } catch (error) {
         console.error('Error fetching table by code:', error);
@@ -102,6 +88,15 @@ export const createTable = async (table) => {
         throw error;
     }
 };
+export const checkCodeExists = async (code) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/checkCode/${code}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Lỗi khi kiểm tra mã code.');
+    }
+};
+
 
 export const deleteTable = async (id, type = 'soft') => {
     try {

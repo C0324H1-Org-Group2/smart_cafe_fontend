@@ -1,18 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createTable } from '../../service/tableService'; // Đảm bảo đường dẫn đúng
+import { createTable } from '../../service/tableService'; // Ensure the path is correct
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-// Định nghĩa schema xác thực với Yup
+// Define validation schema with Yup
 const validationSchema = Yup.object({
     code: Yup.string()
-        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Biểu thức chính quy để kiểm tra định dạng
+        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Regular expression to check format
         .required('Code is required'),
     state: Yup.string()
         .required('State is required'),
-    on: Yup.boolean()
+    on: Yup.boolean(),
+    delete: Yup.boolean() // Add validation for delete field
 });
 
 const TableCreate = () => {
@@ -20,10 +21,10 @@ const TableCreate = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            // Gửi dữ liệu với đúng tên trường 'on'
+            // Send data with the correct field names
             await createTable(values);
             toast.success('Table created successfully!');
-            navigate('/admin/tables/list'); // Điều hướng về trang danh sách bảng
+            navigate('/admin/tables/list'); // Navigate to the table list page
         } catch (error) {
             console.error('Error creating table:', error);
             toast.error('Failed to create table.');
@@ -38,7 +39,7 @@ const TableCreate = () => {
                 <h2 className="section-title">Create Table</h2>
                 <div className="card-body">
                     <Formik
-                        initialValues={{ code: '', state: '', on: true }}
+                        initialValues={{ code: '', state: '', on: true, delete: false }} // Set default values for delete
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
@@ -71,6 +72,14 @@ const TableCreate = () => {
                                         <option value={false}>Off</option>
                                     </Field>
                                     <ErrorMessage name="on" component="div" className="text-danger" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="delete">Is Deleted</label>
+                                    <Field as="select" className="form-control" id="delete" name="delete">
+                                        <option value={false}>No</option>
+                                        <option value={true}>Yes</option>
+                                    </Field>
+                                    <ErrorMessage name="delete" component="div" className="text-danger" />
                                 </div>
                                 <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                                     {isSubmitting ? 'Creating...' : 'Create'}

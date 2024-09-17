@@ -185,6 +185,15 @@ function App() {
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
                                 <link rel="stylesheet" href="/assets/css/style.css"/>
                             </Helmet>
                             <AdminLayout>
@@ -194,9 +203,19 @@ function App() {
                         </>
                     }/>
                     <Route path="/admin/tables/create" element={
+                        hasRole('ROLE_ADMIN') ? (
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
                                 <link rel="stylesheet" href="/assets/css/style.css"/>
                             </Helmet>
                             <AdminLayout>
@@ -204,21 +223,30 @@ function App() {
                                 <Sidebar/>
                             </AdminLayout>
                         </>
+                        ) : (<Navigate to="/403" replace/> )
                     }/>
 
                     <Route path="/admin/tables/edit/:tableId" element={
                         <>
                             <Helmet>
                                 <link rel="stylesheet" href="/assets/modules/bootstrap/css/bootstrap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/fontawesome/css/all.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
+                                <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
+
+                                <link rel="stylesheet" href="/assets/css/components.css"/>
                                 <link rel="stylesheet" href="/assets/css/style.css"/>
                             </Helmet>
                             <AdminLayout>
-                                <TableEdit />
-                                <Sidebar />
+                                <TableEdit/>
+                                <Sidebar/>
                             </AdminLayout>
                         </>
-                    } />
-
+                    }/>
 
 
                     <Route path="/admin/service" element={
@@ -230,7 +258,8 @@ function App() {
 
                                 <link rel="stylesheet" href="/assets/modules/jqvmap/dist/jqvmap.min.css"/>
                                 <link rel="stylesheet" href="/assets/modules/summernote/summernote-bs4.css"/>
-                                <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
+                                <link rel="stylesheet"
+                                      href="/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css"/>
                                 <link rel="stylesheet" href="/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css"/>
 
                                 <link rel="stylesheet" href="/assets/css/components.css"/>
