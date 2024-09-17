@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaChartLine, FaUtensils, FaShoppingCart, FaListAlt, FaTable, FaCommentDots, FaNewspaper, FaUser, FaCog } from 'react-icons/fa';
 import './Sidebar.css';
+import {hasRole} from "../manager/HasRole";
 const Sidebar = () => {
     const employeeId = localStorage.getItem('employeeId');
     return (
@@ -14,11 +15,13 @@ const Sidebar = () => {
                     <NavLink to="/admin/home">Sc</NavLink>
                 </div>
                 <ul className="sidebar-menu mt-4">
-                    <li className="mb-3">
-                        <NavLink className="nav-link d-flex align-items-center" to="/admin/home">
-                            <FaChartLine className="me-2" /> <span>Thống kê doanh thu</span>
-                        </NavLink>
-                    </li>
+                    {hasRole('ROLE_ADMIN') && (
+                        <li className="mb-3">
+                            <NavLink className="nav-link d-flex align-items-center" to="/admin/home">
+                                <FaChartLine className="me-2" /> <span>Thống kê doanh thu</span>
+                            </NavLink>
+                        </li>
+                    )}
                     <li className="mb-3">
                         <NavLink className="nav-link d-flex align-items-center" to="/admin/service">
                             <FaUtensils className="me-2" /> <span>Quản lý món</span>
@@ -29,11 +32,13 @@ const Sidebar = () => {
                             <FaShoppingCart className="me-2" /> <span>Quản lý bán hàng</span>
                         </NavLink>
                     </li>
-                    <li className="mb-3">
-                        <NavLink className="nav-link d-flex align-items-center" to="/admin/order">
-                            <FaListAlt className="me-2" /> <span>Quản lý đặt hàng</span>
-                        </NavLink>
-                    </li>
+                    {hasRole('ROLE_ADMIN') && (
+                        <li className="mb-3">
+                            <NavLink className="nav-link d-flex align-items-center" to="/admin/order">
+                                <FaChartLine className="me-2" /> <span>Quản Lý Đơn Hàng</span>
+                            </NavLink>
+                        </li>
+                    )}
                     <li className="mb-3">
                         <NavLink className="nav-link d-flex align-items-center" to="/admin/tables/list">
                             <FaTable className="me-2" /> <span>Quản lý bàn</span>
