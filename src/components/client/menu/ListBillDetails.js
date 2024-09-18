@@ -114,7 +114,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
 
         // Kiểm tra nếu thông tin bàn thiếu
         if (!selectedTable) {
-            toast.error("Hay chọn bàn !!!!");
+            toast.error("Please select a table!");
             return;
         }
 
@@ -220,17 +220,17 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
     const handleCall = async () => {
 
         if (!selectedTable) {
-            toast.error("Vui lòng chọn bàn trước khi gọi phục vụ.");
+            toast.error("Please select a table before requesting service.");
             return;
         }
 
         const checkIsCall = await serviceService.checkIsCallTable(selectedTable.tableId)
 
-        if (!checkIsCall){
+        if (!checkIsCall) {
             await serviceService.callEmployee(selectedTable.tableId);
-            toast.success("Đã gọi phục vụ thành công.");
+            toast.success("Service called successfully.");
         } else {
-            toast.error("Bàn đã được gọi phục vụ trước đó.");
+            toast.error("Service has already been requested for this table.");
         }
     };
 
@@ -251,11 +251,10 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
 
     // Hàm xử lý dữ liệu phản hồi từ modal
     const handleFeedbackSubmit = (feedbackData) => {
-        console.log("Dữ liệu phản hồi:", feedbackData);
-        // Thực hiện các xử lý khác, ví dụ: gửi feedback lên server hoặc lưu lại
-        toast.success("Phản hồi đã được gửi!");
+        console.log("Feedback data:", feedbackData);
+        // Perform other actions, e.g., send feedback to server or save it
+        toast.success("Feedback has been sent!");
     };
-
     const handleSelectAll = (event) => {
         const isChecked = event.target.checked;
         setSelectAll(isChecked);

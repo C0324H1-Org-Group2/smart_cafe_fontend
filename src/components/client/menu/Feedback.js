@@ -26,7 +26,7 @@ const ContactForm = () => {
 
         try {
             await serviceService.sendFeedback({email, message, imageFile});
-            toast.success("Gửi thành công");
+            toast.success("Sent successfully");
 
             // Reset all fields after submission
             setName(''); // Reset Name
@@ -36,7 +36,7 @@ const ContactForm = () => {
             setPreviewImage(null); // Reset Image Preview
             setImageFile(null); // Reset Image File
         } catch (error) {
-            toast.error("Gửi thất bại");
+            toast.error("Send failed");
         }
     };
 
