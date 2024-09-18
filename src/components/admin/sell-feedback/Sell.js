@@ -187,7 +187,7 @@ function Sell() {
             <div className="section-body">
                 <div className="container my-4">
                     <div className="mb-5">
-                        <h2 className="section-title">Sell</h2>
+                        <h2 className="section-title">Sell Management</h2>
                         <SellNotification/>
                     </div>
 
@@ -322,9 +322,14 @@ function Sell() {
                 </div>
             </div>
             {/* Thẻ hiển thị thông tin hóa đơn và in ra PDF */}
-            <div ref={componentPDF} style={{width: '100%', display: showBillInfo ? 'block' : 'none'}}>
+            <div
+                ref={componentPDF}
+                style={{width: '100%', display: showBillInfo ? 'block' : 'none'}}
+                className="receipt"
+            >
                 <BillInfor bills={bills} nameEmployee={nameEmployee}/>
             </div>
+
 
         </div>
 
