@@ -294,13 +294,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
                                     onChange={handleSelectAll}
                                 />
                             </th>
-                            <th>STT</th>
-                            <th>Tên món</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
-                            <th>Thành tiền</th>
-                            <th>Thời gian chờ</th>
-                            <th>Trạng thái</th>
+                            <th>No.</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Wait Time</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -320,8 +320,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
                                 <td colSpan="1" className="text-right"><strong>Total money:</strong></td>
                                 <td>{calculateTotalAmount()}</td>
                                 <td colSpan="3" className="text-center">
-                                    <Button className="w-auto me-2 rounded-pill px-4" variant="warning" onClick={handlePay}><i className="bi bi-credit-card"></i> Confirm
-                                        Pay</Button>
+                                    <Button className="w-auto me-2 rounded-pill px-4" variant="warning" onClick={handlePay}><i className="bi bi-credit-card"></i> Confirm Pay</Button>
                                 </td>
                             </tr>
                         )}
