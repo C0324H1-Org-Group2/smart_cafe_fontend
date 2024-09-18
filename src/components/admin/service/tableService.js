@@ -1,18 +1,47 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/api/tables';
+const token = localStorage.getItem("token");
 
-export const getAllTables = async (page = 0, size = 10) => {
+export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted = false) => {
     try {
-        const response = await axios.get(BASE_URL, {
-            params: { page, size },
+        const response = await axios.get('http://localhost:8080/api/tables', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            params: {
+                code: code || '',
+                on: on !== undefined ? on : null,
+                page: page,
+                size: size,
+                includeDeleted: includeDeleted
+            }
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching tables:', error);
+        console.error("Không tìm thấy bàn:", error);
+        return null;
+    }
+};
+
+export const getAllIncludingDeleted = (code, page = 0, size = 10) => {
+    return axios.get(`${BASE_URL}/all-including-deleted`, { params: { code, page, size } }).then(response => response.data);
+};
+
+export const getTableByCode = async (code) => {
+    try {
+        const response = await axios.get(`/api/tables/code/${code}`,{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching table by code:', error);
         throw error;
     }
 };
+
 
 export const searchTableById = async (id) => {
     try {
@@ -56,6 +85,25 @@ export const createTable = async (table) => {
         return response.data;
     } catch (error) {
         console.error('Lỗi khi tạo bàn:', error);
+        throw error;
+    }
+};
+export const checkCodeExists = async (code) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/checkCode/${code}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Lỗi khi kiểm tra mã code.');
+    }
+};
+
+
+export const deleteTable = async (id, type = 'soft') => {
+    try {
+        const url = type === 'hard' ? `${BASE_URL}/hard/${id}` : `${BASE_URL}/soft/${id}`;
+        await axios.delete(url);
+    } catch (error) {
+        console.error('Lỗi khi xóa bảng:', error);
         throw error;
     }
 };
