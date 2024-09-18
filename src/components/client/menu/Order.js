@@ -150,6 +150,13 @@ const Order = () => {
         setCartItems(updatedItems);
     };
 
+    const handleQuantityChange = (index, newQuantity) => {
+        const updatedItems = [...cartItems];
+        updatedItems[index].quantity = newQuantity;
+        setCartItems(updatedItems);
+    };
+
+
     const handleDeleteCartItems = (updatedItems) => {
         setCartItems(updatedItems);
     };
@@ -189,6 +196,7 @@ const Order = () => {
                 </Row>
                 <ListBillDetails
                     cartItems={cartItems}
+                    handleQuantityChange={handleQuantityChange}
                     handleStatusChange={handleStatusChange}
                     handleDeleteCartItems={handleDeleteCartItems}
                     handleSentBillDetail={handleSentBillDetail}

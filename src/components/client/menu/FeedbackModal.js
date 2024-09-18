@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button';
 
 // Validation schema for the form
 const validationSchema = Yup.object({
-    email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
-    feedback: Yup.string().required('Phản hồi là bắt buộc')
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    feedback: Yup.string().required('Feedback is required')
 });
 
 const FeedbackModal = ({ show, onHide, onSubmit }) => {
