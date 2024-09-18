@@ -3,7 +3,11 @@ import moment from 'moment';
 
 const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) => {
     const [remainTime, setRemainTime] = useState(item.service.waitTime);
-    const [quantity, setQuantity] = useState(item.quantity); // Thêm state cho số lượng
+    const [quantity, setQuantity] = useState(item.quantity);
+
+    useEffect(() => {
+        setQuantity(quantity);
+    }, [quantity]);
 
     useEffect(() => {
         if (item.isOrder) {
@@ -58,10 +62,10 @@ const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) =
                     style={{
                         width: '75px',
                         height: '75px',
-                        backgroundImage: `url(/images/${item.service.imageUrl})`,  // Sử dụng background image
-                        backgroundSize: 'cover',  // Đảm bảo hình ảnh bao phủ hết khung
-                        backgroundPosition: 'center',  // Căn giữa hình ảnh
-                        backgroundRepeat: 'no-repeat',  // Không lặp lại hình ảnh
+                        backgroundImage: `url(/images/${item.service.imageUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
                     }}
                     alt={item.service.serviceName}
                 />
@@ -71,22 +75,26 @@ const BillDetail = ({ item, index, handleStatusChange, handleQuantityChange }) =
                 <input
                     className="input-number"
                     type="number"
-                    value={quantity}
-                    min="1" // Đảm bảo số lượng tối thiểu là 1
+                    value={item.quantity}
+                    min="1"
                     max="100"
-                    onChange={handleChange} // Cập nhật số lượng khi thay đổi
-                    style={{width: '80px', textAlign: 'center'}} // Tùy chỉnh giao diện
+                    onChange={handleChange}
+                    style={{ width: '80px', textAlign: 'center' }}
                     disabled={item.isOrder}
                 />
             </td>
-            <td className="price">{item.service.price.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            })}</td>
-            <td className="total">{(quantity * item.service.price).toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            })}</td>
+            <td className="price">
+                {item.service.price.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                })}
+            </td>
+            <td className="total">
+                {(quantity * item.service.price).toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                })}
+            </td>
             <td>{remainTime}</td>
             <td>{item.isOrder ? "Ordering" : "Wait"}</td>
         </tr>

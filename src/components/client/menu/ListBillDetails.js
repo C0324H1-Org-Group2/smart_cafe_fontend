@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import FeedbackModal from "./FeedbackModal";
 import {NavLink} from "react-router-dom";
 
-const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
+const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, handleDeleteCartItems, handleSentBillDetail, tableInfo, allTables, onUpdateTableInfo  }) => {
     const [items, setItems] = useState(cartItems);
     const [showTableModal, setShowTableModal] = useState(false); // State để điều khiển modal
     const [selectedTable, setSelectedTable] = useState(tableInfo);
@@ -24,7 +24,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     // Khôi phục bàn đã chọn từ sessionStorage
     useEffect(() => {
         const savedTable = sessionStorage.getItem('selectedTable');
-        const saveItem = sessionStorage.getItem('item');
+        const saveItems = sessionStorage.getItem('items');
         const saveCurrentBill = sessionStorage.getItem('currentBill');
         const saveIsTableLocked = sessionStorage.getItem('isTableLocked');
         const saveSelectAll = sessionStorage.getItem('selectAll');
@@ -46,8 +46,8 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             setCurrentBill(JSON.parse(saveCurrentBill));
         }
 
-        if (saveItem) {
-            setItems(JSON.parse(saveItem));
+        if (saveItems) {
+            setItems(JSON.parse(saveItems));
         }
 
         if (saveIsTableLocked) {
@@ -63,7 +63,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         }
 
         if (items) {
-            sessionStorage.setItem('item', JSON.stringify(items));
+            sessionStorage.setItem('items', JSON.stringify(items));
         }
 
         if (currentBill) {
@@ -81,7 +81,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
         if (showTotal) {
             sessionStorage.setItem('showTotal', JSON.stringify(showTotal));
         }
-    }, [selectedTable, items, currentBill, isTableLocked, isTableLocked, showTotal]);
+    }, [selectAll, items, currentBill, selectedTable, isTableLocked, showTotal]);
 
 
     console.log(items);
@@ -114,7 +114,7 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
         // Kiểm tra nếu thông tin bàn thiếu
         if (!selectedTable) {
-            toast.error("Hay chọn bàn !!!!");
+            toast.error("Please select a table!");
             return;
         }
 
@@ -220,17 +220,17 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
     const handleCall = async () => {
 
         if (!selectedTable) {
-            toast.error("Vui lòng chọn bàn trước khi gọi phục vụ.");
+            toast.error("Please select a table before requesting service.");
             return;
         }
 
         const checkIsCall = await serviceService.checkIsCallTable(selectedTable.tableId)
 
-        if (!checkIsCall){
+        if (!checkIsCall) {
             await serviceService.callEmployee(selectedTable.tableId);
-            toast.success("Đã gọi phục vụ thành công.");
+            toast.success("Service called successfully.");
         } else {
-            toast.error("Bàn đã được gọi phục vụ trước đó.");
+            toast.error("Service has already been requested for this table.");
         }
     };
 
@@ -251,11 +251,10 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
 
     // Hàm xử lý dữ liệu phản hồi từ modal
     const handleFeedbackSubmit = (feedbackData) => {
-        console.log("Dữ liệu phản hồi:", feedbackData);
-        // Thực hiện các xử lý khác, ví dụ: gửi feedback lên server hoặc lưu lại
-        toast.success("Phản hồi đã được gửi!");
+        console.log("Feedback data:", feedbackData);
+        // Perform other actions, e.g., send feedback to server or save it
+        toast.success("Feedback has been sent!");
     };
-
     const handleSelectAll = (event) => {
         const isChecked = event.target.checked;
         setSelectAll(isChecked);
@@ -263,13 +262,6 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
             ...item,
             status: isChecked
         }));
-        setItems(updatedItems);
-    };
-
-    const handleQuantityChange = (index, newQuantity) => {
-        const updatedItems = items.map((item, i) =>
-            i === index ? { ...item, quantity: newQuantity } : item
-        );
         setItems(updatedItems);
     };
 
@@ -314,11 +306,12 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleDeleteCartItems,
                         <tbody>
                         {items.map((item, index) => (
                             <BillDetail
-                                key={index || item.serviceId}
+                                key={item.serviceId}
                                 index={index}
                                 item={item}
                                 handleStatusChange={handleStatusChange}
-                                handleQuantityChange={handleQuantityChange}/>
+                                handleQuantityChange={handleQuantityChange}
+                            />
                         ))}
                         {/* Hiển thị dòng tổng tiền khi showTotal là true */}
                         {showTotal && (
