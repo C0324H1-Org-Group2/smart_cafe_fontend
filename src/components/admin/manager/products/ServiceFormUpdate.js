@@ -71,7 +71,7 @@ const ServiceFormUpdate = () => {
 
 
             const formData = new FormData();
-            formData.append('serviceCode', values.serviceCode);
+            // formData.append('serviceCode', values.serviceCode);
             formData.append('serviceName', values.serviceName);
             formData.append('typeId', values.typeId);
             formData.append('price', values.price);
@@ -133,11 +133,11 @@ const ServiceFormUpdate = () => {
                         >
                             {({ setFieldValue }) => (
                                 <Form encType="multipart/form-data">
-                                    <BootstrapForm.Group className="mb-3" controlId="serviceCode">
-                                        <BootstrapForm.Label>Mã Món:</BootstrapForm.Label>
-                                        <Field name="serviceCode" type="text" className="form-control" />
-                                        <ErrorMessage name="serviceCode" component="p" className="text-danger" />
-                                    </BootstrapForm.Group>
+                                    {/*<BootstrapForm.Group className="mb-3" controlId="serviceCode">*/}
+                                    {/*    <BootstrapForm.Label>Mã Món:</BootstrapForm.Label>*/}
+                                    {/*    <Field name="serviceCode" type="text" className="form-control" />*/}
+                                    {/*    <ErrorMessage name="serviceCode" component="p" className="text-danger" />*/}
+                                    {/*</BootstrapForm.Group>*/}
 
                                     <BootstrapForm.Group className="mb-3" controlId="serviceName">
                                         <BootstrapForm.Label>Tên Món:</BootstrapForm.Label>
