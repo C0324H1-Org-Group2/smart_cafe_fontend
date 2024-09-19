@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../ManagerOrder.css';
 import ServiceDetailModal from './ServiceDetailModal';
-import { deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted } from '../../service/ServiceService';
+import { deleteService, getAllServicesIdDesc, getAllServicesIdDescNotDeleted, restoreService } from '../../service/ServiceService';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Modal } from 'react-bootstrap';
@@ -21,6 +21,8 @@ const TableService = () => {
     const isLastPage = page >= totalPages - 1;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [serviceToDelete, setServiceToDelete] = useState(null);
+    const [showRestoreModal, setShowRestoreModal] = useState(false);
+    const [serviceToRestore, setServiceToRestore] = useState(null);
     const [userRole, setUserRole] = useState('ROLE_EMPLOYEE');
 
     useEffect(() => {
@@ -82,17 +84,41 @@ const TableService = () => {
         setShowDeleteModal(true);
     };
 
+    const handleShowRestoreModal = (service) => {
+        setServiceToRestore(service);
+        setShowRestoreModal(true);
+    };
+
     const handleConfirmDelete = async () => {
         if (serviceToDelete) {
             await deleteService(serviceToDelete.serviceId);
             setShowDeleteModal(false);
             setServiceToDelete(null);
-            // Refresh danh sách dịch vụ sau khi xóa
             const data = userRole === 'ROLE_ADMIN'
                 ? await getAllServicesIdDesc(page)
                 : await getAllServicesIdDescNotDeleted(page);
             setAllServices(data);
-            setPage(0); // Reset về trang đầu tiên sau khi xóa
+            setPage(0);
+        }
+    };
+
+    const handleConfirmRestore = async () => {
+        if (serviceToRestore) {
+            try {
+                const response = await restoreService(serviceToRestore.serviceId);
+                console.log(response); // Kiểm tra phản hồi từ API
+                setShowRestoreModal(false);
+                setServiceToRestore(null);
+                const data = userRole === 'ROLE_ADMIN'
+                    ? await getAllServicesIdDesc(page)
+                    : await getAllServicesIdDescNotDeleted(page);
+                setAllServices(data);
+                setPage(0);
+            } catch (error) {
+                console.error("Error restoring service:", error.response ? error.response.data : error.message);
+
+                toast.error("Failed to restore service.");
+            }
         }
     };
 
@@ -105,17 +131,9 @@ const TableService = () => {
                         <div className="d-flex justify-content-between mb-3">
                             <div className="d-flex align-items-center">
                                 {userRole === 'ROLE_ADMIN' && (
-                                    <>
-                                        <button className="btn btn-success" onClick={handleCreateClick}>
-                                            <i className="fas fa-plus"></i> Create
-                                        </button>
-                                        {/*<button*/}
-                                        {/*    className={`btn ${showDeleted ? 'btn-secondary' : 'btn-success'} ml-2`}*/}
-                                        {/*    onClick={() => setShowDeleted(!showDeleted)}*/}
-                                        {/*>*/}
-                                        {/*    {showDeleted ? 'Hide Deleted' : 'Show Deleted'}*/}
-                                        {/*</button>*/}
-                                    </>
+                                    <button className="btn btn-success" onClick={handleCreateClick}>
+                                        <i className="fas fa-plus"></i> Create
+                                    </button>
                                 )}
                             </div>
                             <div className="d-flex">
@@ -176,6 +194,14 @@ const TableService = () => {
                                                         <i className="fas fa-trash"></i>
                                                     </button>
                                                 )}
+                                                {service.isDelete === 'DELETED' && userRole === 'ROLE_ADMIN' && (
+                                                    <button
+                                                        className="btn btn-warning ml-2"
+                                                        onClick={() => handleShowRestoreModal(service)}
+                                                    >
+                                                        <i className="fas fa-undo"></i>
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
@@ -229,6 +255,22 @@ const TableService = () => {
                         </Button>
                         <Button variant="danger" onClick={handleConfirmDelete}>
                             Xóa
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
+            {showRestoreModal && (
+                <Modal show={showRestoreModal} onHide={() => setShowRestoreModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Xác nhận khôi phục</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có chắc chắn muốn khôi phục dịch vụ: {serviceToRestore?.serviceName} ?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowRestoreModal(false)}>
+                            Hủy
+                        </Button>
+                        <Button variant="warning" onClick={handleConfirmRestore}>
+                            Khôi phục
                         </Button>
                     </Modal.Footer>
                 </Modal>

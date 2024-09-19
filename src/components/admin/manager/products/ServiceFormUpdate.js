@@ -50,7 +50,7 @@ const ServiceFormUpdate = () => {
     }, [serviceId]);
 
     const validationSchema = Yup.object({
-        serviceCode: Yup.string().required('Mã món là bắt buộc'),
+        // serviceCode: Yup.string().required('Mã món là bắt buộc'),
         serviceName: Yup.string().required('Tên món là bắt buộc'),
         typeId: Yup.number().required('Loại món là bắt buộc'),
         price: Yup.number().required('Giá là bắt buộc'),
@@ -71,7 +71,7 @@ const ServiceFormUpdate = () => {
 
 
             const formData = new FormData();
-            formData.append('serviceCode', values.serviceCode);
+            // formData.append('serviceCode', values.serviceCode);
             formData.append('serviceName', values.serviceName);
             formData.append('typeId', values.typeId);
             formData.append('price', values.price);
@@ -124,7 +124,7 @@ const ServiceFormUpdate = () => {
         <div className="main-content">
             <div className="section-body">
                 <Container className="mt-4">
-                    <h2>Cập Nhật Dịch Vụ</h2>
+                    <h2>Update Dish</h2>
                     {service && (
                         <Formik
                             initialValues={service}
@@ -133,22 +133,22 @@ const ServiceFormUpdate = () => {
                         >
                             {({ setFieldValue }) => (
                                 <Form encType="multipart/form-data">
-                                    <BootstrapForm.Group className="mb-3" controlId="serviceCode">
-                                        <BootstrapForm.Label>Mã Món:</BootstrapForm.Label>
-                                        <Field name="serviceCode" type="text" className="form-control" />
-                                        <ErrorMessage name="serviceCode" component="p" className="text-danger" />
-                                    </BootstrapForm.Group>
+                                    {/*<BootstrapForm.Group className="mb-3" controlId="serviceCode">*/}
+                                    {/*    <BootstrapForm.Label>Mã Món:</BootstrapForm.Label>*/}
+                                    {/*    <Field name="serviceCode" type="text" className="form-control" />*/}
+                                    {/*    <ErrorMessage name="serviceCode" component="p" className="text-danger" />*/}
+                                    {/*</BootstrapForm.Group>*/}
 
                                     <BootstrapForm.Group className="mb-3" controlId="serviceName">
-                                        <BootstrapForm.Label>Tên Món:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Name Dish:</BootstrapForm.Label>
                                         <Field name="serviceName" type="text" className="form-control" />
                                         <ErrorMessage name="serviceName" component="p" className="text-danger" />
                                     </BootstrapForm.Group>
 
                                     <BootstrapForm.Group className="mb-3" controlId="typeId">
-                                        <BootstrapForm.Label>Loại Món:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Type of Dish:</BootstrapForm.Label>
                                         <Field as="select" name="typeId" className="form-control">
-                                            <option value="">Chọn loại món</option>
+                                            <option value="">Select Dish Type</option>
                                             {serviceTypes.map(type => (
                                                 <option key={type.typeId} value={type.typeId}>
                                                     {type.typeName}
@@ -159,19 +159,19 @@ const ServiceFormUpdate = () => {
                                     </BootstrapForm.Group>
 
                                     <BootstrapForm.Group className="mb-3" controlId="price">
-                                        <BootstrapForm.Label>Giá:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Price:</BootstrapForm.Label>
                                         <Field name="price" type="number" className="form-control" />
                                         <ErrorMessage name="price" component="p" className="text-danger" />
                                     </BootstrapForm.Group>
 
                                     <BootstrapForm.Group className="mb-3" controlId="description">
-                                        <BootstrapForm.Label>Mô Tả:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Describe:</BootstrapForm.Label>
                                         <Field name="description" as="textarea" className="form-control" />
                                         <ErrorMessage name="description" component="p" className="text-danger" />
                                     </BootstrapForm.Group>
 
                                     <BootstrapForm.Group className="mb-3" controlId="imageUrl">
-                                        <BootstrapForm.Label>Ảnh:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Image:</BootstrapForm.Label>
                                         <input
                                             name="imageUrl"
                                             type="file"
@@ -188,13 +188,13 @@ const ServiceFormUpdate = () => {
                                     )}
 
                                     <BootstrapForm.Group className="mb-3" controlId="waitTime">
-                                        <BootstrapForm.Label>Thời Gian Chờ (phút):</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Time Wait (minute):</BootstrapForm.Label>
                                         <Field name="waitTime" type="number" className="form-control" min="0" />
                                         <ErrorMessage name="waitTime" component="p" className="text-danger" />
                                     </BootstrapForm.Group>
 
                                     <BootstrapForm.Group className="mb-3" controlId="status">
-                                        <BootstrapForm.Label>Trạng Thái:</BootstrapForm.Label>
+                                        <BootstrapForm.Label>Status:</BootstrapForm.Label>
                                         <Field as="select" name="status" className="form-control">
                                             <option value="available">Available</option>
                                             <option value="unavailable">Unavailable</option>
@@ -204,8 +204,8 @@ const ServiceFormUpdate = () => {
                                     </BootstrapForm.Group>
 
                                     <div className="d-flex justify-content-between">
-                                        <Button type="submit" variant="primary">Tạo Món</Button>
-                                        <Button type="button" variant="secondary" onClick={handleCancel}>Hủy</Button>
+                                        <Button type="submit" variant="primary">Update</Button>
+                                        <Button type="button" variant="secondary" onClick={handleCancel}>Cancel</Button>
                                     </div>
                                 </Form>
                             )}
