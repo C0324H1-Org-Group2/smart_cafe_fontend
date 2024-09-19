@@ -15,6 +15,16 @@ export const getAllServices = async (page = 0, size = 10) => {
     }
 };
 
+export const restoreService = async (serviceId) => {
+    try {
+        const response = await axios.patch(`http://localhost:8080/api/services/${serviceId}/restore`);
+        return response.data;
+    } catch (error) {
+        console.error("Error restoring service:", error);
+        throw error;
+    }
+};
+
 export const getAllServicesIdDesc = async (page = 0, size = 10) => {
     try {
         const response = await axios.get('http://localhost:8080/api/services/all-services-sorted', {

@@ -278,9 +278,9 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
                                 variant="info"
                                 className="btn-lg rounded-pill ms-3"
                                 disabled={isTableLocked} // Khóa nút chọn bàn nếu đã gọi món
-                            >Chọn bàn</Button>
+                            >Select table</Button>
                             <Button onClick={handleCall}
-                                    variant="info" className="btn-lg rounded-pill ms-3">Gọi phục vụ</Button>
+                                    variant="info" className="btn-lg rounded-pill ms-3">Call Employee</Button>
                             <span><strong>Bàn của bạn :</strong> {selectedTable ? selectedTable.code : 'N/A'}</span>
                         </div>
                     </div>
@@ -294,13 +294,13 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
                                     onChange={handleSelectAll}
                                 />
                             </th>
-                            <th>STT</th>
-                            <th>Tên món</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
-                            <th>Thành tiền</th>
-                            <th>Thời gian chờ</th>
-                            <th>Trạng thái</th>
+                            <th>No.</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Wait Time</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -317,11 +317,10 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
                         {showTotal && (
                             <tr>
                                 <td colSpan="4"></td>
-                                <td colSpan="1" className="text-right"><strong>Tổng tiền:</strong></td>
+                                <td colSpan="1" className="text-right"><strong>Total money:</strong></td>
                                 <td>{calculateTotalAmount()}</td>
                                 <td colSpan="3" className="text-center">
-                                    <Button className="w-auto me-2 rounded-pill px-4" variant="warning" onClick={handlePay}><i className="bi bi-credit-card"></i> Confirm
-                                        Pay</Button>
+                                    <Button className="w-auto me-2 rounded-pill px-4" variant="warning" onClick={handlePay}><i className="bi bi-credit-card"></i> Confirm Pay</Button>
                                 </td>
                             </tr>
                         )}
@@ -330,17 +329,16 @@ const ListBillDetails = ({ cartItems, handleStatusChange, handleQuantityChange, 
 
                     <div className="d-flex justify-content-center mb-3">
                         <Button className="w-auto me-2 rounded-pill px-4" onClick={handleDelete}
-                                variant="danger">Xóa</Button>
-                        <Button className="w-auto me-2 rounded-pill px-4" onClick={handleOrder} variant="primary">Gọi
-                            món</Button>
+                                variant="danger">Delete</Button>
+                        <Button className="w-auto me-2 rounded-pill px-4" onClick={handleOrder} variant="primary">Order</Button>
                         <Button className="w-auto me-2 rounded-pill px-4" onClick={handleCheckTotalMoney}
-                                variant="success"> Thanh toán</Button>
+                                variant="success"> Pay</Button>
                         <NavLink
                             to="/order#feedback"
-                            onClick={() => console.log("Phản hồi")}
+                            onClick={() => console.log("Feedback")}
                             className="btn btn-info btn-lg rounded-pill w-auto px-4"
                         >
-                            Phản hồi
+                            Feedback
                         </NavLink>
                     </div>
 
