@@ -19,9 +19,9 @@ const LoginForm = () => {
             await login(values); // Đăng nhập người dùng
 
             if (hasRole('ROLE_ADMIN')) {
-                navigate('/admin/home'); // Đường dẫn cho admin
+                window.location.href = '/admin/home'; // Đường dẫn cho admin
             } else if (hasRole('ROLE_EMPLOYEE')) {
-                navigate('/admin/sell'); // Đường dẫn cho employee
+                window.location.href = '/admin/sell'; // Đường dẫn cho employee
             } else {
                 toast.error('Vai trò không hợp lệ.');
             }
