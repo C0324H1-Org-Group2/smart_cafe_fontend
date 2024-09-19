@@ -1,5 +1,9 @@
 import axios from "axios";
 
+
+
+
+
 export async function setStatusOrder(tableId) {
     try {
         await axios.patch(`http://localhost:8080/api/table/order/${tableId}`)
@@ -38,9 +42,9 @@ export const getBillByTableId= async (tableId) => {
     }
 }
 
-export const changeStatusBillByTableId = async (tableId) => {
+export const changeStatusBillByTableId = async (tableId,userId) => {
     try {
-        await axios.patch(`http://localhost:8080/api/bills/delete/${tableId}`)
+        await axios.patch(`http://localhost:8080/api/bills/delete/${tableId}/${userId}`)
         return true;
     } catch (e) {
         console.error(e);
