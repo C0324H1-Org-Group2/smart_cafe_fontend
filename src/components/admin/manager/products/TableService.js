@@ -196,7 +196,7 @@ const TableService = () => {
                                                 )}
                                                 {service.isDelete === 'DELETED' && userRole === 'ROLE_ADMIN' && (
                                                     <button
-                                                        className="btn btn-warning ml-2"
+                                                        className="btn btn-info ml-1"
                                                         onClick={() => handleShowRestoreModal(service)}
                                                     >
                                                         <i className="fas fa-undo"></i>

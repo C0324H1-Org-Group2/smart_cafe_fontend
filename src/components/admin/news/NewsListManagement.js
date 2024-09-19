@@ -6,6 +6,7 @@ import { Button, Modal } from "react-bootstrap";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import SearchNews from "./SearchNews";
+import {restoreService} from "../../client/services/NewsService";
 
 const NewsListManagement = () => {
     const [newsEntries, setNewsEntries] = useState([]);
@@ -79,6 +80,16 @@ const NewsListManagement = () => {
             } catch (error) {
                 toast.error('Xóa tin tức thất bại!');
             }
+        }
+    };
+
+    const handleRestore = async (newsId) => {
+        try {
+            await newsService.restoreService(newsId);
+            loadNews(currentPage);
+            toast.success('Khôi phục tin tức thành công!');
+        } catch (error) {
+            toast.error('Khôi phục tin tức thất bại!');
         }
     };
 
@@ -157,6 +168,12 @@ const NewsListManagement = () => {
                                                             <i className="fas fa-eraser"></i>
                                                         </button>
                                                     )}
+                                                    {news.status === 'Deleted' && (
+                                                        <button className="btn btn-info ml-2"
+                                                                onClick={() => handleRestore(news.newsId)}>
+                                                            <i className="fas fa-undo"></i>
+                                                        </button>
+                                                    )}
                                                 </>
                                             )}
                                             {userRole === 'ROLE_EMPLOYEE' && news.status === 'Active' && (
@@ -208,17 +225,17 @@ const NewsListManagement = () => {
                 </Modal.Header>
                 <Modal.Body>
                     {isHardDelete ? (
-                        <>Are you sure you want to <strong>hard delete</strong> the news titled "<strong>{selectedNews?.title}</strong>"?</>
+                        <>Are you sure you want to <strong>permanently delete</strong> this news entry?</>
                     ) : (
-                        <>Are you sure you want to <strong>soft delete</strong> the news titled "<strong>{selectedNews?.title}</strong>"?</>
+                        <>Are you sure you want to <strong>soft delete</strong> this news entry?</>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={handleDeleteConfirm}>
-                        Delete
+                    <Button variant="warning" onClick={handleDeleteConfirm}>
+                        {isHardDelete ? "Permanently Delete" : "Soft Delete"}
                     </Button>
                 </Modal.Footer>
             </Modal>

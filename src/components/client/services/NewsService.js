@@ -30,6 +30,16 @@ export const getAllNews = async (page = 0, size = 6) => {
     }
 };
 
+export const restoreService = async (newsId) => {
+    try {
+        const response = await axios.patch(`http://localhost:8080/api/news/${newsId}/restore`);
+        return response.data;
+    } catch (error) {
+        console.error("Error restoring news:", error);
+        throw error;
+    }
+};
+
 export const getNewsById = async (newsId) => {
     try {
         const response = await axios.get(`http://localhost:8080/api/news/${newsId}`);
