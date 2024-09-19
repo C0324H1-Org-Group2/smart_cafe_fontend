@@ -1,35 +1,30 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTableById, updateTable } from '../../service/tableService';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import ConfirmationModal from './ConfirmationModal'; // Import modal component
 
-// Define validation schema with Yup
+// Define validation schema with Yup for only the state field
 const validationSchema = Yup.object({
-    code: Yup.string()
-        .matches(/^TB\d+$/, 'Code must start with "TB" followed by numbers') // Regular expression to check format
-        .required('Code is required'),
-    state: Yup.string()
-        .required('State is required'),
-    on: Yup.boolean(),
-    delete: Yup.boolean() // Add validation for delete field
+    state: Yup.string().required('State is required'),
 });
 
 const TableEdit = () => {
     const { tableId } = useParams();
     const navigate = useNavigate();
     const [initialValues, setInitialValues] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [formValues, setFormValues] = useState(null);
 
     useEffect(() => {
         const fetchTable = async () => {
             try {
                 const data = await getTableById(tableId);
                 setInitialValues({
-                    code: data.code,
-                    state: data.state,
-                    on: data.on,
-                    delete: data.delete // Set delete value when loading data
+                    state: data.state, // Only set initial value for state
                 });
             } catch (error) {
                 console.error('Error fetching table information:', error);
@@ -40,17 +35,27 @@ const TableEdit = () => {
         fetchTable();
     }, [tableId]);
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+    const handleSubmit = (values, { setSubmitting }) => {
+        setFormValues(values);
+        setShowModal(true);
+        setSubmitting(false);
+    };
+
+    const handleConfirm = async () => {
+        setShowModal(false);
+
         try {
-            await updateTable(tableId, values);
+            await updateTable(tableId, formValues);
             toast.success('Table updated successfully!');
             navigate('/admin/tables/list'); // Navigate to the table list page
         } catch (error) {
             console.error('Error updating table:', error);
             toast.error('Failed to update table.');
-        } finally {
-            setSubmitting(false);
         }
+    };
+
+    const handleCancel = () => {
+        setShowModal(false);
     };
 
     if (!initialValues) return <p>Loading...</p>;
@@ -68,16 +73,6 @@ const TableEdit = () => {
                         {({ isSubmitting }) => (
                             <Form>
                                 <div className="form-group">
-                                    <label htmlFor="code">Code</label>
-                                    <Field
-                                        type="text"
-                                        className="form-control"
-                                        id="code"
-                                        name="code"
-                                    />
-                                    <ErrorMessage name="code" component="div" className="text-danger" />
-                                </div>
-                                <div className="form-group">
                                     <label htmlFor="state">State</label>
                                     <Field
                                         type="text"
@@ -87,22 +82,6 @@ const TableEdit = () => {
                                     />
                                     <ErrorMessage name="state" component="div" className="text-danger" />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="on">Status</label>
-                                    <Field as="select" className="form-control" id="on" name="on">
-                                        <option value={true}>ON</option>
-                                        <option value={false}>OFF</option>
-                                    </Field>
-                                    <ErrorMessage name="on" component="div" className="text-danger" />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="delete">Is Deleted</label>
-                                    <Field as="select" className="form-control" id="delete" name="delete">
-                                        <option value={false}>No</option>
-                                        <option value={true}>Yes</option>
-                                    </Field>
-                                    <ErrorMessage name="delete" component="div" className="text-danger" />
-                                </div>
                                 <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                                     {isSubmitting ? 'Updating...' : 'Update'}
                                 </button>
@@ -111,8 +90,17 @@ const TableEdit = () => {
                     </Formik>
                 </div>
             </div>
+
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                show={showModal}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+                message="Are you sure you want to update this table?"
+            />
         </div>
     );
 };
 
 export default TableEdit;
+
