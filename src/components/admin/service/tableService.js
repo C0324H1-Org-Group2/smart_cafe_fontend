@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {toast} from "react-toastify";
 
 const BASE_URL = 'http://localhost:8080/api/tables';
 const token = localStorage.getItem("token");
@@ -23,7 +24,16 @@ export const getAllTables = async (code, on, page = 0, size = 10, includeDeleted
         return null;
     }
 };
-
+export const restoreTable = async (tableId) => {
+    try {
+        const response = await axios.patch(`http://localhost:8080/api/tables/${tableId}/restore`);
+        return response.data;
+    } catch (error) {
+        console.error('Error restoring table:', error);
+        toast.error('Failed to restore table.');
+        throw error; // Để bắt lỗi phía gọi hàm nếu cần
+    }
+};
 export const getAllIncludingDeleted = (code, page = 0, size = 10) => {
     return axios.get(`${BASE_URL}/all-including-deleted`, { params: { code, page, size } }).then(response => response.data);
 };
