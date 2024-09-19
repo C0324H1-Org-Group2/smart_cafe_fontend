@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTable } from '../../service/tableService'; // Ensure the path is correct
@@ -12,8 +13,7 @@ const validationSchema = Yup.object({
         .required('Code is required'),
     state: Yup.string()
         .required('State is required'),
-    on: Yup.boolean(),
-    delete: Yup.boolean() // Add validation for delete field
+    on: Yup.boolean()
 });
 
 const TableCreate = () => {
@@ -39,7 +39,7 @@ const TableCreate = () => {
                 <h2 className="section-title">Create Table</h2>
                 <div className="card-body">
                     <Formik
-                        initialValues={{ code: '', state: '', on: true, delete: false }} // Set default values for delete
+                        initialValues={{ code: '', state: '', on: true }} // Remove `delete` field from initial values
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
@@ -73,14 +73,6 @@ const TableCreate = () => {
                                     </Field>
                                     <ErrorMessage name="on" component="div" className="text-danger" />
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="delete">Is Deleted</label>
-                                    <Field as="select" className="form-control" id="delete" name="delete">
-                                        <option value={false}>No</option>
-                                        <option value={true}>Yes</option>
-                                    </Field>
-                                    <ErrorMessage name="delete" component="div" className="text-danger" />
-                                </div>
                                 <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                                     {isSubmitting ? 'Creating...' : 'Create'}
                                 </button>
@@ -94,3 +86,4 @@ const TableCreate = () => {
 };
 
 export default TableCreate;
+
