@@ -11,6 +11,8 @@
         const navigate = useNavigate();
         const [showModal, setShowModal] = useState(false);
         const [selectedFeedback, setSelectedFeedback] = useState(null);
+        const nameEmployee = localStorage.getItem("employeeName");
+
 
 
 
@@ -126,7 +128,7 @@
                                                 <td>{indexOfFirstItem + index + 1}</td>
                                                 <td>{item.code}</td>
                                                 <td>{formatDate(item.feedbackDate)}</td>
-                                                <td>{item.creator.employee.fullName}</td>
+                                                <td>{nameEmployee}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.content}</td>
                                                 <td>

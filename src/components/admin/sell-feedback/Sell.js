@@ -16,9 +16,10 @@ function Sell() {
     const [selectedTableId, setSelectedTableId] = useState(null);
     const [selectedIsPay, setSelectedIsPay] = useState(false)
     const [loading, setLoading] = useState(false);
-    const [table, setTable] = useState([])
+    const [table, setTable] = useState([]);
     const nameEmployee = localStorage.getItem("employeeName");
-    const [showBillInfo, setShowBillInfo] = useState(false); // Quản lý hiển thị thẻ BillInfor
+    const userId = localStorage.getItem("userId");
+    const [showBillInfo, setShowBillInfo] = useState(false);
 
 
     useEffect(() => {
@@ -125,6 +126,7 @@ function Sell() {
     };
 
 
+
     const checkBillBeforPay = () => {
         if (selectedIsPay === true && bills.length > 0) {
             setShowBillInfo(true);
@@ -141,7 +143,7 @@ function Sell() {
         content: () => componentPDF.current,
         documentTitle: "Bill detail",
         onAfterPrint: async () => {
-            await changeStatusBillByTableId(selectedTableId);
+            await changeStatusBillByTableId(selectedTableId,userId);
             await getBillByTableId(selectedTableId, false);
             await getAllTables();
             await setShowBillInfo(false);
@@ -150,9 +152,9 @@ function Sell() {
 
 
 
-    const changeStatusBillByTableId = async (tableId) => {
+    const changeStatusBillByTableId = async (tableId,userId) => {
         try {
-            let isSuccess = await sellService.changeStatusBillByTableId(tableId);
+            let isSuccess = await sellService.changeStatusBillByTableId(tableId,userId);
             if (isSuccess) {
                 toast.success("Payment successful");
             } else {
